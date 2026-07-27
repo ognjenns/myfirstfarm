@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2340" height="1080" viewBox="0 0 2340 1080">
+<rect x="0" y="0" width="2340" height="1080" fill="#F5EDE0"></rect>
+<rect x="0" y="726" width="2340" height="354" fill="#EDE3D2"></rect>
+<rect x="60" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="240" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="420" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="600" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="780" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="960" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="1140" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="1320" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="1500" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="1680" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="1860" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="2040" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="2220" y="742" width="12" height="338" fill="#E2D6C0"></rect>
+<rect x="0" y="712" width="2340" height="26" rx="13" fill="#DFD2B9"></rect>
+<rect x="0" y="1042" width="2340" height="38" fill="#E4D3B4"></rect>
+<g stroke="#4A3F3A" stroke-width="10">
+  <rect x="1904" y="46" width="360" height="272" rx="34" fill="#B9E3F2"></rect>
+  <path d="M1910,268 C1986,228 2062,258 2138,236 C2188,222 2222,226 2258,234 L2258,286 A32,32 0 0 1 2226,314 L1942,314 A32,32 0 0 1 1910,282 Z" fill="#B7DBA4"></path>
+  <circle cx="2004" cy="122" r="38" fill="#FFD873"></circle>
+  <ellipse cx="2142" cy="136" rx="50" ry="27" fill="#FFFFFF"></ellipse>
+  <rect x="1878" y="310" width="412" height="26" rx="13" fill="#E4D3B4"></rect>
+  <ellipse cx="1836" cy="252" rx="44" ry="34" fill="#74B36B"></ellipse>
+  <ellipse cx="1892" cy="230" rx="36" ry="28" fill="#83BF77"></ellipse>
+  <path d="M1808,272 L1888,272 L1874,318 A12,12 0 0 1 1862,324 L1822,324 A12,12 0 0 1 1810,318 Z" fill="#D46B5E"></path>
+</g>
+</svg>

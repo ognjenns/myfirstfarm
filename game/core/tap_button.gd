@@ -16,8 +16,6 @@ func _init(pos: Vector2, r: float, bg_color := Color.WHITE) -> void:
 	circle.radius = r * 1.15  # tap zona veća od vizuelnog kruga
 	shape.shape = circle
 	add_child(shape)
-	# senka + krug
-	UI.circle(self, Vector2(0, 8), r, Color(0, 0, 0, 0.15))
 	UI.circle(self, Vector2.ZERO, r, bg_color)
 	input_event.connect(_on_input)
 

@@ -61,11 +61,13 @@ static func label(parent: Node, text: String, pos: Vector2, size := 64, color :=
 	l.add_theme_color_override("font_color", color)
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	l.anchors_preset = Control.PRESET_TOP_LEFT
-	l.position = pos
 	parent.add_child(l)
+	# centriranje se ponovi kad god label izračuna/promeni veličinu — uvek tačno
+	var recenter := func() -> void:
+		l.position = pos - l.size / 2.0
+	l.resized.connect(recenter)
 	l.reset_size()
-	l.position = pos - l.size / 2.0
+	recenter.call()
 	return l
 
 ## Konfete — CPUParticles2D eksplozija koja se sama počisti.

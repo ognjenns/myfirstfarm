@@ -1,68 +1,93 @@
 extends BaseScreen
-## Roditeljski ugao (iza parental gate-a): zvuk/muzika prekidači,
-## ukloni reklame, privacy policy, o aplikaciji.
-## Tekst je OK ovde — namenjen roditelju.
+## Roditeljski ugao u duhu igre: drvene daske-dugmad sa ikonicama,
+## farm prekidači za muziku/zvuk, footer sa Oggie ćurkicom.
 
 const VERSION := "0.1.0"
-const PRIVACY_URL := ""  # TODO: GitHub Pages URL kad se objavi privacy policy
+const PRIVACY_URL := "https://ognjenns.github.io/myfirstfarm/privacy.html"
 
-var music_btn: Button
-var sfx_btn: Button
+var music_toggle: Sprite2D
+var sfx_toggle: Sprite2D
 
 func _ready() -> void:
 	ad_on_exit = false
 	var s := UI.vs(self)
-	add_child(GradientBG.new(Pal.SKY_LOW, Pal.BARN_TRIM))
+	Scenery.background(self, "background-parents")
 	add_home_button()
 
-	UI.label(self, "Za roditelje", Vector2(s.x / 2, s.y * 0.12), 72)
+	UI.label(self, "For parents", Vector2(s.x * 0.5, s.y * 0.12), 64, Color(0.45, 0.40, 0.36))
 
-	var left := s.x * 0.28
-	var right := s.x * 0.72
+	var lx := s.x * 0.30
+	var rx := s.x * 0.70
+	var rows := [s.y * 0.32, s.y * 0.52, s.y * 0.72]
 
-	music_btn = _menu_button("", Vector2(left, s.y * 0.32), _toggle_music)
-	sfx_btn = _menu_button("", Vector2(right, s.y * 0.32), _toggle_sfx)
-	_refresh_audio_labels()
-
-	_menu_button("Ukloni reklame — 2,99 € (uskoro)", Vector2(left, s.y * 0.52), func() -> void:
-		pass  # TODO (N5): IAP
-	)
-	_menu_button("Vrati kupovine (uskoro)", Vector2(right, s.y * 0.52), func() -> void:
-		pass  # TODO (N5): restore
-	)
-	_menu_button("Politika privatnosti", Vector2(left, s.y * 0.72), func() -> void:
+	music_toggle = _row(lx, rows[0], "icon-music", "Music", _toggle_music, true)
+	sfx_toggle = _row(rx, rows[0], "icon-sound", "Sounds", _toggle_sfx, true)
+	_row(lx, rows[1], "icon-noads", "Remove ads — soon", func() -> void: pass, false, 36)
+	_row(rx, rows[1], "icon-restore", "Restore purchases — soon", func() -> void: pass, false, 36)
+	_row(lx, rows[2], "icon-privacy", "Privacy policy", func() -> void:
 		if PRIVACY_URL != "":
 			OS.shell_open(PRIVACY_URL)
 	)
-	_menu_button("Nazad na igru", Vector2(right, s.y * 0.72), func() -> void:
-		go("hub")
-	)
+	_row(rx, rows[2], "icon-home-small", "Back to game", func() -> void: go("hub"))
 
-	# o aplikaciji — Oggie ćurkica + verzija
-	Scenery.svg(self, "logo-mini", Vector2(s.x / 2 - 420, s.y * 0.90), 0.35, 0)
-	UI.label(self, "My First Farm  •  Oggie Games  •  v%s" % VERSION, Vector2(s.x / 2 + 60, s.y * 0.90), 34, Color(0.5, 0.46, 0.42))
+	_refresh_toggles()
+
+	# footer: Oggie ćurkica + verzija
+	Scenery.svg(self, "logo-mini", Vector2(s.x / 2 - 420, s.y * 0.91), 0.3, 0)
+	UI.label(self, "My First Farm  •  Oggie Games  •  v%s" % VERSION, Vector2(s.x / 2 + 60, s.y * 0.91), 32, Color(0.55, 0.50, 0.45))
+
+## Jedna daska-dugme: ikonica levo, tekst, opciono prekidač desno. Vraća toggle sprite.
+func _row(x: float, y: float, icon: String, text: String, action: Callable, with_toggle := false, font_size := 40) -> Sprite2D:
+	var s := UI.vs(self)
+	var w := s.x * 0.36
+	var plank_scale := w / 760.0
+	var btn := Area2D.new()
+	btn.position = Vector2(x, y)
+
+	var plank := Sprite2D.new()
+	plank.texture = load("res://art/svg/button-wide.svg")
+	plank.scale = Vector2.ONE * plank_scale
+	btn.add_child(plank)
+
+	var ic := Sprite2D.new()
+	ic.texture = load("res://art/svg/%s.svg" % icon)
+	ic.scale = Vector2.ONE * plank_scale * 0.62
+	ic.position = Vector2(-w * 0.40, -6.0 * plank_scale)
+	btn.add_child(ic)
+
+	var toggle: Sprite2D = null
+	if with_toggle:
+		toggle = Sprite2D.new()
+		toggle.scale = Vector2.ONE * plank_scale * 0.62
+		toggle.position = Vector2(w * 0.36, -6.0 * plank_scale)
+		btn.add_child(toggle)
+		UI.label(btn, text, Vector2(-w * 0.06, -6.0 * plank_scale), font_size)
+	else:
+		UI.label(btn, text, Vector2(w * 0.03, -6.0 * plank_scale), font_size)
+
+	var shape := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = Vector2(w * 1.05, 140.0 * plank_scale * 1.3)
+	shape.shape = rect
+	btn.add_child(shape)
+	btn.input_event.connect(func(_vp: Node, event: InputEvent, _i: int) -> void:
+		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			Audio.play("pop", -6.0)
+			UI.bounce(btn, Vector2.ONE)
+			action.call()
+	)
+	add_child(btn)
+	return toggle
 
 func _toggle_music() -> void:
 	Save.set_music_on(not Save.music_on)
 	Audio.set_music_enabled(Save.music_on)
-	_refresh_audio_labels()
+	_refresh_toggles()
 
 func _toggle_sfx() -> void:
 	Save.set_sfx_on(not Save.sfx_on)
-	_refresh_audio_labels()
-	if Save.sfx_on:
-		Audio.play("pop")  # potvrda da je zvuk opet tu
+	_refresh_toggles()
 
-func _refresh_audio_labels() -> void:
-	music_btn.text = "Muzika: %s" % ("UKLJUČENA" if Save.music_on else "isključena")
-	sfx_btn.text = "Zvukovi: %s" % ("UKLJUČENI" if Save.sfx_on else "isključeni")
-
-func _menu_button(text: String, pos: Vector2, action: Callable) -> Button:
-	var btn := Button.new()
-	btn.text = text
-	btn.add_theme_font_size_override("font_size", 44)
-	btn.custom_minimum_size = Vector2(760, 120)
-	btn.position = pos - Vector2(380, 60)
-	btn.pressed.connect(action)
-	add_child(btn)
-	return btn
+func _refresh_toggles() -> void:
+	music_toggle.texture = load("res://art/svg/toggle-%s.svg" % ("on" if Save.music_on else "off"))
+	sfx_toggle.texture = load("res://art/svg/toggle-%s.svg" % ("on" if Save.sfx_on else "off"))
