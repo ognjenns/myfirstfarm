@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2340" height="1080" viewBox="0 0 2340 1080">
+<defs>
+<linearGradient id="skyDusk" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#C6BDE4"></stop>
+<stop offset="46%" stop-color="#DCD2EA"></stop>
+<stop offset="78%" stop-color="#F0DFD4"></stop>
+<stop offset="100%" stop-color="#F7EBDC"></stop>
+</linearGradient>
+</defs>
+<rect x="0" y="0" width="2340" height="1080" fill="url(#skyDusk)"></rect>
+<g fill="#FFFFFF" fill-opacity="0.55">
+  <circle cx="420" cy="180" r="10"></circle>
+  <circle cx="1840" cy="128" r="12"></circle>
+  <circle cx="2020" cy="266" r="8"></circle>
+</g>
+<circle cx="1960" cy="200" r="86" fill="#FBEFD2" fill-opacity="0.5"></circle>
+<path d="M0,780 C420,720 880,796 1300,780 C1720,764 2040,714 2340,748 L2340,1080 L0,1080 Z" fill="#C7BBAE" fill-opacity="0.45"></path>
+<path d="M0,896 C460,846 940,918 1420,902 C1820,888 2100,856 2340,876 L2340,1080 L0,1080 Z" fill="#B3A79C" fill-opacity="0.5"></path>
+</svg>

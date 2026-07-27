@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2340" height="1080" viewBox="0 0 2340 1080">
+<defs>
+<linearGradient id="skyHS" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#B9E3F2"></stop>
+<stop offset="54%" stop-color="#D8EFF8"></stop>
+<stop offset="100%" stop-color="#E6F5FA"></stop>
+</linearGradient>
+</defs>
+<rect x="0" y="0" width="2340" height="1080" fill="url(#skyHS)"></rect>
+<path d="M0,556 C300,478 620,516 900,552 C1180,588 1460,466 1760,492 C2000,512 2180,558 2340,536 L2340,1080 L0,1080 Z" fill="#B7DBA4"></path>
+<rect x="300" y="486" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="392" y="486" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="484" y="486" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="576" y="486" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="668" y="486" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="760" y="486" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="852" y="486" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="294" y="504" width="580" height="12" rx="6" fill="#E8DABF"></rect><rect x="294" y="528" width="580" height="12" rx="6" fill="#E8DABF"></rect>
+<rect x="1480" y="470" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="1572" y="470" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="1664" y="470" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="1756" y="470" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="1848" y="470" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="1940" y="470" width="16" height="64" rx="8" fill="#EFE3CC"></rect><rect x="1474" y="488" width="488" height="12" rx="6" fill="#E8DABF"></rect><rect x="1474" y="512" width="488" height="12" rx="6" fill="#E8DABF"></rect>
+<path d="M0,660 C340,588 700,700 1040,684 C1380,668 1720,586 2340,652 L2340,1080 L0,1080 Z" fill="#9BCB89"></path>
+<path d="M0,792 C380,730 740,818 1120,802 C1500,786 1880,712 2340,776 L2340,1080 L0,1080 Z" fill="#85C077"></path>
+<path d="M0,920 C460,864 900,948 1340,932 C1780,916 2070,872 2340,898 L2340,1080 L0,1080 Z" fill="#6FAE64"></path>
+<circle cx="300" cy="880" r="15" fill="#F3B3C4"></circle>
+<circle cx="420" cy="940" r="15" fill="#FFE3A0"></circle>
+<circle cx="760" cy="910" r="15" fill="#F3B3C4"></circle>
+<circle cx="1180" cy="960" r="15" fill="#FFE3A0"></circle>
+<circle cx="1520" cy="900" r="15" fill="#E9A6D8"></circle>
+<circle cx="1880" cy="950" r="15" fill="#F3B3C4"></circle>
+<circle cx="2130" cy="890" r="15" fill="#FFE3A0"></circle>
+<circle cx="980" cy="1020" r="15" fill="#F3B3C4"></circle>
+<circle cx="1700" cy="1010" r="15" fill="#FFE3A0"></circle>
+</svg>

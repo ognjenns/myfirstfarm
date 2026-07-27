@@ -1,0 +1,36 @@
+; Moja Farma — Godot 4.7
+config_version=5
+
+[application]
+
+config/name="My First Farm"
+run/main_scene="res://core/main.tscn"
+config/features=PackedStringArray("4.7")
+config/icon="res://icon.png"
+boot_splash/bg_color=Color(0.969, 0.941, 0.894, 1)
+boot_splash/image="res://boot_splash.png"
+boot_splash/fullsize=false
+
+[autoload]
+
+Save="*res://core/save.gd"
+Audio="*res://core/audio.gd"
+Ads="*res://core/ads_manager.gd"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=4
+
+[input_devices]
+
+pointing/emulate_mouse_from_touch=true
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

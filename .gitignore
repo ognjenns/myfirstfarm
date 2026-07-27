@@ -1,0 +1,11 @@
+.godot/
+build/
+shots/
+.DS_Store
+assets/kenney_animalPackRedux.zip
+assets/kenney_animals/
+assets/fs_candidates/
+assets/fs_audition/
+assets/real_sounds/
+assets/real_sounds2/
+assets/real_sounds3/
