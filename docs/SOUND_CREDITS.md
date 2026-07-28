@@ -15,3 +15,7 @@
 Varijante `_1` su isti snimci sa blagim pitch pomakom (±5–7%).
 
 Originali: `~/Downloads/mixkit-*.wav`, `assets/fs_candidates/`, `assets/real_sounds*/` (arhiva starih pokušaja).
+- `elephant_0/1.wav` — Pixabay (freesound_community, "Elephant trumpets growls"), Pixabay Content License, bez atribucije
+- `lion_0/1.wav` — Pixabay (pwlpl, "Powerful lion roar"), Pixabay Content License, bez atribucije; skraćeno i stišano
+- `monkey_0/1.wav` — Pixabay (u_zpj3vbdres, "Monkey"), Pixabay Content License, bez atribucije
+- `parrot_0/1.wav` — "Parrot squawk sound effect" (korisnikov download), dva različita kreštaja isečena iz istog snimka

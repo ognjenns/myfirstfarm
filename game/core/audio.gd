@@ -42,9 +42,13 @@ func _load_stream(sound: String) -> AudioStream:
 			return _cache[sound]
 	return null
 
+const SUCCESS_VARIANTS := ["success", "success_1", "success_2"]
+
 func play(sound: String, volume_db := 0.0, pitch := 1.0) -> void:
 	if not Save.sfx_on:
 		return
+	if sound == "success":
+		sound = SUCCESS_VARIANTS[randi() % SUCCESS_VARIANTS.size()]  # protiv zamora ponavljanja
 	var stream := _load_stream(sound)
 	if stream == null:
 		return

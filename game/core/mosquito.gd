@@ -54,6 +54,7 @@ func _init(from: Vector2, to: Vector2) -> void:
 	for w in [_wing_l, _wing_r]:
 		w.scale = Vector2(1.5, 0.7)
 
+
 func _process(delta: float) -> void:
 	_t += delta
 	var k := _t / _dur

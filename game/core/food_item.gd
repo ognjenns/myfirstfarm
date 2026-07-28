@@ -39,7 +39,7 @@ func _on_input(_vp: Node, event: InputEvent, _idx: int) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		dragging = true
 		z_index = 30
-		Audio.play("tap")
+		Audio.play("pluck")
 		var tw := create_tween()
 		tw.tween_property(self, "scale", base_s * 1.25, 0.1)
 

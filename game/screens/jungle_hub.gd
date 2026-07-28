@@ -6,7 +6,10 @@ extends BaseScreen
 func _ready() -> void:
 	var s := UI.vs(self)
 	Scenery.background(self, "background-jungle")
-	add_ambient(0, "mosquito")  # bez oblaka; komični komarac umesto leptira
+	add_ambient(0, "mosquito")  # bez oblaka; komični komarci umesto leptira
+	# na startu 6 komaraca, razmaknuto (kao 3 leptira na farmi)
+	for i in 6:
+		get_tree().create_timer(0.6 + i * 1.1).timeout.connect(_spawn_ambient_flyer)
 
 	# lijana sa vrha, drvo desno, kamen dole levo
 	Scenery.svg(self, "vine", Vector2(s.x * 0.516, (s.y * 0.0) + 250.0 * (s.x * 0.060) / 200.0), (s.x * 0.060) / 200.0, -20)
@@ -17,15 +20,15 @@ func _ready() -> void:
 
 	# životinje: raširene preko cele širine, cik-cak da se ne preklapaju
 	var back := [
-		{"id": "monkey", "x": 0.205, "y": 0.46, "sc": 0.112},
-		{"id": "elephant", "x": 0.355, "y": 0.50, "sc": 0.125},
-		{"id": "giraffe", "x": 0.525, "y": 0.46, "sc": 0.115},
-		{"id": "lion", "x": 0.70, "y": 0.50, "sc": 0.126},
+		{"id": "monkey", "x": 0.235, "y": 0.46, "sc": 0.112},
+		{"id": "elephant", "x": 0.385, "y": 0.50, "sc": 0.125},
+		{"id": "giraffe", "x": 0.555, "y": 0.46, "sc": 0.115},
+		{"id": "lion", "x": 0.725, "y": 0.50, "sc": 0.126},
 	]
 	for a in back:
 		_spawn_animal(a.id, Vector2(s.x * a.x, s.y * a.y), (s.x * a.sc) / 230.0)
-	_spawn_animal("hippo", Vector2(s.x * 0.27, s.y * 0.76), (s.x * 0.110) / 230.0)
-	_spawn_animal("parrot", Vector2(s.x * 0.60, s.y * 0.77), (s.x * 0.108) / 230.0)
+	_spawn_animal("hippo", Vector2(s.x * 0.30, s.y * 0.76), (s.x * 0.110) / 230.0)
+	_spawn_animal("parrot", Vector2(s.x * 0.63, s.y * 0.77), (s.x * 0.108) / 230.0)
 
 	_build_gates(s)
 	_build_worlds_button()
@@ -49,22 +52,28 @@ func _build_parent_button(s: Vector2) -> void:
 	btn.tapped.connect(func() -> void: go("gate"))
 	add_child(btn)
 
+## Igre koje se otključavaju kupovinom ("Unlock all games").
+const LOCKED_GAMES := ["memory", "quiz"]
+
 func _build_gates(s: Vector2) -> void:
 	var gates := [
-		{"screen": "memory", "icon": "icon-memory", "ready": true},
-		{"screen": "", "icon": "icon-sound-game", "ready": false},  # čeka zvuke životinja
-		{"screen": "shower", "icon": "icon-elephant-shower", "ready": true},
-		{"screen": "jfeed", "icon": "icon-banana", "ready": true},
+		{"screen": "memory", "icon": "icon-memory"},
+		{"screen": "quiz", "icon": "icon-sound-game"},
+		{"screen": "shower", "icon": "icon-elephant-shower"},
+		{"screen": "jfeed", "icon": "icon-banana"},
 	]
 	for i in gates.size():
 		var g: Dictionary = gates[i]
 		var pos := Vector2(s.x * (0.305 + 0.13 * i), 195)
 		var btn := TapButton.new(pos, 105, Pal.BUTTON_WHITE)
 		Scenery.svg(btn, g.icon, Vector2.ZERO, 0.66, 0)
-		if g.ready:
-			var target: String = g.screen
-			btn.tapped.connect(func() -> void: go(target))
-			btn.start_pulse()
+		var target: String = g.screen
+		var locked: bool = target in LOCKED_GAMES and not Save.unlocked
+		if locked:
+			# katančić u uglu kapije
+			Scenery.svg(btn, "icon-lock", Vector2(58, 58), 0.55, 5)
+			btn.tapped.connect(func() -> void: go("gate"))  # ka roditeljima na otključavanje
 		else:
-			btn.tapped.connect(func() -> void: UI.head_shake(btn))  # uskoro
+			btn.tapped.connect(func() -> void: go(target))
 		add_child(btn)
+		btn.start_pulse()

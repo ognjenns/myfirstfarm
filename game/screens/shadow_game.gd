@@ -44,7 +44,7 @@ class DragAnimal extends Area2D:
 		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			dragging = true
 			z_index = 30
-			Audio.play("tap")
+			Audio.play("pluck")
 
 	func _input(event: InputEvent) -> void:
 		if not dragging:

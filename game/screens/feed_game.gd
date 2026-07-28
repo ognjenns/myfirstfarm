@@ -14,19 +14,34 @@ func _ready() -> void:
 	_setup_scene(s)
 	add_home_button()
 
-	# korito preko donjeg dela (raspon 0.19–0.81 širine kao na mockupu)
-	var trough := Scenery.svg(self, "trough", Vector2(s.x * 0.5, s.y * 0.79), (s.x * 0.616) / 600.0, 10)
+	# korito preko donjeg dela
+	var trough := Scenery.svg(self, _trough_asset(), Vector2(s.x * 0.5, s.y * 0.79), (s.x * _trough_span()) / 600.0, 10)
 	trough.z_index = 10
 
 	_start_round()
 
-## Svet — džungla varijanta prejaše ovo dvoje.
+## Svet — džungla varijanta prejaše ove kukice.
 func _setup_scene(_s: Vector2) -> void:
 	Scenery.background(self, "background-feed")
 	add_ambient()
 
 func _world_list() -> Array:
 	return Animals.LIST
+
+func _trough_asset() -> String:
+	return "trough"
+
+func _trough_span() -> float:
+	return 0.616
+
+func _plate_asset() -> String:
+	return "feeding-plate"
+
+func _food_y() -> float:
+	return 0.72
+
+func _plate_span() -> float:
+	return 0.075
 
 func _animal_count() -> int:
 	return clampi(2 + round_num / 3, 2, 4)
@@ -46,7 +61,7 @@ func _start_round() -> void:
 
 	# životinje u redu gore + činija ispod svake
 	var head_scale := (s.x * 0.092) / 230.0
-	var plate_scale := (s.x * 0.075) / 256.0
+	var plate_scale := (s.x * _plate_span()) / 256.0
 	for i in n:
 		var x := s.x * (i + 1) / (n + 1)
 		var a := AnimalSprite.new(chosen[i], head_scale)
@@ -55,7 +70,7 @@ func _start_round() -> void:
 		animals_on_screen.append(a)
 		_round_nodes.append(a)
 
-		var plate := Scenery.svg(self, "feeding-plate", Vector2(x, s.y * 0.50), plate_scale, 5)
+		var plate := Scenery.svg(self, _plate_asset(), Vector2(x, s.y * 0.50), plate_scale, 5)
 		plates[chosen[i].id] = plate
 		_round_nodes.append(plate)
 
@@ -65,7 +80,7 @@ func _start_round() -> void:
 	var spacing := s.x * 0.13
 	for i in n:
 		var fx := s.x * 0.5 + (i - (n - 1) / 2.0) * spacing
-		var f := FoodItem.new(foods[i], Vector2(fx, s.y * 0.72), s.x * 0.062)
+		var f := FoodItem.new(foods[i], Vector2(fx, s.y * _food_y()), s.x * 0.062)
 		f.dropped.connect(_on_food_dropped)
 		add_child(f)
 		_round_nodes.append(f)
@@ -73,7 +88,7 @@ func _start_round() -> void:
 func _plate_hit(food: FoodItem) -> String:
 	var s := UI.vs(self)
 	for id in plates:
-		if food.global_position.distance_to(plates[id].global_position) < s.x * 0.075:
+		if food.global_position.distance_to(plates[id].global_position) < s.x * maxf(0.075, _plate_span()):
 			return id
 	return ""
 
@@ -96,11 +111,12 @@ func _on_food_dropped(food: FoodItem) -> void:
 
 func _feed(animal_node: AnimalSprite, food: FoodItem) -> void:
 	foods_left -= 1
-	# hrana upadne u činiju, pa životinja srećno poskoči
+	# plop u činiju → nom-nom žvakanje → srećan poskok (slojevit feedback)
 	food.eaten_by(plates[animal_node.animal.id].global_position)
 	UI.haptic(35)
-	Audio.play("pop")
-	animal_node.react(true)
+	Audio.play("plop")
+	get_tree().create_timer(0.22).timeout.connect(func() -> void: Audio.play("nom"))
+	get_tree().create_timer(0.55).timeout.connect(func() -> void: animal_node.react(true))
 	if foods_left == 0:
 		round_num += 1
 		_victory_dance()

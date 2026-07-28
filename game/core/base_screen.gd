@@ -48,3 +48,7 @@ func celebrate(pos: Vector2) -> void:
 	UI.confetti(self, pos, 90)
 	UI.confetti(self, pos + Vector2(-350, 60), 50)
 	UI.confetti(self, pos + Vector2(350, 60), 50)
+	# retka bonus nagrada: dečji kikot ili "yay!" (~1 od 4 slavlja — da ostane specijalno)
+	if randf() < 0.25:
+		var bonus: String = ["giggle", "yay"][randi() % 2]
+		get_tree().create_timer(0.7).timeout.connect(func() -> void: Audio.play(bonus, -2.0))

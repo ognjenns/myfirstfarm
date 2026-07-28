@@ -64,6 +64,7 @@ func _make_card(animal: Dictionary, pos: Vector2, card_scale: float) -> Area2D:
 	card.set_meta("animal", animal)
 	card.set_meta("revealed", false)
 	card.set_meta("matched", false)
+	card.set_meta("base_scale", card_scale)  # prava širina — flip se UVEK vraća na ovo
 
 	# poleđina: dizajnerska karta sa listom (card-back.svg, 360×440)
 	var back := Node2D.new()
@@ -103,7 +104,7 @@ func _make_card(animal: Dictionary, pos: Vector2, card_scale: float) -> Area2D:
 func _on_card_tapped(card: Area2D) -> void:
 	if busy or card.get_meta("revealed") or card.get_meta("matched"):
 		return
-	Audio.play("tap")
+	Audio.play("pluck")
 	_flip(card, true)
 	if first_pick == null:
 		first_pick = card
@@ -127,7 +128,7 @@ func _match_found(c1: Area2D, c2: Area2D) -> void:
 	Audio.animal_voice(c1.get_meta("animal").id)
 	UI.haptic(35)
 	for c in [c1, c2]:
-		UI.bounce(c, c.scale)
+		UI.bounce(c, Vector2.ONE * float(c.get_meta("base_scale")))
 		_star_pop(c.global_position)
 	if pairs_left == 0:
 		round_num += 1
@@ -158,13 +159,19 @@ func _flip_back(c1: Area2D, c2: Area2D) -> void:
 	busy = false
 
 ## Flip animacija: skupi po X, zameni stranu, raširi.
+## Uvek se vraća na base_scale iz meta — tap usred animacije ne može da "zaglavi" kartu usku.
 func _flip(card: Area2D, reveal: bool) -> void:
 	card.set_meta("revealed", reveal)
-	var base: Vector2 = card.scale
+	if card.has_meta("flip_tw"):
+		var old: Tween = card.get_meta("flip_tw")
+		if old and old.is_valid():
+			old.kill()
+	var base_x: float = card.get_meta("base_scale")
 	var tw := card.create_tween()
+	card.set_meta("flip_tw", tw)
 	tw.tween_property(card, "scale:x", 0.0, 0.11).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tw.tween_callback(func() -> void:
 		card.get_node("Back").visible = not reveal
 		card.get_node("Front").visible = reveal
 	)
-	tw.tween_property(card, "scale:x", base.x, 0.11).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(card, "scale:x", base_x, 0.11).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)

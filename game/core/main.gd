@@ -7,6 +7,7 @@ const SCREENS := {
 	"hub": preload("res://screens/hub.gd"),
 	"jungle": preload("res://screens/jungle_hub.gd"),
 	"memory": preload("res://screens/memory_game.gd"),
+	"quiz": preload("res://screens/sound_quiz_game.gd"),
 	"jfeed": preload("res://screens/jungle_feed_game.gd"),
 	"shower": preload("res://screens/elephant_shower_game.gd"),
 	"feed": preload("res://screens/feed_game.gd"),
