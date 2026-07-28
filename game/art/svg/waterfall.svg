@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="700" viewBox="0 0 500 700">
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round">
+  <path d="M70,40 L430,40 L430,520 C430,566 386,596 250,596 C114,596 70,566 70,520 Z" fill="#9AD3EA"></path>
+</g>
+<g fill="#C6E7F4">
+  <rect x="120" y="60" width="46" height="480" rx="23"></rect>
+  <rect x="228" y="60" width="52" height="500" rx="26"></rect>
+  <rect x="338" y="60" width="44" height="470" rx="22"></rect>
+</g>
+<g fill="#7FC0DC">
+  <rect x="182" y="60" width="30" height="470" rx="15"></rect>
+  <rect x="300" y="60" width="28" height="460" rx="14"></rect>
+</g>
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round">
+  <path d="M20,606 C60,566 116,590 158,566 C204,540 254,568 300,560 C348,552 404,570 452,600 C486,622 478,668 430,676 L70,676 C22,668 6,626 20,606 Z" fill="#FFFFFF"></path>
+</g>
+<g fill="#DCEFF6">
+  <circle cx="126" cy="628" r="26"></circle>
+  <circle cx="216" cy="618" r="22"></circle>
+  <circle cx="306" cy="626" r="24"></circle>
+  <circle cx="392" cy="634" r="20"></circle>
+</g>
+</svg>

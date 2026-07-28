@@ -11,15 +11,22 @@ var _round_nodes: Array[Node] = []
 
 func _ready() -> void:
 	var s := UI.vs(self)
-	Scenery.background(self, "background-feed")
+	_setup_scene(s)
 	add_home_button()
 
 	# korito preko donjeg dela (raspon 0.19–0.81 širine kao na mockupu)
 	var trough := Scenery.svg(self, "trough", Vector2(s.x * 0.5, s.y * 0.79), (s.x * 0.616) / 600.0, 10)
 	trough.z_index = 10
 
-	add_ambient()
 	_start_round()
+
+## Svet — džungla varijanta prejaše ovo dvoje.
+func _setup_scene(_s: Vector2) -> void:
+	Scenery.background(self, "background-feed")
+	add_ambient()
+
+func _world_list() -> Array:
+	return Animals.LIST
 
 func _animal_count() -> int:
 	return clampi(2 + round_num / 3, 2, 4)
@@ -33,7 +40,7 @@ func _start_round() -> void:
 	plates.clear()
 
 	var s := UI.vs(self)
-	var chosen := Animals.random_set(_animal_count())
+	var chosen := Animals.random_set(_animal_count(), _world_list())
 	foods_left = chosen.size()
 	var n := chosen.size()
 

@@ -6,7 +6,7 @@ var a := 0
 var b := 0
 
 func _ready() -> void:
-	ad_on_exit = false
+	home_target = get_tree().get_first_node_in_group("main").last_world
 	var s := UI.vs(self)
 	Scenery.background(self, "background-parents")
 	add_home_button()
@@ -46,6 +46,6 @@ func _ready() -> void:
 				if val == correct:
 					go("parents")
 				else:
-					go("hub")
+					go(home_target)
 		)
 		add_child(btn)

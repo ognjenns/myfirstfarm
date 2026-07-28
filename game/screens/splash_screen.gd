@@ -8,7 +8,6 @@ var ring: Sprite2D
 var holder: Node2D
 
 func _ready() -> void:
-	ad_on_exit = false
 	var s := UI.vs(self)
 	add_child(GradientBG.new(Pal.BARN_TRIM, Color("#F3E8D5")))
 
@@ -40,7 +39,7 @@ func _ready() -> void:
 	_at(3.2, _wink)
 	_at(3.75, _unwink)
 	_at(4.55, _fade_out)
-	_at(5.0, func() -> void: go("hub"))
+	_at(5.0, func() -> void: go("worlds"))
 
 ## Timer kao dete node — umire zajedno sa scenom, bez visećih callbackova.
 func _at(sec: float, action: Callable) -> void:

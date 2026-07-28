@@ -7,9 +7,10 @@ const PRIVACY_URL := "https://ognjenns.github.io/myfirstfarm/privacy.html"
 
 var music_toggle: Sprite2D
 var sfx_toggle: Sprite2D
+var unlock_label: Label
 
 func _ready() -> void:
-	ad_on_exit = false
+	home_target = get_tree().get_first_node_in_group("main").last_world
 	var s := UI.vs(self)
 	Scenery.background(self, "background-parents")
 	add_home_button()
@@ -22,15 +23,19 @@ func _ready() -> void:
 
 	music_toggle = _row(lx, rows[0], "icon-music", "Music", _toggle_music, true)
 	sfx_toggle = _row(rx, rows[0], "icon-sound", "Sounds", _toggle_sfx, true)
-	_row(lx, rows[1], "icon-noads", "Remove ads — soon", func() -> void: pass, false, 36)
+	_row(lx, rows[1], "icon-lock", "", _toggle_unlock_test, false, 36)
 	_row(rx, rows[1], "icon-restore", "Restore purchases — soon", func() -> void: pass, false, 36)
 	_row(lx, rows[2], "icon-privacy", "Privacy policy", func() -> void:
 		if PRIVACY_URL != "":
 			OS.shell_open(PRIVACY_URL)
 	)
-	_row(rx, rows[2], "icon-home-small", "Back to game", func() -> void: go("hub"))
+	_row(rx, rows[2], "icon-home-small", "Back to game", func() -> void: go(home_target))
 
+	# tekst na unlock dasci (menja se sa stanjem)
+	var up_scale := (s.x * 0.36) / 760.0
+	unlock_label = UI.label(self, "", Vector2(lx + s.x * 0.36 * 0.03, rows[1] - 6.0 * up_scale), 36)
 	_refresh_toggles()
+	_refresh_unlock()
 
 	# footer: Oggie ćurkica + verzija
 	Scenery.svg(self, "logo-mini", Vector2(s.x / 2 - 420, s.y * 0.91), 0.3, 0)
@@ -78,6 +83,15 @@ func _row(x: float, y: float, icon: String, text: String, action: Callable, with
 	)
 	add_child(btn)
 	return toggle
+
+## PRIVREMENO za testiranje: prekidač umesto prave kupovine.
+## TODO (IAP): zameniti Google Play Billing / StoreKit kupovinom.
+func _toggle_unlock_test() -> void:
+	Save.set_unlocked(not Save.unlocked)
+	_refresh_unlock()
+
+func _refresh_unlock() -> void:
+	unlock_label.text = "All games unlocked  ✓" if Save.unlocked else "Unlock all games — €2.99"
 
 func _toggle_music() -> void:
 	Save.set_music_on(not Save.music_on)

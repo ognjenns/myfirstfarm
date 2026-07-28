@@ -3,7 +3,12 @@ extends Node2D
 
 const SCREENS := {
 	"splash": preload("res://screens/splash_screen.gd"),
+	"worlds": preload("res://screens/worlds_screen.gd"),
 	"hub": preload("res://screens/hub.gd"),
+	"jungle": preload("res://screens/jungle_hub.gd"),
+	"memory": preload("res://screens/memory_game.gd"),
+	"jfeed": preload("res://screens/jungle_feed_game.gd"),
+	"shower": preload("res://screens/elephant_shower_game.gd"),
 	"feed": preload("res://screens/feed_game.gd"),
 	"shadows": preload("res://screens/shadow_game.gd"),
 	"bath": preload("res://screens/bath_game.gd"),
@@ -13,6 +18,7 @@ const SCREENS := {
 }
 
 var current: Node = null
+var last_world := "hub"  # poslednji hub (farma/džungla) — za povratak iz roditeljskih ekrana
 
 func _ready() -> void:
 	add_to_group("main")
@@ -123,6 +129,8 @@ func _smoke_test() -> void:
 	get_tree().quit()
 
 func goto(screen_name: String) -> void:
+	if screen_name == "hub" or screen_name == "jungle":
+		last_world = screen_name
 	if current:
 		current.queue_free()
 	current = SCREENS[screen_name].new()

@@ -10,13 +10,28 @@ const LIST := [
 	{"id": "duck",    "food": "bread"},
 ]
 
+const JUNGLE := [
+	{"id": "monkey",   "food": "banana"},
+	{"id": "elephant", "food": "peanut"},
+	{"id": "giraffe",  "food": "leaves"},
+	{"id": "lion",     "food": "meat"},
+	{"id": "parrot",   "food": "seeds"},
+	{"id": "hippo",    "food": "watermelon"},
+]
+
 static func by_id(id: String) -> Dictionary:
 	for a in LIST:
 		if a.id == id:
 			return a
 	return {}
 
-static func random_set(count: int) -> Array:
-	var pool := LIST.duplicate()
+static func by_id_jungle(id: String) -> Dictionary:
+	for a in JUNGLE:
+		if a.id == id:
+			return a
+	return {}
+
+static func random_set(count: int, from_list := LIST) -> Array:
+	var pool := from_list.duplicate()
 	pool.shuffle()
 	return pool.slice(0, count)

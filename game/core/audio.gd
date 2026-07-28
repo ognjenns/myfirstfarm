@@ -69,7 +69,11 @@ func is_busy() -> bool:
 	return false
 
 func animal_voice(id: String) -> void:
-	play("%s_%d" % [id, randi() % 2])
+	var name := "%s_%d" % [id, randi() % 2]
+	if _load_stream(name) == null:
+		play("%s_happy" % id)  # džungla još nema prava glasanja — veseli đingl
+	else:
+		play(name)
 
 func animal_happy(id: String) -> void:
 	play("%s_happy" % id)

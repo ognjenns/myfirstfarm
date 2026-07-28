@@ -9,6 +9,26 @@ const H := 1080.0
 static func vs(node: CanvasItem) -> Vector2:
 	return node.get_viewport_rect().size
 
+## Tekstura kapljice za particle vode (bez teksture su nevidljive tačkice).
+static var _drop_tex: ImageTexture = null
+
+static func drop_texture() -> ImageTexture:
+	if _drop_tex:
+		return _drop_tex
+	var w := 18
+	var h := 26
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	for y in h:
+		for x in w:
+			var dx := (x - 9.0) / 7.0
+			var dy := (y - 15.0) / 10.0
+			if dx * dx + dy * dy <= 1.0:
+				img.set_pixel(x, y, Color(0.62, 0.84, 1.0, 0.95))
+			elif y < 15 and absf(x - 9.0) < (y - 2.0) * 0.45 and y > 4:
+				img.set_pixel(x, y, Color(0.62, 0.84, 1.0, 0.9))
+	_drop_tex = ImageTexture.create_from_image(img)
+	return _drop_tex
+
 ## Kratka vibracija na mobilnom (pogodak/uspeh) — deca to vole.
 static func haptic(ms := 40) -> void:
 	if OS.has_feature("mobile"):

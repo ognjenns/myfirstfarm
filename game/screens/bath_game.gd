@@ -136,26 +136,9 @@ func _spawn_mud() -> void:
 		add_child(blob)
 		mud_blobs.append(blob)
 
-## Tekstura kapljice (bez nje su particle nevidljive tačkice od 2px).
-func _drop_texture() -> ImageTexture:
-	var w := 18
-	var h := 26
-	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
-	for y in h:
-		for x in w:
-			# elipsa (kap): centar (9,15), poluose 7×10
-			var dx := (x - 9.0) / 7.0
-			var dy := (y - 15.0) / 10.0
-			if dx * dx + dy * dy <= 1.0:
-				img.set_pixel(x, y, Color(0.62, 0.84, 1.0, 0.95))
-			# špic na vrhu kapi
-			elif y < 15 and absf(x - 9.0) < (y - 2.0) * 0.45 and y > 4:
-				img.set_pixel(x, y, Color(0.62, 0.84, 1.0, 0.9))
-	return ImageTexture.create_from_image(img)
-
 func _make_rain(from: Vector2, rim_y: float) -> void:
 	var fall := rim_y - from.y  # kapi žive samo do oboda kade — "upadaju" u vodu
-	var drop_tex := _drop_texture()
+	var drop_tex := UI.drop_texture()
 	rain = CPUParticles2D.new()
 	rain.texture = drop_tex
 	rain.position = from

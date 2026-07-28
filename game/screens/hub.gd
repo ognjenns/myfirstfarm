@@ -28,7 +28,15 @@ func _ready() -> void:
 
 	_build_gates(s)
 	_build_parent_button(s)
+	_build_worlds_button()
 	_start_life_timers()
+
+## Malo dugme gore levo — nazad na izbor sveta.
+func _build_worlds_button() -> void:
+	var btn := TapButton.new(Vector2(100, 100), 62, Color(1, 1, 1, 0.85))
+	UI.poly(btn, PackedVector2Array([Vector2(14, -26), Vector2(-22, 0), Vector2(14, 26)]), Color(0.45, 0.40, 0.36))
+	btn.tapped.connect(func() -> void: go("worlds"))
+	add_child(btn)
 
 func _build_scenery(s: Vector2) -> void:
 	Scenery.sun(self, Vector2(s.x - 190, 150))
@@ -61,6 +69,9 @@ func _build_scenery(s: Vector2) -> void:
 		var p: Vector2 = flower_spots[i] * s + Vector2(randf_range(-25, 25), randf_range(-15, 15))
 		Scenery.flower(self, p, flower_colors[i % 3])
 
+## Igre koje se otključavaju kupovinom ("Unlock all games").
+const LOCKED_GAMES := ["bath", "hideseek"]
+
 func _build_gates(s: Vector2) -> void:
 	var gates := [
 		{"screen": "feed", "icon": "apple"},
@@ -75,7 +86,13 @@ func _build_gates(s: Vector2) -> void:
 		var btn := TapButton.new(pos, 105, Pal.BUTTON_WHITE)
 		_draw_gate_icon(btn, g.icon)
 		var target: String = g.screen
-		btn.tapped.connect(func() -> void: go(target))
+		var locked: bool = target in LOCKED_GAMES and not Save.unlocked
+		if locked:
+			# katančić u uglu kapije
+			Scenery.svg(btn, "icon-lock", Vector2(58, 58), 0.55, 5)
+			btn.tapped.connect(func() -> void: go("gate"))  # ka roditeljima na otključavanje
+		else:
+			btn.tapped.connect(func() -> void: go(target))
 		add_child(btn)
 		btn.start_pulse()
 

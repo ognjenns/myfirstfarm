@@ -23,6 +23,48 @@ func check(cond: bool, what: String) -> void:
 		failed = true
 		printerr("AUTOTEST FAIL: ", what)
 
+func _test_memory() -> void:
+	main.goto("memory")
+	await _frames(5)
+	var g: Node = main.current
+	check(g.cards.size() == 4, "memory: prva runda ima 4 karte")
+	# nađi par i promašaj
+	var by_id := {}
+	for c in g.cards:
+		var id: String = c.get_meta("animal").id
+		if not by_id.has(id):
+			by_id[id] = []
+		by_id[id].append(c)
+	var ids := by_id.keys()
+	# promašaj: karta prve i karta druge životinje
+	g._on_card_tapped(by_id[ids[0]][0])
+	g._on_card_tapped(by_id[ids[1]][0])
+	await _sleep(1.2)
+	check(not by_id[ids[0]][0].get_meta("revealed"), "memory: promašene karte se vraćaju")
+	# pogodi oba para
+	for id in ids:
+		g._on_card_tapped(by_id[id][0])
+		g._on_card_tapped(by_id[id][1])
+		await _sleep(0.7)
+		check(by_id[id][0].get_meta("matched"), "memory: par %s spojen" % id)
+	check(g.pairs_left == 0, "memory: runda kompletna")
+	check(g.round_num == 1, "memory: prešlo na sledeću rundu")
+	await _sleep(2.0)
+
+func _test_shower() -> void:
+	main.goto("shower")
+	await _frames(5)
+	var g: Node = main.current
+	check(not g.mud_blobs.is_empty(), "shower: životinja je blatnjava na startu")
+	var first_id: String = g.bather.animal.id
+	check(first_id != "elephant", "shower: slon ne kupa sam sebe")
+	for i in 5:
+		g._spray()
+		await _sleep(0.6)
+	check(g.mud_blobs.is_empty() or g._busy, "shower: blato oprano posle prskanja")
+	await _sleep(2.6)
+	check(not g.mud_blobs.is_empty(), "shower: sledeća životinja stigla blatnjava")
+
 func run() -> void:
 	# failsafe: ako bilo šta zaglavi, ugasi se posle 90s sa greškom
 	main.get_tree().create_timer(90.0).timeout.connect(func() -> void:
@@ -33,6 +75,8 @@ func run() -> void:
 	await _test_shadows()
 	await _test_bath()
 	await _test_hideseek()
+	await _test_memory()
+	await _test_shower()
 	if failed:
 		printerr("AUTOTEST: NEUSPEH")
 		main.get_tree().quit(1)
