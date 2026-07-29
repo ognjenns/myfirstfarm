@@ -23,8 +23,9 @@ func _ready() -> void:
 
 	music_toggle = _row(lx, rows[0], "icon-music", "Music", _toggle_music, true)
 	sfx_toggle = _row(rx, rows[0], "icon-sound", "Sounds", _toggle_sfx, true)
-	_row(lx, rows[1], "icon-lock", "", _toggle_unlock_test, false, 36)
-	_row(rx, rows[1], "icon-restore", "Restore purchases — soon", func() -> void: pass, false, 36)
+	_row(lx, rows[1], "icon-lock", "", _unlock_pressed, false, 36)
+	_row(rx, rows[1], "icon-restore", "Restore purchases", _restore_pressed, false, 36)
+	Store.unlock_state_changed.connect(_refresh_unlock)
 	_row(lx, rows[2], "icon-privacy", "Privacy policy", func() -> void:
 		if PRIVACY_URL != "":
 			OS.shell_open(PRIVACY_URL)
@@ -34,6 +35,8 @@ func _ready() -> void:
 	# tekst na unlock dasci (menja se sa stanjem)
 	var up_scale := (s.x * 0.36) / 760.0
 	unlock_label = UI.label(self, "", Vector2(lx + s.x * 0.36 * 0.03, rows[1] - 6.0 * up_scale), 36)
+	# ispod daske: šta se sve dobija (obećanje važi i za buduće svetove)
+	UI.label(self, "All worlds + future updates", Vector2(lx, rows[1] + 92.0 * up_scale), 26, Color(0.55, 0.50, 0.45))
 	_refresh_toggles()
 	_refresh_unlock()
 
@@ -84,14 +87,21 @@ func _row(x: float, y: float, icon: String, text: String, action: Callable, with
 	add_child(btn)
 	return toggle
 
-## PRIVREMENO za testiranje: prekidač umesto prave kupovine.
-## TODO (IAP): zameniti Google Play Billing / StoreKit kupovinom.
-func _toggle_unlock_test() -> void:
-	Save.set_unlocked(not Save.unlocked)
-	_refresh_unlock()
+## Prava kupovina preko Google Play; u debug buildu bez Billinga (ili u
+## editoru) ostaje test-prekidač da možemo da probamo zaključavanje.
+func _unlock_pressed() -> void:
+	if Store.available:
+		if not Save.unlocked:
+			Store.buy()
+	elif OS.is_debug_build():
+		Save.set_unlocked(not Save.unlocked)
+		_refresh_unlock()
+
+func _restore_pressed() -> void:
+	Store.restore()
 
 func _refresh_unlock() -> void:
-	unlock_label.text = "All games unlocked  ✓" if Save.unlocked else "Unlock all games — €2.99"
+	unlock_label.text = "All games unlocked  ✓" if Save.unlocked else "Unlock all games — %s" % Store.price_text
 
 func _toggle_music() -> void:
 	Save.set_music_on(not Save.music_on)

@@ -15,6 +15,11 @@ boot_splash/fullsize=false
 
 Save="*res://core/save.gd"
 Audio="*res://core/audio.gd"
+Store="*res://core/store.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GodotGooglePlayBilling/plugin.cfg")
 
 [display]
 

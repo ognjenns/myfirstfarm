@@ -31,6 +31,8 @@ func _ready() -> void:
 		Autotest.new(self).run()
 	elif "--make-icon" in OS.get_cmdline_user_args():
 		_make_icon()
+	elif "--make-product-icon" in OS.get_cmdline_user_args():
+		_make_product_icon()
 	else:
 		goto("splash")
 
@@ -45,6 +47,56 @@ func _screenshot_run() -> void:
 		img.save_png(dir.path_join("%s.png" % screen_name))
 		print("SHOT: ", screen_name)
 	print("SHOTS DONE")
+	get_tree().quit()
+
+## Ikonica IAP proizvoda za Play konzolu (512px, bez teksta/brenda):
+## zlatni otključan katanac sa zvezdicom na zelenom krugu.
+func _make_product_icon() -> void:
+	get_window().size = Vector2i(512, 512)
+	var root := Node2D.new()
+	add_child(root)
+	var center := Vector2(UI.W / 2, UI.H / 2)
+	UI.poly(root, UI.rect_points(1000, 1000), Color("#DFF0D0"), center)
+	UI.circle(root, center, 470, Color("#B7DC9A"))
+	# otvorena alka: prsten pomeren gore-desno, donji deo "otvoren"
+	var shackle := Node2D.new()
+	shackle.position = center + Vector2(120, -200)
+	shackle.rotation = 0.45
+	root.add_child(shackle)
+	UI.circle(shackle, Vector2.ZERO, 140, Pal.OUTLINE)
+	UI.circle(shackle, Vector2.ZERO, 88, Color("#B7DC9A"))
+	UI.poly(shackle, UI.rect_points(320, 170), Color("#B7DC9A"), Vector2(0, 150))
+	# telo katanca: zaobljeno, tamna ivica pa zlatno
+	var body := center + Vector2(-30, 120)
+	for corner_pass in [[Pal.OUTLINE, 470.0, 390.0, 80.0], [Color("#F5B971"), 430.0, 350.0, 62.0]]:
+		var col: Color = corner_pass[0]
+		var w: float = corner_pass[1]
+		var h: float = corner_pass[2]
+		var r: float = corner_pass[3]
+		UI.poly(root, UI.rect_points(w, h - 2.0 * r), col, body)
+		UI.poly(root, UI.rect_points(w - 2.0 * r, h), col, body)
+		for sx in [-1, 1]:
+			for sy in [-1, 1]:
+				UI.circle(root, body + Vector2(sx * (w / 2 - r), sy * (h / 2 - r)), r, col)
+	# ključaonica
+	UI.circle(root, body + Vector2(0, -30), 42, Pal.OUTLINE)
+	UI.poly(root, UI.rect_points(30, 80), Pal.OUTLINE, body + Vector2(0, 30))
+	# zvezdica gore-levo
+	var pts := PackedVector2Array()
+	for i in 10:
+		var ang := -PI / 2 + PI * i / 5.0
+		var rr := 78.0 if i % 2 == 0 else 32.0
+		pts.append(Vector2(cos(ang), sin(ang)) * rr)
+	UI.poly(root, pts, Pal.SUN, center + Vector2(-300, -250))
+	await get_tree().create_timer(0.5).timeout
+	var img := get_viewport().get_texture().get_image()
+	var content_scale := minf(img.get_width() / UI.W, img.get_height() / UI.H)
+	var cc := center * content_scale
+	var half := 500.0 * content_scale
+	img = img.get_region(Rect2i(int(cc.x - half), int(cc.y - half), int(half * 2), int(half * 2)))
+	img.resize(512, 512, Image.INTERPOLATE_LANCZOS)
+	img.save_png(ProjectSettings.globalize_path("res://").path_join("../build/product_unlock.png"))
+	print("PRODUCT ICON DONE")
 	get_tree().quit()
 
 ## Nacrta ikonicu app-a (krava na zelenom krugu) i snimi u res://icon.png (1024px).
