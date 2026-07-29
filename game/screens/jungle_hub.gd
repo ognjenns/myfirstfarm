@@ -7,9 +7,9 @@ func _ready() -> void:
 	var s := UI.vs(self)
 	Scenery.background(self, "background-jungle")
 	add_ambient(0, "mosquito")  # bez oblaka; komični komarci umesto leptira
-	# na startu 6 komaraca, razmaknuto (kao 3 leptira na farmi)
-	for i in 6:
-		get_tree().create_timer(0.6 + i * 1.1).timeout.connect(_spawn_ambient_flyer)
+	# na startu 3 komarca, razmaknuto (kao leptiri na farmi)
+	for i in 3:
+		get_tree().create_timer(0.6 + i * 1.4).timeout.connect(_spawn_ambient_flyer)
 
 	# lijana sa vrha, drvo desno, kamen dole levo
 	Scenery.svg(self, "vine", Vector2(s.x * 0.516, (s.y * 0.0) + 250.0 * (s.x * 0.060) / 200.0), (s.x * 0.060) / 200.0, -20)

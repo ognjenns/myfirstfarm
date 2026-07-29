@@ -19,3 +19,4 @@ Originali: `~/Downloads/mixkit-*.wav`, `assets/fs_candidates/`, `assets/real_sou
 - `lion_0/1.wav` — Pixabay (pwlpl, "Powerful lion roar"), Pixabay Content License, bez atribucije; skraćeno i stišano
 - `monkey_0/1.wav` — Pixabay (u_zpj3vbdres, "Monkey"), Pixabay Content License, bez atribucije
 - `parrot_0/1.wav` — "Parrot squawk sound effect" (korisnikov download), dva različita kreštaja isečena iz istog snimka
+- `frog.wav` — Pixabay (freesound_community, "Frog"), Pixabay Content License, bez atribucije

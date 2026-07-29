@@ -3,14 +3,14 @@ extends Node
 
 const PATH := "user://save.cfg"
 
-var unlocked := false  # kupljeno "otključaj sve igre"
+var unlocked := OS.is_debug_build()  # debug: sve otključano (screenshotovi/razvoj); release: kupovina
 var music_on := true
 var sfx_on := true
 
 func _ready() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(PATH) == OK:
-		unlocked = cfg.get_value("iap", "unlocked", false)
+		unlocked = cfg.get_value("iap", "unlocked", OS.is_debug_build())
 		music_on = cfg.get_value("audio", "music_on", true)
 		sfx_on = cfg.get_value("audio", "sfx_on", true)
 

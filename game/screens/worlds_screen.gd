@@ -12,7 +12,8 @@ func _ready() -> void:
 func _world_card(pos: Vector2, art: String, title: String, target: String, s: Vector2, animal_id := "") -> void:
 	var card := Area2D.new()
 	card.position = pos
-	var card_scale := (s.y * 0.62) / 600.0
+	# ograniči i po širini da se kartice ne preklope na tabletu (4:3)
+	var card_scale := minf((s.y * 0.62) / 600.0, (s.x * 0.365) / 700.0)
 	var spr := Sprite2D.new()
 	spr.texture = load("res://art/svg/%s.svg" % art)
 	spr.scale = Vector2.ONE * card_scale

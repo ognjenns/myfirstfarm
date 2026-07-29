@@ -9,7 +9,7 @@ signal purchase_failed(message: String)
 const PRODUCT_ID := "unlock_all"
 
 var available := false     # Billing konektovan I proizvod postoji u Play konzoli
-var price_text := "€2.99"  # zameni se pravom lokalizovanom cenom iz Play-a
+var price_text := "$2.99"  # zameni se pravom lokalizovanom cenom iz Play-a
 
 var _bc: BillingClient = null
 

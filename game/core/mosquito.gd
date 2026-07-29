@@ -4,14 +4,16 @@ extends Node2D
 ## krilca i nervozan cik-cak let preko ekrana.
 
 var _t := 0.0
-var _from := Vector2.ZERO
 var _to := Vector2.ZERO
-var _dur := 6.0
+var _wp := Vector2.ZERO       # trenutna među-meta (waypoint)
+var _hover_t := 0.0           # > 0: lebdi u mestu pre sledećeg naleta
+var _hover_anchor := Vector2.ZERO
+var _dart_speed := 0.0
+var _vel := Vector2.ZERO
 var _wing_l: Polygon2D
 var _wing_r: Polygon2D
 
 func _init(from: Vector2, to: Vector2) -> void:
-	_from = from
 	_to = to
 	position = from
 	z_index = 60
@@ -55,19 +57,46 @@ func _init(from: Vector2, to: Vector2) -> void:
 		w.scale = Vector2(1.5, 0.7)
 
 
+## Pravi komarački let (steering kao kod leptira): brzina se SAVIJA ka meti
+## pa su putanje lukovi, meta ume da bude i bočno i unazad, a lebdenje
+## vidljivo treperi u mestu. Nikad prava linija.
 func _process(delta: float) -> void:
 	_t += delta
-	var k := _t / _dur
-	if k >= 1.0:
+	if _t >= 12.0 or position.distance_to(_to) < 70.0:
 		queue_free()
 		return
-	# nervozan let: osnovna putanja + dva sloja cik-caka
-	var jitter := Vector2(
-		sin(_t * 7.0) * 34.0 + sin(_t * 13.0) * 18.0,
-		sin(_t * 9.0) * 30.0 + cos(_t * 17.0) * 16.0
-	)
-	position = _from.lerp(_to, k) + jitter
+	if _wp == Vector2.ZERO:
+		_pick_waypoint()
+
+	if _hover_t > 0.0:
+		# lebdi: vidljivo nervozno treperenje oko sidra
+		_hover_t -= delta
+		_vel = _vel.lerp(Vector2.ZERO, 8.0 * delta)
+		position = _hover_anchor + Vector2(sin(_t * 21.0) * 10.0, cos(_t * 16.0) * 9.0)
+		rotation = lerpf(rotation, 0.0, 6.0 * delta)
+		if _hover_t <= 0.0:
+			_pick_waypoint()
+	else:
+		# skretanje sa ograničenjem → let u lukovima, ne po lenjiru
+		var desired := (_wp - position).normalized() * _dart_speed
+		_vel = _vel.lerp(desired, 4.5 * delta)
+		position += _vel * delta
+		# lice i nagib prate STVARNU brzinu (ne metu)
+		if absf(_vel.x) > 60.0:
+			scale.x = absf(scale.x) * (1.0 if _vel.x >= 0.0 else -1.0)
+		rotation = clampf(_vel.y * 0.0008, -0.35, 0.35) * signf(scale.x)
+		if position.distance_to(_wp) < 26.0:
+			_hover_anchor = position
+			_hover_t = randf_range(0.25, 0.8)
+
 	# frenetično zujanje krilima
 	var flap := absf(sin(_t * 34.0))
 	_wing_l.scale.y = 0.25 + 0.8 * flap
 	_wing_r.scale.y = 0.2 + 0.7 * (1.0 - flap)
+
+## Nova među-meta: uglavnom napreduje ka izlazu, ali ume i bočno/unazad.
+func _pick_waypoint() -> void:
+	var ahead := position.lerp(_to, randf_range(0.12, 0.38))
+	_wp = ahead + Vector2(randf_range(-170.0, 170.0), randf_range(-190.0, 190.0))
+	_wp.y = clampf(_wp.y, 80.0, 620.0)
+	_dart_speed = randf_range(380.0, 720.0)

@@ -11,15 +11,33 @@ static func svg(parent: Node, name: String, pos: Vector2, s := 1.0, z := -30) ->
 	parent.add_child(sp)
 	return sp
 
-## Pozadina cele scene (nebo + brda), razvučena na viewport.
-static func background(parent: CanvasItem, name := "background") -> void:
+## Pozadina cele scene (nebo + brda): visina se uklapa tačno, a širina sme
+## da se "stisne" najviše ~10% — ostatak se kropuje sa strana. Na telefonu
+## (16:9+) identično kao pre; na tabletu pločice/oblici ne izgledaju suženo.
+const BG_ART := Vector2(2340.0, 1080.0)
+static var _bg_scale_x := 1.0
+static var _bg_view := Vector2.ZERO
+
+## stretch=true: razvuci preko celog ekrana (organske pozadine — brda, trava —
+## gde deformacija nije vidljiva, a pozicije u pozadini prate frakcije ekrana).
+## stretch=false: geometrijske pozadine (pločice) — bez suženja, kropuje se.
+static func background(parent: CanvasItem, name := "background", stretch := false) -> void:
 	var size := UI.vs(parent)
 	var sp := Sprite2D.new()
 	sp.texture = load("res://art/svg/%s.svg" % name)
 	sp.position = size / 2
-	sp.scale = Vector2(size.x / 2340.0, size.y / 1080.0)
+	var sy := size.y / BG_ART.y
+	var sx := size.x / BG_ART.x if stretch else maxf(size.x / BG_ART.x, sy * 0.90)
+	sp.scale = Vector2(sx, sy)
 	sp.z_index = -50
 	parent.add_child(sp)
+	_bg_scale_x = sx
+	_bg_view = size
+
+## X na ekranu za frakciju širine POZADINSKOG arta — za rekvizite koji moraju
+## tačno da legnu na elemente nacrtane u pozadini (npr. pojilo u tuš-igri).
+static func bg_x(fx: float) -> float:
+	return _bg_view.x / 2.0 + (fx - 0.5) * BG_ART.x * _bg_scale_x
 
 static func sun(parent: Node, pos: Vector2, z := -35) -> void:
 	svg(parent, "sun", pos, 0.8, z)

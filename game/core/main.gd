@@ -33,6 +33,10 @@ func _ready() -> void:
 		_make_icon()
 	elif "--make-product-icon" in OS.get_cmdline_user_args():
 		_make_product_icon()
+	elif "--make-play-icon" in OS.get_cmdline_user_args():
+		_make_play_icon()
+	elif "--make-feature" in OS.get_cmdline_user_args():
+		_make_feature()
 	else:
 		goto("splash")
 
@@ -47,6 +51,67 @@ func _screenshot_run() -> void:
 		img.save_png(dir.path_join("%s.png" % screen_name))
 		print("SHOT: ", screen_name)
 	print("SHOTS DONE")
+	get_tree().quit()
+
+## Play Store ikonica (512px, PUN kvadrat bez providnosti — Play sam zaobljava).
+func _make_play_icon() -> void:
+	get_window().size = Vector2i(512, 512)
+	var root := Node2D.new()
+	add_child(root)
+	var center := Vector2(UI.W / 2, UI.H / 2)
+	UI.poly(root, UI.rect_points(1100, 1100), Pal.GRASS_DARK, center)
+	UI.circle(root, center, 470, Pal.GRASS)
+	UI.circle(root, center, 420, Pal.HILL_MID)
+	var f := AnimalFaces.build("cow")
+	f.position = center + Vector2(0, 20)
+	f.scale = Vector2(3.1, 3.1)
+	root.add_child(f)
+	await get_tree().create_timer(0.5).timeout
+	var img := get_viewport().get_texture().get_image()
+	var content_scale := minf(img.get_width() / UI.W, img.get_height() / UI.H)
+	var cc := center * content_scale
+	var half := 480.0 * content_scale
+	img = img.get_region(Rect2i(int(cc.x - half), int(cc.y - half), int(half * 2), int(half * 2)))
+	img.resize(512, 512, Image.INTERPOLATE_LANCZOS)
+	img.save_png(ProjectSettings.globalize_path("res://").path_join("../build/play_icon.png"))
+	print("PLAY ICON DONE")
+	get_tree().quit()
+
+## Feature grafika za Play listing (1024×500): nebo, brdo, red faca, naslov.
+func _make_feature() -> void:
+	get_window().size = Vector2i(1024, 500)
+	var root := Node2D.new()
+	add_child(root)
+	var s := UI.vs(self)
+	root.add_child(GradientBG.new(Pal.SKY_TOP, Pal.SKY_LOW))
+	# meka brda pri dnu
+	var hill := Polygon2D.new()
+	hill.polygon = UI.circle_points(s.x * 0.75, 60)
+	hill.position = Vector2(s.x * 0.30, s.y * 1.45)
+	hill.color = Pal.GRASS
+	root.add_child(hill)
+	var hill2 := Polygon2D.new()
+	hill2.polygon = UI.circle_points(s.x * 0.65, 60)
+	hill2.position = Vector2(s.x * 0.85, s.y * 1.50)
+	hill2.color = Pal.HILL_MID
+	root.add_child(hill2)
+	Scenery.svg(root, "sun", Vector2(s.x * 0.925, s.y * 0.16), 0.75, 0)
+	Scenery.svg(root, "cloud", Vector2(s.x * 0.10, s.y * 0.12), 0.8, 0)
+	# naslov
+	UI.label(root, "My First Animals", Vector2(s.x * 0.5, s.y * 0.20), 130, Color(0.29, 0.25, 0.22))
+	UI.label(root, "Cute animal games for toddlers  •  No ads", Vector2(s.x * 0.5, s.y * 0.38), 52, Color(0.42, 0.38, 0.34))
+	# red faca: farma + džungla
+	var ids := ["cow", "monkey", "pig", "lion", "duck", "elephant"]
+	for i in ids.size():
+		var f := AnimalFaces.build(ids[i])
+		f.position = Vector2(s.x * (0.115 + 0.154 * i), s.y * 0.76 + (18.0 if i % 2 == 1 else -8.0))
+		f.scale = Vector2.ONE * 1.35
+		root.add_child(f)
+	await get_tree().create_timer(0.5).timeout
+	var img := get_viewport().get_texture().get_image()
+	img.resize(1024, 500, Image.INTERPOLATE_LANCZOS)
+	img.save_png(ProjectSettings.globalize_path("res://").path_join("../build/feature_graphic.png"))
+	print("FEATURE DONE")
 	get_tree().quit()
 
 ## Ikonica IAP proizvoda za Play konzolu (512px, bez teksta/brenda):
@@ -135,7 +200,7 @@ func _make_icon() -> void:
 
 	# Android adaptive: pozadina (puna zelena) + prednji plan (krava, transparentno, safe zone)
 	var bg := Image.create(432, 432, false, Image.FORMAT_RGBA8)
-	bg.fill(Color("#F7F0E4"))  # krem — ista pozadina kao splash (brend)
+	bg.fill(Pal.HILL_MID)  # zelena — ista kao store ikonica (kontrast za krem kravu)
 	bg.save_png(ProjectSettings.globalize_path("res://icon_adaptive_bg.png"))
 
 	root.queue_free()

@@ -52,6 +52,7 @@ func _build_scenery(s: Vector2) -> void:
 	Scenery.fence(self, Vector2(s.x * 0.40, s.y * 0.47), 6)
 	Scenery.tree(self, Vector2(s.x * 0.93, s.y * 0.42))
 	Scenery.pond(self, Vector2(s.x * 0.60, s.y * 0.86))
+	add_child(Frog.new(Vector2(s.x * 0.60 - 150, s.y * 0.86 - 70)))
 	Scenery.hay_bales(self, Vector2(s.x * 0.80, s.y * 0.73))
 
 	# žbunje po brdima

@@ -16,19 +16,27 @@ var splash_pos := Vector2.ZERO
 func _ready() -> void:
 	home_target = "jungle"
 	var s := UI.vs(self)
-	Scenery.background(self, "background-shower")
+	Scenery.background(self, "background-shower", true)  # organska — puno razvlačenje
 	add_ambient(0, "mosquito")
 	add_home_button()
 
-	# rekviziti: biljka levo, grana sa peškirom desno
+	# rekviziti: biljka levo, peškir desno
 	Scenery.svg(self, "shower-plant", Vector2(s.x * 0.055, s.y * 0.80), (s.x * 0.10) / 300.0, -20)
-	# drvo sa peškirom: deblo FLUSH uz desnu ivicu, krošnja do vrha ekrana
-	var tb_scale := (s.y * 0.80) / 620.0
-	Scenery.svg(self, "towel-branch", Vector2(s.x - 260.0 * tb_scale, s.y * 0.42), tb_scale, -20)
+	if s.x / s.y >= 1.6:
+		# širok ekran (telefon): drvo uz desnu ivicu, krošnja izlazi preko vrha
+		var tb_scale := (s.y * 0.80) / 620.0
+		Scenery.svg(self, "towel-branch", Vector2(s.x - 260.0 * tb_scale, s.y * 0.42), tb_scale, -20)
+	else:
+		# uzak ekran (tablet 4:3/16:10): drvo bi pregazilo pojilo — umesto njega
+		# peškir visi na lijani sa vrha ekrana
+		var v_scale := (s.y * 0.34) / 500.0
+		Scenery.svg(self, "vine", Vector2(s.x * 0.88, 250.0 * v_scale), v_scale, -20)
+		Scenery.svg(self, "towel", Vector2(s.x * 0.88, 500.0 * v_scale + 130.0 * (s.x * 0.085) / 256.0), (s.x * 0.085) / 256.0, -19)
 
-	# slon na kamenoj ploči (ploča je u pozadini)
+	# slon na kamenoj ploči (ploča je u pozadini) — sidrimo mu STOPALA na
+	# vrh ploče (0.79h), pa visina ekrana ne može da ga "odlepi" od nje
 	var e_scale := (s.x * 0.215) / 560.0
-	elephant_pos = Vector2(s.x * 0.215, s.y * 0.60)
+	elephant_pos = Vector2(s.x * 0.215, s.y * 0.79 - 230.0 * e_scale)
 	elephant = Area2D.new()
 	elephant.position = elephant_pos
 	var spr := Sprite2D.new()
