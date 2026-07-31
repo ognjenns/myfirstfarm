@@ -2,12 +2,13 @@ extends BaseScreen
 ## Roditeljski ugao u duhu igre: drvene daske-dugmad sa ikonicama,
 ## farm prekidači za muziku/zvuk, footer sa Oggie ćurkicom.
 
-const VERSION := "0.1.0"
+const VERSION := "1.0.2"  # držati u skladu sa version/name u export_presets.cfg
 const PRIVACY_URL := "https://ognjenns.github.io/myfirstfarm/privacy.html"
 
 var music_toggle: Sprite2D
 var sfx_toggle: Sprite2D
 var unlock_label: Label
+var unlock_price: Label
 
 func _ready() -> void:
 	home_target = get_tree().get_first_node_in_group("main").last_world
@@ -23,8 +24,8 @@ func _ready() -> void:
 
 	music_toggle = _row(lx, rows[0], "icon-music", "Music", _toggle_music, true)
 	sfx_toggle = _row(rx, rows[0], "icon-sound", "Sounds", _toggle_sfx, true)
-	_row(lx, rows[1], "icon-lock", "", _unlock_pressed, false, 36)
-	_row(rx, rows[1], "icon-restore", "Restore purchases", _restore_pressed, false, 36)
+	_row(lx, rows[1], "icon-lock", "", _unlock_pressed)
+	_row(rx, rows[1], "icon-restore", "Restore purchases", _restore_pressed)
 	Store.unlock_state_changed.connect(_refresh_unlock)
 	_row(lx, rows[2], "icon-privacy", "Privacy policy", func() -> void:
 		if PRIVACY_URL != "":
@@ -32,17 +33,27 @@ func _ready() -> void:
 	)
 	_row(rx, rows[2], "icon-home-small", "Back to game", func() -> void: go(home_target))
 
-	# tekst na unlock dasci (menja se sa stanjem)
+	# unlock daska u tri segmenta kao Music/Sounds: katanac | tekst | cena.
+	# Tekst mora da stane IZMEĐU urezanih linija (art: x=200..565 od 760),
+	# a cena/kvačica ide u desni segment — tamo gde ostale daske drže prekidač.
 	var up_scale := (s.x * 0.36) / 760.0
-	unlock_label = UI.label(self, "", Vector2(lx + s.x * 0.36 * 0.03, rows[1] - 6.0 * up_scale), 36)
+	unlock_label = UI.label(self, "", Vector2(lx + s.x * 0.36 * 0.007, rows[1] - 6.0 * up_scale), 40)
+	unlock_price = UI.label(self, "", Vector2(lx + s.x * 0.36 * 0.34, rows[1] - 6.0 * up_scale), 34)
 	# ispod daske: šta se sve dobija (obećanje važi i za buduće svetove)
 	UI.label(self, "All worlds + future updates", Vector2(lx, rows[1] + 92.0 * up_scale), 26, Color(0.55, 0.50, 0.45))
 	_refresh_toggles()
 	_refresh_unlock()
 
 	# footer: Oggie ćurkica + verzija
-	Scenery.svg(self, "logo-mini", Vector2(s.x / 2 - 420, s.y * 0.91), 0.3, 0)
-	UI.label(self, "My First Farm  •  Oggie Games  •  v%s" % VERSION, Vector2(s.x / 2 + 60, s.y * 0.91), 32, Color(0.55, 0.50, 0.45))
+	Scenery.svg(self, "logo-mini", Vector2(s.x / 2 - 460, s.y * 0.91), 0.3, 0)
+	# ime se čita iz project.godot da više ne može da odluta od stvarnog imena appa;
+	# na iOS-u App Store listing nosi i "Toddler Game" sufiks (golo ime je bilo zauzeto)
+	var app_name: String = ProjectSettings.get_setting("application/config/name", "My First Animals")
+	if OS.has_feature("ios"):
+		app_name += ": Toddler Game"
+	var footer := "%s  •  Oggie Games  •  v%s" % [app_name, VERSION]
+	# duži iOS tekst: manji font + centar pomeren udesno da ne pređe preko ćurke
+	UI.label(self, footer, Vector2(s.x / 2 + 80, s.y * 0.91), 26 if footer.length() > 45 else 32, Color(0.55, 0.50, 0.45))
 
 ## Jedna daska-dugme: ikonica levo, tekst, opciono prekidač desno. Vraća toggle sprite.
 func _row(x: float, y: float, icon: String, text: String, action: Callable, with_toggle := false, font_size := 40) -> Sprite2D:
@@ -101,7 +112,16 @@ func _restore_pressed() -> void:
 	Store.restore()
 
 func _refresh_unlock() -> void:
-	unlock_label.text = "All games unlocked  ✓" if Save.unlocked else "Unlock all games — %s" % Store.price_text
+	if Save.unlocked:
+		unlock_label.text = "All games unlocked"
+		unlock_price.text = "✓"
+		unlock_price.add_theme_font_size_override("font_size", 44)
+		unlock_price.add_theme_color_override("font_color", Color("#5FA463"))
+	else:
+		unlock_label.text = "Unlock all games"
+		unlock_price.text = Store.price_text
+		# duže lokalizovane cene (npr. "RSD 349,99") — manji font da stanu u segment
+		unlock_price.add_theme_font_size_override("font_size", 34 if Store.price_text.length() <= 6 else 24)
 
 func _toggle_music() -> void:
 	Save.set_music_on(not Save.music_on)

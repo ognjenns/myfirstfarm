@@ -1,25 +1,30 @@
-; Moja Farma — Godot 4.7
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
 config_version=5
 
 [application]
 
 config/name="My First Animals"
 run/main_scene="res://core/main.tscn"
+run/flush_stdout_on_print=true
 config/features=PackedStringArray("4.7")
-config/icon="res://icon.png"
 boot_splash/bg_color=Color(0.969, 0.941, 0.894, 1)
+boot_splash/stretch_mode=0
 boot_splash/image="res://boot_splash.png"
-boot_splash/fullsize=false
+config/icon="res://icon.png"
 
 [autoload]
 
 Save="*res://core/save.gd"
 Audio="*res://core/audio.gd"
+GodotIapPlugin="*uid://t6k01b7ffp5q"
 Store="*res://core/store.gd"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/GodotGooglePlayBilling/plugin.cfg")
 
 [display]
 
@@ -29,9 +34,9 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=4
 
-[input_devices]
+[editor_plugins]
 
-pointing/emulate_mouse_from_touch=true
+enabled=PackedStringArray("res://addons/GodotGooglePlayBilling/plugin.cfg", "res://addons/godot-iap/plugin.cfg")
 
 [rendering]
 

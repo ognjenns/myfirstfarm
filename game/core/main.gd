@@ -72,6 +72,11 @@ func _make_play_icon() -> void:
 	var cc := center * content_scale
 	var half := 480.0 * content_scale
 	img = img.get_region(Rect2i(int(cc.x - half), int(cc.y - half), int(half * 2), int(half * 2)))
+	# iOS traži 1024 pun kvadrat bez alfe; ista slika služi i za Play store (512)
+	var ios := img.duplicate()
+	ios.resize(1024, 1024, Image.INTERPOLATE_LANCZOS)
+	ios.convert(Image.FORMAT_RGB8)
+	ios.save_png(ProjectSettings.globalize_path("res://ios_icon_1024.png"))
 	img.resize(512, 512, Image.INTERPOLATE_LANCZOS)
 	img.save_png(ProjectSettings.globalize_path("res://").path_join("../build/play_icon.png"))
 	print("PLAY ICON DONE")
