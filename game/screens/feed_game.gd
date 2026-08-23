@@ -115,8 +115,8 @@ func _feed(animal_node: AnimalSprite, food: FoodItem) -> void:
 	food.eaten_by(plates[animal_node.animal.id].global_position)
 	UI.haptic(35)
 	Audio.play("plop")
-	get_tree().create_timer(0.22).timeout.connect(func() -> void: Audio.play("nom"))
-	get_tree().create_timer(0.55).timeout.connect(func() -> void: animal_node.react(true))
+	get_tree().create_timer(0.20).timeout.connect(func() -> void: Audio.play("nom"))
+	get_tree().create_timer(1.00).timeout.connect(func() -> void: animal_node.react(true))
 	if foods_left == 0:
 		round_num += 1
 		_victory_dance()

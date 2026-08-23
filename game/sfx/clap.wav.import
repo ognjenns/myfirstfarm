@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://ddf8knrtaxl43"
-path="res://.godot/imported/horse_happy.wav-e19c9ed06ca922221c96890fef4c451f.sample"
+uid="uid://cosl2ush3be1n"
+path="res://.godot/imported/clap.wav-7ab817fa38f18f97883f99203b90e667.sample"
 
 [deps]
 
-source_file="res://sfx/horse_happy.wav"
-dest_files=["res://.godot/imported/horse_happy.wav-e19c9ed06ca922221c96890fef4c451f.sample"]
+source_file="res://sfx/clap.wav"
+dest_files=["res://.godot/imported/clap.wav-7ab817fa38f18f97883f99203b90e667.sample"]
 
 [params]
 

@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://fndrgt1i4asc"
-path="res://.godot/imported/duck_happy.wav-f3e9b4efaa082b8b307e7844eb8d150c.sample"
+uid="uid://cm8kyxmltej83"
+path="res://.godot/imported/hippo_0.wav-7e36e920b076a40f43fd3b02d8516f46.sample"
 
 [deps]
 
-source_file="res://sfx/duck_happy.wav"
-dest_files=["res://.godot/imported/duck_happy.wav-f3e9b4efaa082b8b307e7844eb8d150c.sample"]
+source_file="res://sfx/hippo_0.wav"
+dest_files=["res://.godot/imported/hippo_0.wav-7e36e920b076a40f43fd3b02d8516f46.sample"]
 
 [params]
 

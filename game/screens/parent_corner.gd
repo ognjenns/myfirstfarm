@@ -2,7 +2,7 @@ extends BaseScreen
 ## Roditeljski ugao u duhu igre: drvene daske-dugmad sa ikonicama,
 ## farm prekidači za muziku/zvuk, footer sa Oggie ćurkicom.
 
-const VERSION := "1.0.2"  # držati u skladu sa version/name u export_presets.cfg
+const VERSION := "1.0.3"  # držati u skladu sa version/name u export_presets.cfg
 const PRIVACY_URL := "https://ognjenns.github.io/myfirstfarm/privacy.html"
 
 var music_toggle: Sprite2D

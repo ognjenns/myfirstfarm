@@ -20,6 +20,8 @@ func _ready() -> void:
 	Scenery.background(self, "background-quiz")
 	add_home_button()
 	for a in Animals.JUNGLE:
+		if a.id in Animals.SILENT:   # žvakanje se ne može pogoditi kao glas
+			continue
 		if ResourceLoader.exists("res://sfx/%s_0.wav" % a.id):
 			roster.append(a)
 	_build_bubble(s)

@@ -43,12 +43,17 @@ func _load_stream(sound: String) -> AudioStream:
 	return null
 
 const SUCCESS_VARIANTS := ["success", "success_1", "success_2"]
+## Dodiri se u minutu ponove desetine puta; identičan sempl svaki put zvuči
+## mašinski, pa im visina varira za nijansu (jedva primetno, ali ubija zamor).
+const PITCH_VARIED := ["pluck", "pop", "tap", "nom"]
 
 func play(sound: String, volume_db := 0.0, pitch := 1.0) -> void:
 	if not Save.sfx_on:
 		return
 	if sound == "success":
 		sound = SUCCESS_VARIANTS[randi() % SUCCESS_VARIANTS.size()]  # protiv zamora ponavljanja
+	if pitch == 1.0 and sound in PITCH_VARIED:
+		pitch = randf_range(0.95, 1.06)
 	var stream := _load_stream(sound)
 	if stream == null:
 		return
@@ -75,9 +80,5 @@ func is_busy() -> bool:
 func animal_voice(id: String) -> void:
 	var name := "%s_%d" % [id, randi() % 2]
 	if _load_stream(name) == null:
-		play("%s_happy" % id)  # džungla još nema prava glasanja — veseli đingl
-	else:
-		play(name)
-
-func animal_happy(id: String) -> void:
-	play("%s_happy" % id)
+		name = "%s_0" % id  # životinja ima samo jednu varijantu glasanja
+	play(name)

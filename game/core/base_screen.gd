@@ -44,11 +44,15 @@ func _spawn_ambient_flyer() -> void:
 		add_child(Butterfly.new(from, to, Butterfly.COLORS[randi() % Butterfly.COLORS.size()]))
 
 func celebrate(pos: Vector2) -> void:
-	Audio.play("fanfare")
+	# Slavlje je sastavljeno od pravih snimaka: pobednički đingl, pa aplauz,
+	# pa na pola slučajeva dečji glas. Sintetička fanfara je zvučala kao zvono.
+	Audio.play("win")
 	UI.confetti(self, pos, 90)
 	UI.confetti(self, pos + Vector2(-350, 60), 50)
 	UI.confetti(self, pos + Vector2(350, 60), 50)
-	# retka bonus nagrada: dečji kikot ili "yay!" (~1 od 4 slavlja — da ostane specijalno)
-	if randf() < 0.25:
-		var bonus: String = ["giggle", "yay"][randi() % 2]
-		get_tree().create_timer(0.7).timeout.connect(func() -> void: Audio.play(bonus, -2.0))
+	# ILI aplauz ILI dečji glas — nikad oba, jer se preklapaju u kašu.
+	if randf() < 0.5:
+		var kid: String = ["yay", "giggle", "kid"][randi() % 3]
+		get_tree().create_timer(0.55).timeout.connect(func() -> void: Audio.play(kid, -2.0))
+	else:
+		get_tree().create_timer(0.35).timeout.connect(func() -> void: Audio.play("clap", -3.0))

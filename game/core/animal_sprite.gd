@@ -47,11 +47,11 @@ func _on_input(_vp: Node, event: InputEvent, _idx: int) -> void:
 		tapped.emit(animal)
 
 ## Glasanje + poskok (poziva se i spolja, npr. kad je nahranjena).
-func react(happy := false) -> void:
-	if happy:
-		Audio.animal_happy(animal.id)
-	else:
-		Audio.animal_voice(animal.id)
+## I kad je srećna pušta SVOJE pravo glasanje — sintetički đingl je zvučao
+## kao zvono iz lifta i dete ga ne povezuje sa životinjom. Za žirafu i nilskog
+## konja (nemaju snimak) animal_voice sam pada na _happy đingl.
+func react(_happy := false) -> void:
+	Audio.animal_voice(animal.id)
 	UI.bounce(self, base_scale)
 
 func shake() -> void:

@@ -20,3 +20,26 @@ Originali: `~/Downloads/mixkit-*.wav`, `assets/fs_candidates/`, `assets/real_sou
 - `monkey_0/1.wav` — Pixabay (u_zpj3vbdres, "Monkey"), Pixabay Content License, bez atribucije
 - `parrot_0/1.wav` — "Parrot squawk sound effect" (korisnikov download), dva različita kreštaja isečena iz istog snimka
 - `frog.wav` — Pixabay (freesound_community, "Frog"), Pixabay Content License, bez atribucije
+
+## Dopuna 23.08.2026 — pravi snimci umesto sinteze
+
+Svi Mixkit Free License (komercijalno OK, **bez obaveze potpisivanja**).
+Obrada: `assets/process_mixkit_v4.sh` (mono 22050, odsecanje tišine, fade, RMS poravnat na ostatak igre).
+
+| Zvuk u igri | Izvor |
+|---|---|
+| nom (žvakanje) | Mixkit "Animal eating herb" (2241) |
+| giraffe_0/1, hippo_0/1 | isti snimak, pitch varijante — žirafa i nilski konj namerno nemaju pravo glasanje (plašilo bi decu), pa "govore" mirnim žvakanjem |
+| wrong | Mixkit "Cartoon girl saying no no no" (2257) |
+| success, success_1/2 | Mixkit "Achievement bell" (600), _1/_2 pitch varijante |
+| win (kraj runde) | Mixkit "Instant win" (2021) |
+| clap | Mixkit "Small group clapping" (475), skraćeno na 2,6 s |
+| kid | Mixkit "Funny kid voice" (2879) |
+| splash | Mixkit "Spray water or liquid" (3215) |
+| pop, tap (meni i dugmad) | Mixkit "Plastic bubble click" (1124), tap je viša i tiša varijanta |
+| pluck (uzimanje hrane, karta) | Mixkit "Electric pop" (2365), skraćen na 0,45 s |
+
+**Ostalo sintetičko:** plop, scrub, music, splash_theme,
+i 13 `*_happy` đinglova koji su sada MRTVI (sve životinje imaju pravo glasanje) —
+mogu se obrisati pri sledećem čišćenju. `buzz.wav` je nezakačen jer su komarci
+NAMERNO uklonjeni iz igre — nije propust.

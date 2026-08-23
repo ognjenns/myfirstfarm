@@ -12,12 +12,16 @@ config_version=5
 
 config/name="My First Animals"
 run/main_scene="res://core/main.tscn"
-run/flush_stdout_on_print=true
 config/features=PackedStringArray("4.7")
+run/flush_stdout_on_print=true
 boot_splash/bg_color=Color(0.969, 0.941, 0.894, 1)
 boot_splash/stretch_mode=0
 boot_splash/image="res://boot_splash.png"
 config/icon="res://icon.png"
+
+[audio]
+
+buses/default_bus_layout="uid://bqm2ynwvxlk3f"
 
 [autoload]
 

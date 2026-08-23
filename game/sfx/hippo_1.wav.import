@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://dr70qmovw1gih"
-path="res://.godot/imported/monkey_happy.wav-588861be0fb74cde6847016516680c52.sample"
+uid="uid://dlpxp61n6lgmx"
+path="res://.godot/imported/hippo_1.wav-910243424a508b3d83905cfccd6bde2c.sample"
 
 [deps]
 
-source_file="res://sfx/monkey_happy.wav"
-dest_files=["res://.godot/imported/monkey_happy.wav-588861be0fb74cde6847016516680c52.sample"]
+source_file="res://sfx/hippo_1.wav"
+dest_files=["res://.godot/imported/hippo_1.wav-910243424a508b3d83905cfccd6bde2c.sample"]
 
 [params]
 

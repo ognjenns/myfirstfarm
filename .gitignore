@@ -9,3 +9,7 @@ assets/fs_audition/
 assets/real_sounds/
 assets/real_sounds2/
 assets/real_sounds3/
+
+# radni artefakti zvuka (bekapi i A/B poređenja, ne idu u repo)
+assets/sfx_backup_v2/
+assets/sfx_AB_*.wav

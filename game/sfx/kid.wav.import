@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://dgfrasgefxxe2"
-path="res://.godot/imported/hippo_happy.wav-361e35e17fcc46a1dfabcdeb2b4997fe.sample"
+uid="uid://d2nwixd4bhpwi"
+path="res://.godot/imported/kid.wav-6b908601af73ef269906576b218b981b.sample"
 
 [deps]
 
-source_file="res://sfx/hippo_happy.wav"
-dest_files=["res://.godot/imported/hippo_happy.wav-361e35e17fcc46a1dfabcdeb2b4997fe.sample"]
+source_file="res://sfx/kid.wav"
+dest_files=["res://.godot/imported/kid.wav-6b908601af73ef269906576b218b981b.sample"]
 
 [params]
 

@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://8mtkk4j3fm2t"
-path="res://.godot/imported/giraffe_happy.wav-f306ccb7d1caea6167cfff0879df212b.sample"
+uid="uid://cb3j4c37oitha"
+path="res://.godot/imported/win.wav-f68d6ed3654ce2827de82af073a2c740.sample"
 
 [deps]
 
-source_file="res://sfx/giraffe_happy.wav"
-dest_files=["res://.godot/imported/giraffe_happy.wav-f306ccb7d1caea6167cfff0879df212b.sample"]
+source_file="res://sfx/win.wav"
+dest_files=["res://.godot/imported/win.wav-f68d6ed3654ce2827de82af073a2c740.sample"]
 
 [params]
 

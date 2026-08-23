@@ -1,6 +1,11 @@
 class_name Animals
 ## Sav "sadržaj" igre na jednom mestu — reskin = zameni ovaj fajl + sfx + AnimalFaces.
 
+## Žirafa i nilski konj namerno nemaju snimljeno glasanje — prava rika bi
+## plašila decu. Njihov "glas" je mirno žvakanje, što ima smisla dok jedu,
+## ali NE u pogađalici zvukova ni kao reakcija na kupanje.
+const SILENT := ["giraffe", "hippo"]
+
 const LIST := [
 	{"id": "cow",     "food": "grass"},
 	{"id": "pig",     "food": "apple"},

@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://bkm3jrqtjk8eh"
-path="res://.godot/imported/pig_happy.wav-ef74b0058c4d55614aaeeba87cb22ef2.sample"
+uid="uid://c6rnm7532s3au"
+path="res://.godot/imported/giraffe_0.wav-6dc0ee47338e245077511208e7cb94da.sample"
 
 [deps]
 
-source_file="res://sfx/pig_happy.wav"
-dest_files=["res://.godot/imported/pig_happy.wav-ef74b0058c4d55614aaeeba87cb22ef2.sample"]
+source_file="res://sfx/giraffe_0.wav"
+dest_files=["res://.godot/imported/giraffe_0.wav-6dc0ee47338e245077511208e7cb94da.sample"]
 
 [params]
 

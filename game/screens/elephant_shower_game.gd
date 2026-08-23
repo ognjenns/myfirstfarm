@@ -96,7 +96,8 @@ func _next_bather(announce := true) -> void:
 	bather.z_index = 10
 	add_child(bather)
 	if announce:
-		Audio.animal_happy(animal.id)
+		if not animal.id in Animals.SILENT:   # žvakanje uz kupanje nema smisla
+			Audio.animal_voice(animal.id)
 		UI.bounce(bather, bather.base_scale)
 	_spawn_mud()
 	_busy = false
@@ -156,7 +157,10 @@ func _show_splash_ring() -> void:
 	tw.tween_callback(ring.queue_free)
 
 func _celebrate_clean() -> void:
-	bather.react(true)
+	if bather.animal.id in Animals.SILENT:
+		UI.bounce(bather, bather.base_scale)   # samo poskoči, bez žvakanja
+	else:
+		bather.react(true)
 	UI.haptic(60)
 	celebrate(bather_pos + Vector2(0, -200))
 	var tw := create_tween()

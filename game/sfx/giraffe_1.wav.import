@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://ckiixp0k74vm6"
-path="res://.godot/imported/fanfare.wav-8ad8bdc07d86cb458a6a41ccc8df1b14.sample"
+uid="uid://dxn3c3u755ka5"
+path="res://.godot/imported/giraffe_1.wav-3cbb2ba051c49ec6b54e4d23f0842b08.sample"
 
 [deps]
 
-source_file="res://sfx/fanfare.wav"
-dest_files=["res://.godot/imported/fanfare.wav-8ad8bdc07d86cb458a6a41ccc8df1b14.sample"]
+source_file="res://sfx/giraffe_1.wav"
+dest_files=["res://.godot/imported/giraffe_1.wav-3cbb2ba051c49ec6b54e4d23f0842b08.sample"]
 
 [params]
 
