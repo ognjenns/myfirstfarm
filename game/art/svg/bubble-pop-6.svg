@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <g transform="translate(128 128) scale(0.95 1.05) translate(-128 -128)">
+    <circle cx="128" cy="128" r="110" fill="#BFE4F2" fill-opacity="0.32" stroke="#F2FAFD" stroke-width="4" stroke-opacity="0.7"></circle>
+    <circle cx="102" cy="100" r="26.4" fill="#FFFFFF" fill-opacity="0.56"></circle>
+  </g>
+  <circle cx="222.1" cy="147.1" r="5.0" fill="#CFEAF6" fill-opacity="0.5" stroke="#F2FAFD" stroke-width="4" stroke-opacity="0.5"></circle>
+  <circle cx="158.5" cy="219.0" r="5.0" fill="#CFEAF6" fill-opacity="0.5" stroke="#F2FAFD" stroke-width="4" stroke-opacity="0.5"></circle>
+  <circle cx="64.4" cy="199.9" r="5.0" fill="#CFEAF6" fill-opacity="0.5" stroke="#F2FAFD" stroke-width="4" stroke-opacity="0.5"></circle>
+  <circle cx="33.9" cy="108.9" r="5.0" fill="#CFEAF6" fill-opacity="0.5" stroke="#F2FAFD" stroke-width="4" stroke-opacity="0.5"></circle>
+  <circle cx="97.5" cy="37.0" r="5.0" fill="#CFEAF6" fill-opacity="0.5" stroke="#F2FAFD" stroke-width="4" stroke-opacity="0.5"></circle>
+  <circle cx="191.6" cy="56.1" r="5.0" fill="#CFEAF6" fill-opacity="0.5" stroke="#F2FAFD" stroke-width="4" stroke-opacity="0.5"></circle>
+</svg>

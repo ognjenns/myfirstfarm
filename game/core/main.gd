@@ -6,6 +6,11 @@ const SCREENS := {
 	"worlds": preload("res://screens/worlds_screen.gd"),
 	"hub": preload("res://screens/hub.gd"),
 	"jungle": preload("res://screens/jungle_hub.gd"),
+	"ocean": preload("res://screens/ocean_hub.gd"),
+	"bubbles": preload("res://screens/bubble_catch_game.gd"),
+	"leadfish": preload("res://screens/lead_fish_game.gd"),
+	"orchestra": preload("res://screens/orchestra_game.gd"),
+	"colors": preload("res://screens/color_sort_game.gd"),
 	"memory": preload("res://screens/memory_game.gd"),
 	"quiz": preload("res://screens/sound_quiz_game.gd"),
 	"jfeed": preload("res://screens/jungle_feed_game.gd"),
@@ -46,7 +51,12 @@ func _screenshot_run() -> void:
 	DirAccess.make_dir_recursive_absolute(dir)
 	for screen_name in SCREENS:
 		goto(screen_name)
-		await get_tree().create_timer(0.9).timeout
+		# Igre popunjavaju ekran tokom vremena — mehurići se dižu, ribice
+		# doplivaju, nagoveštaj se iscrta. Na 0,9 s su ekrani bili prazni.
+		await get_tree().create_timer(5.0).timeout
+		# Bez čekanja na završen crtež slika zaostaje za ekranom — snimci su
+		# ispadali dva ekrana unazad, pa je "bubbles.png" prikazivao džunglu.
+		await RenderingServer.frame_post_draw
 		var img := get_viewport().get_texture().get_image()
 		img.save_png(dir.path_join("%s.png" % screen_name))
 		print("SHOT: ", screen_name)
@@ -251,8 +261,12 @@ func _smoke_test() -> void:
 	print("SMOKE DONE")
 	get_tree().quit()
 
+## Hubovi svetova — dopuniti pri dodavanju novog sveta, inače povratak iz
+## roditeljskih ekrana odvede na pogrešan svet (okean je tako vodio na farmu).
+const WORLD_HUBS := ["hub", "jungle", "ocean"]
+
 func goto(screen_name: String) -> void:
-	if screen_name == "hub" or screen_name == "jungle":
+	if screen_name in WORLD_HUBS:
 		last_world = screen_name
 	if current:
 		current.queue_free()

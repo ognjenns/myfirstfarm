@@ -114,12 +114,11 @@ func _on_pick(btn: TapButton, a: Dictionary) -> void:
 		return
 	if a.id != answer.id:
 		# blaga reakcija, dete slobodno proba dalje
-		Audio.play("wrong", -10.0)
+		Audio.play("wrong", -8.0)
 		_shake_no(btn)
 		return
 	busy = true
 	streak += 1
-	Audio.play("success", -4.0)
 	Audio.animal_voice(a.id)
 	UI.haptic(35)
 	_jump_spin(btn)

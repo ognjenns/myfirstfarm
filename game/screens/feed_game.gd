@@ -105,7 +105,7 @@ func _on_food_dropped(food: FoodItem) -> void:
 	if animal_node.animal.food == food.kind:
 		_feed(animal_node, food)
 	else:
-		Audio.play("wrong", -6.0)
+		Audio.play("wrong", -8.0)
 		animal_node.shake()
 		food.go_home()
 

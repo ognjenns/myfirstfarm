@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="260" viewBox="0 0 360 260">
+<ellipse cx="180" cy="206.3" rx="168.3" ry="16.7" fill="#CBB894" fill-opacity="0.4"></ellipse>
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round">
+  <path d="M82.7,72 L82.7,44" stroke-width="11" stroke-linecap="round"></path>
+  <path d="M277.3,72 L277.3,44" stroke-width="11" stroke-linecap="round"></path>
+  <circle cx="82.7" cy="34" r="20" fill="#F28E86"></circle>
+  <circle cx="277.3" cy="34" r="20" fill="#F28E86"></circle>
+  <path d="M97.4,194.3 A118 76 0 1 1 262.6,194.3 Z" fill="#F28E86"></path>
+</g>
+<circle cx="82.7" cy="34" r="7" fill="#4A3F3A"></circle>
+<circle cx="277.3" cy="34" r="7" fill="#4A3F3A"></circle>
+<ellipse cx="140" cy="136" rx="12" ry="15" fill="#4A3F3A"></ellipse>
+<ellipse cx="220" cy="136" rx="12" ry="15" fill="#4A3F3A"></ellipse>
+<ellipse cx="102" cy="146" rx="20" ry="12" fill="#F3B3C4" fill-opacity="0.5"></ellipse>
+<ellipse cx="258" cy="146" rx="20" ry="12" fill="#F3B3C4" fill-opacity="0.5"></ellipse>
+<path d="M156,176 Q180,196 204,176" fill="none" stroke="#4A3F3A" stroke-width="8" stroke-linecap="round"></path>
+<path d="M35.7,194.3 C93.4,173.4 266.6,173.4 324.3,194.3 C266.6,213.1 93.4,213.1 35.7,194.3 Z" fill="#E4D3B4"></path>
+<path d="M58.8,195.3 C110.7,180.5 249.3,180.5 301.2,195.3 C249.3,205.1 110.7,205.1 58.8,195.3 Z" fill="#EFE2C8" fill-opacity="0.8"></path>
+  <circle cx="78.9" cy="178.7" r="5.5" fill="#EFE2C8" fill-opacity="0.39"></circle>
+  <circle cx="106.3" cy="174.3" r="7.1" fill="#EFE2C8" fill-opacity="0.39"></circle>
+  <circle cx="135.4" cy="179.8" r="5.1" fill="#CBB894" fill-opacity="0.39"></circle>
+  <circle cx="166.3" cy="175.4" r="6.7" fill="#EFE2C8" fill-opacity="0.39"></circle>
+  <circle cx="198.9" cy="178.7" r="5.5" fill="#EFE2C8" fill-opacity="0.39"></circle>
+  <circle cx="229.7" cy="173.7" r="7.3" fill="#EFE2C8" fill-opacity="0.39"></circle>
+  <circle cx="258.9" cy="180.4" r="4.9" fill="#CBB894" fill-opacity="0.39"></circle>
+  <circle cx="286.3" cy="176.5" r="6.3" fill="#EFE2C8" fill-opacity="0.39"></circle>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="560" viewBox="0 0 520 560">
+<ellipse cx="260" cy="542" rx="222" ry="18" fill="#4A3F3A" fill-opacity="0.14"></ellipse>
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round">
+  <path d="M74,300 C56,236 88,190 132,196 C120,236 122,272 136,306 Z" fill="#D95F62"></path>
+  <path d="M446,296 C464,232 432,186 388,192 C400,232 398,268 384,302 Z" fill="#D95F62"></path>
+  <path d="M150,180 C150,110 198,58 260,58 C322,58 370,110 370,180 Z" fill="#F0876F"></path>
+  <path d="M62,534 C42,404 70,264 152,190 C210,138 310,138 368,190 C450,264 478,404 458,534 Z" fill="#F0876F"></path>
+  <path d="M150,534 C142,414 178,336 260,336 C342,336 378,414 370,534 Z" fill="#3A4A52"></path>
+</g>
+<path d="M170,522 C164,418 194,352 260,352 C326,352 356,418 350,522 Z" fill="#2A363C"></path>
+<g fill="#F7B3A2">
+  <circle cx="122" cy="286" r="16"></circle>
+  <circle cx="398" cy="282" r="14"></circle>
+  <circle cx="212" cy="222" r="18"></circle>
+  <circle cx="308" cy="212" r="15"></circle>
+  <circle cx="106" cy="404" r="17"></circle>
+  <circle cx="414" cy="396" r="15"></circle>
+  <circle cx="132" cy="474" r="13"></circle>
+  <circle cx="392" cy="470" r="12"></circle>
+</g>
+<g fill="#F4A79A">
+  <circle cx="260" cy="128" r="20"></circle>
+  <circle cx="196" cy="146" r="13"></circle>
+  <circle cx="322" cy="142" r="12"></circle>
+</g>
+</svg>

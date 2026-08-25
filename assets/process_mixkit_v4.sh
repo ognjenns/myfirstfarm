@@ -81,3 +81,22 @@ prep "$SRC/mixkit-plastic-bubble-click-1124.wav" tap.wav -27 "asetrate=22050*1.1
 prep "$SRC/mixkit-electric-pop-2365.wav" pluck.wav -24 "atrim=0:0.45"
 
 echo "Gotovo."
+
+# --- IGRA MEHURIĆI ----------------------------------------------------------
+# Pucanje mehurića — najčešći zvuk u igri, zato kratak i mek.
+prep "$SRC/mixkit-water-bubble-1317.wav" bubble_pop.wav -26
+# Ribica krene ka kućici; original ima rep od 2 s pa se skraćuje.
+prep "$SRC/mixkit-game-liquid-game-hit-3155.wav" fish_go.wav -29 "atrim=0:0.90"
+
+# --- IGRA ORKESTAR ----------------------------------------------------------
+# Jedan čist ton; visina se u kodu menja u pentatonsku lestvicu po biću.
+# Ovaj JEDAN fajl ostaje na 44 kHz. Igra ga svira i oktavu više, a na 22 kHz
+# podizanje visine gura sadržaj preko Nyquistove granice i čuje se kao
+# šuštanje. Sa dvostrukim rate-om ima mesta za podizanje.
+ffmpeg -v error -i "$SRC/mixkit-alert-quick-chime-766.wav" -ac 1 \
+	-af "aresample=44100,$TRIM,atrim=0:1.05,afade=t=in:st=0:d=0.004,afade=t=out:st=0.80:d=0.25" \
+	-ar 44100 -c:a pcm_s16le "$TMP/n.wav" -y
+NRMS=$(ffmpeg -hide_banner -i "$TMP/n.wav" -af astats -f null - 2>&1 | grep "RMS level dB" | tail -1 | awk '{print $NF}')
+NG=$(python3 -c "print(f'{-22.0-($NRMS):.2f}')")
+ffmpeg -v error -i "$TMP/n.wav" -af "volume=${NG}dB" -ar 44100 -c:a pcm_s16le "$DST/note.wav" -y
+printf "  %-16s 44 kHz  RMS %s -> -22 dB\n" "note.wav" "$NRMS"

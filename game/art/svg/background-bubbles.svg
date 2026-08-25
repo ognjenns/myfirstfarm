@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2340" height="1080" viewBox="0 0 2340 1080">
+<rect x="0" y="0" width="2340" height="1080" fill="#4FA7C8"></rect>
+<rect x="0" y="0" width="2340" height="700" fill="#63B6D4"></rect>
+<rect x="0" y="0" width="2340" height="420" fill="#7CC6DF"></rect>
+<rect x="0" y="0" width="2340" height="190" fill="#98D6EA"></rect>
+<g>
+  <path d="M210,0 L420,0 L610,900 L110,900 Z" fill="#EAF7FD" fill-opacity="0.3"></path>
+  <path d="M600,0 L730,0 L920,900 L500,900 Z" fill="#EAF7FD" fill-opacity="0.2"></path>
+  <path d="M1000,0 L1250,0 L1440,900 L900,900 Z" fill="#EAF7FD" fill-opacity="0.26"></path>
+  <path d="M1450,0 L1600,0 L1790,900 L1350,900 Z" fill="#EAF7FD" fill-opacity="0.22"></path>
+  <path d="M1820,0 L2040,0 L2230,900 L1720,900 Z" fill="#EAF7FD" fill-opacity="0.28"></path>
+  <path d="M2140,0 L2270,0 L2460,900 L2040,900 Z" fill="#EAF7FD" fill-opacity="0.18"></path>
+</g>
+<path d="M0,120 C280,86 560,132 900,150 C1240,168 1560,110 2340,140 L2340,260 L0,260 Z" fill="#B0E2F1" fill-opacity="0.45"></path>
+<path d="M0,986 C440,952 980,1000 1480,990 C1840,982 2120,962 2340,974 L2340,1080 L0,1080 Z" fill="#DCC8A2"></path>
+<path d="M0,1026 C520,996 1080,1038 1600,1030 C1920,1024 2160,1010 2340,1018 L2340,1080 L0,1080 Z" fill="#E9D8B6"></path>
+<g fill="#CFB994">
+  <ellipse cx="360" cy="1050" rx="42" ry="12"></ellipse>
+  <ellipse cx="1180" cy="1064" rx="54" ry="14"></ellipse>
+  <ellipse cx="1860" cy="1046" rx="36" ry="11"></ellipse>
+</g>
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round">
+  <path d="M96,986 C88,944 116,912 158,906 C142,936 138,960 144,986 Z" fill="#5DA26D"></path>
+  <path d="M150,986 C158,948 186,926 218,928 C196,950 182,966 178,986 Z" fill="#7FBF8C"></path>
+  <path d="M2244,986 C2252,944 2224,912 2182,906 C2198,936 2202,960 2196,986 Z" fill="#5DA26D"></path>
+  <path d="M2190,986 C2182,948 2154,926 2122,928 C2144,950 2158,966 2162,986 Z" fill="#7FBF8C"></path>
+</g>
+<g stroke="#4A3F3A" stroke-width="9" stroke-linejoin="round">
+  <ellipse cx="286" cy="1006" rx="46" ry="26" fill="#B7C6C4"></ellipse>
+  <ellipse cx="2064" cy="1002" rx="40" ry="22" fill="#B7C6C4"></ellipse>
+</g>
+</svg>

@@ -6,14 +6,15 @@ func _ready() -> void:
 	add_child(GradientBG.new(Pal.SKY_TOP, Pal.SKY_LOW))
 	add_ambient(2)
 
-	_world_card(Vector2(s.x * 0.30, s.y * 0.50), "card-farm", "My Farm", "hub", s, "cow")
-	_world_card(Vector2(s.x * 0.70, s.y * 0.50), "card-jungle", "My Jungle", "jungle", s, "monkey")
+	_world_card(Vector2(s.x * 0.20, s.y * 0.50), "card-farm", "title-farm", "hub", s, "cow")
+	_world_card(Vector2(s.x * 0.50, s.y * 0.50), "card-jungle", "title-jungle", "jungle", s, "monkey")
+	_world_card(Vector2(s.x * 0.80, s.y * 0.50), "card-ocean", "title-ocean", "ocean", s, "fish")
 
 func _world_card(pos: Vector2, art: String, title: String, target: String, s: Vector2, animal_id := "") -> void:
 	var card := Area2D.new()
 	card.position = pos
 	# ograniči i po širini da se kartice ne preklope na tabletu (4:3)
-	var card_scale := minf((s.y * 0.62) / 600.0, (s.x * 0.365) / 700.0)
+	var card_scale := minf((s.y * 0.62) / 600.0, (s.x * 0.270) / 700.0)
 	var spr := Sprite2D.new()
 	spr.texture = load("res://art/svg/%s.svg" % art)
 	spr.scale = Vector2.ONE * card_scale
@@ -23,7 +24,13 @@ func _world_card(pos: Vector2, art: String, title: String, target: String, s: Ve
 		face.position = Vector2(175.0, 70.0) * card_scale
 		face.scale = Vector2.ONE * card_scale * 1.15
 		card.add_child(face)
-	UI.label(card, title, Vector2(0, 350.0 * card_scale + 40.0), 44, Color(0.32, 0.29, 0.26))
+	# Naslov je crtež, ne tekst: u igri postoje samo tri natpisa, pa nose stil
+	# igre umesto podrazumevanog font-a engine-a. `title` je ime SVG fajla.
+	var t := Sprite2D.new()
+	t.texture = load("res://art/svg/%s.svg" % title)
+	t.scale = Vector2.ONE * ((640.0 * card_scale) / t.texture.get_size().x)
+	t.position = Vector2(0, 350.0 * card_scale + 52.0)
+	card.add_child(t)
 
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()

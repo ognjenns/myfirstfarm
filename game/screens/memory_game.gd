@@ -124,7 +124,6 @@ func _match_found(c1: Area2D, c2: Area2D) -> void:
 	first_pick = null
 	busy = false
 	pairs_left -= 1
-	Audio.play("success", -4.0)
 	Audio.animal_voice(c1.get_meta("animal").id)
 	UI.haptic(35)
 	for c in [c1, c2]:
@@ -152,7 +151,7 @@ func _star_pop(pos: Vector2) -> void:
 	tw.tween_callback(star.queue_free)
 
 func _flip_back(c1: Area2D, c2: Area2D) -> void:
-	Audio.play("wrong", -10.0)
+	Audio.play("wrong", -8.0)
 	_flip(c1, false)
 	_flip(c2, false)
 	first_pick = null

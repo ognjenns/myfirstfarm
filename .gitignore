@@ -13,3 +13,8 @@ assets/real_sounds3/
 # radni artefakti zvuka (bekapi i A/B poređenja, ne idu u repo)
 assets/sfx_backup_v2/
 assets/sfx_AB_*.wav
+
+# lozinka za potpisivanje — Godot je cuva u cistom tekstu
+game/export_credentials.cfg
+shots_backup/
+assets/sfx_backup_levels/

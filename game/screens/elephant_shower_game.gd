@@ -120,7 +120,7 @@ func _spawn_mud() -> void:
 func _spray() -> void:
 	if _busy:
 		return
-	Audio.play("splash", -4.0, randf_range(0.95, 1.1))
+	Audio.play("splash", -3.0, randf_range(0.95, 1.1))
 	UI.haptic(30)
 	UI.bounce(elephant, Vector2.ONE)
 	spray.restart()

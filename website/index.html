@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My First Animals — a calm little world for ages 2–5 | Oggie Games</title>
+<meta name="description" content="A toddler game with no ads, no text, no timers and no way to lose. Three worlds, twelve gentle games. One purchase unlocks everything, forever.">
+<meta property="og:title" content="My First Animals — Oggie Games">
+<meta property="og:description" content="No ads. No text. No timers. No way to lose. A calm little world for ages 2–5.">
+<meta property="og:image" content="img/shot-ocean.png">
+<meta name="theme-color" content="#F7F0E4">
+<link rel="icon" href="img/icon.png">
+<style>
+  :root{
+    --ink:#4A3F3A; --ink-soft:#6E635C; --cream:#F7F0E4; --paper:#FDFBF6;
+    --line:#E4D3B4; --sky:#D8EFF8; --sky-deep:#B9E3F2;
+    --grass:#6FAE64; --sea:#2E7FA6; --sun:#FFD873; --coral:#E4736B;
+    --r:22px; --shadow:0 10px 30px rgba(74,63,58,.10);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink); background:var(--cream);
+    font:17px/1.65 ui-rounded,"SF Pro Rounded",-apple-system,"Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  h1,h2,h3{line-height:1.15;margin:0 0 .5em}
+  h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.01em}
+  h3{font-size:20px}
+  p{margin:0 0 1em}
+  a{color:var(--sea)}
+  .muted{color:var(--ink-soft)}
+
+  /* ---------- header ---------- */
+  header{
+    background:linear-gradient(180deg,var(--sky-deep),var(--sky) 55%,var(--cream));
+    padding:26px 0 74px;position:relative;overflow:hidden;
+  }
+  header::after{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:60px;
+    background:radial-gradient(120% 100% at 50% 0,transparent 60%,var(--cream) 61%);
+  }
+  .nav{display:flex;align-items:center;gap:14px}
+  .nav img{width:44px;height:44px;border-radius:12px;box-shadow:var(--shadow)}
+  .nav b{font-size:18px}
+  .nav .spacer{flex:1}
+  .nav a{color:var(--ink);text-decoration:none;font-weight:600;font-size:15px}
+  .nav a:hover{color:var(--sea)}
+
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center;margin-top:52px}
+  .hero h1{font-size:clamp(34px,5.2vw,56px);letter-spacing:-.02em}
+  .hero .lede{font-size:clamp(17px,2vw,21px);color:var(--ink-soft);max-width:32ch}
+  .badges{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 8px}
+  .pill{
+    background:var(--paper);border:2px solid var(--line);border-radius:999px;
+    padding:7px 15px;font-size:14px;font-weight:700;
+  }
+  .cta{
+    display:inline-flex;align-items:center;gap:10px;margin-top:18px;
+    background:var(--ink);color:#fff;text-decoration:none;font-weight:800;
+    padding:15px 26px;border-radius:999px;box-shadow:var(--shadow);
+  }
+  .cta:hover{transform:translateY(-2px)}
+  .shot-hero{
+    border-radius:var(--r);overflow:hidden;border:3px solid var(--ink);
+    box-shadow:0 24px 50px rgba(74,63,58,.22);transform:rotate(-1.2deg);
+  }
+  .shot-hero img{display:block;width:100%}
+
+  /* ---------- sections ---------- */
+  section{padding:74px 0}
+  .kicker{
+    display:inline-block;font-weight:800;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--sea);margin-bottom:10px;
+  }
+  .grid{display:grid;gap:18px}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .card{
+    background:var(--paper);border:2px solid var(--line);border-radius:var(--r);
+    padding:24px;box-shadow:var(--shadow);
+  }
+  .card h3{margin-bottom:.35em;margin-top:8px}
+  .card p{margin:0;color:var(--ink-soft);font-size:15.5px}
+  /* Umesto emoji ikonica — one dolaze iz sistemskog fonta i odskaču od ručno
+     crtanog stila igre. Ovako je oznaka deo dizajna, ne tuđi crtež. */
+  .card{position:relative;padding-top:30px}
+  .card::before{
+    content:"";position:absolute;left:24px;top:22px;width:34px;height:6px;
+    border-radius:999px;background:var(--grass);
+  }
+  .card:nth-child(2)::before{background:var(--sea)}
+  .card:nth-child(3)::before{background:var(--sun)}
+  .card:nth-child(4)::before{background:var(--coral)}
+
+  /* ---------- worlds ---------- */
+  .world{
+    display:grid;grid-template-columns:.95fr 1.05fr;gap:38px;align-items:center;
+    padding:34px;border-radius:28px;border:2px solid var(--line);margin-bottom:22px;
+  }
+  .world:nth-child(1){background:linear-gradient(135deg,#EAF6E4,#FBFDF7)}
+  .world:nth-child(2){background:linear-gradient(135deg,#E4F2E0,#F8FCF6)}
+  .world:nth-child(3){background:linear-gradient(135deg,#DFF0F7,#F6FBFD)}
+  .world.flip{grid-template-columns:1.05fr .95fr}
+  .world.flip .copy{order:2}
+  .world .title{height:52px;margin-bottom:14px}
+  .world img.shot{width:100%;border-radius:16px;border:3px solid var(--ink);display:block}
+  .learn{list-style:none;padding:0;margin:14px 0 0}
+  .learn li{position:relative;padding-left:26px;margin-bottom:7px;color:var(--ink-soft)}
+  .learn li::before{
+    content:"";position:absolute;left:0;top:.55em;width:11px;height:11px;
+    border-radius:50%;background:var(--grass);
+  }
+  .world:nth-child(3) .learn li::before{background:var(--sea)}
+
+  /* ---------- gallery ---------- */
+  .strip{display:flex;gap:16px;overflow-x:auto;padding:6px 22px 22px;scroll-snap-type:x mandatory}
+  .strip img{
+    height:230px;border-radius:16px;border:3px solid var(--ink);flex:0 0 auto;
+    scroll-snap-align:center;box-shadow:var(--shadow);
+  }
+
+  /* ---------- footer ---------- */
+  footer{background:var(--paper);border-top:2px solid var(--line);padding:44px 0 60px}
+  .foot{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+  .foot .spacer{flex:1}
+  .foot a{color:var(--ink);text-decoration:none;font-weight:700}
+  .foot a:hover{color:var(--sea)}
+
+  @media (max-width:860px){
+    .hero,.world,.world.flip{grid-template-columns:1fr;gap:26px}
+    .world.flip .copy{order:0}
+    .g4{grid-template-columns:repeat(2,1fr)}
+    .g3{grid-template-columns:1fr}
+    .shot-hero{transform:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <img src="img/icon.png" alt="">
+      <b>Oggie Games</b>
+      <span class="spacer"></span>
+      <a href="#worlds">Worlds</a>
+      <a href="#why">Why</a>
+      <a href="support.html">Support</a>
+    </nav>
+
+    <div class="hero">
+      <div>
+        <h1>A calm little world for ages&nbsp;2–5.</h1>
+        <p class="lede">Three worlds, twelve gentle games, and not a single way
+          for a child to get it wrong.</p>
+        <div class="badges">
+          <span class="pill">No ads</span>
+          <span class="pill">No text to read</span>
+          <span class="pill">No timers</span>
+          <span class="pill">No way to lose</span>
+        </div>
+        <a class="cta" href="https://play.google.com/store/apps/details?id=com.oggie.myfirstfarm">
+          Get it on Google Play →
+        </a>
+      </div>
+      <div class="shot-hero"><img src="img/shot-ocean.png" alt="The ocean world"></div>
+    </div>
+  </div>
+</header>
+
+<section id="why">
+  <div class="wrap">
+    <span class="kicker">Made deliberately</span>
+    <h2>Every decision was made for a two-year-old.</h2>
+    <p class="muted" style="max-width:60ch">Toddlers can't read, can't take being
+      rushed, and shouldn't be sold to. So the app has none of it.</p>
+
+    <div class="grid g4" style="margin-top:28px">
+      <div class="card">
+        <h3>No advertising</h3>
+        <p>Not a banner, not a video, not one. Nothing in the app links out to
+          anywhere else.</p>
+      </div>
+      <div class="card">
+        <h3>No text at all</h3>
+        <p>Nothing to read, so nothing to translate — a child anywhere in the
+          world plays the same game.</p>
+      </div>
+      <div class="card">
+        <h3>No timers, no score</h3>
+        <p>Nothing counts down and nothing keeps score. A child can sit on one
+          screen for as long as they like.</p>
+      </div>
+      <div class="card">
+        <h3>No way to lose</h3>
+        <p>A wrong tap is answered gently and never punished. There is no red X
+          anywhere in the app.</p>
+      </div>
+    </div>
+
+    <div class="grid g3" style="margin-top:18px">
+      <div class="card">
+        <h3>Purchases behind a parental gate</h3>
+        <p>The single optional purchase sits behind a gate a toddler can't pass.
+          Payment is handled entirely by the store.</p>
+      </div>
+      <div class="card">
+        <h3>No data collected</h3>
+        <p>No accounts, no analytics, no tracking. Settings stay on the device
+          and leave with the app.</p>
+      </div>
+      <div class="card">
+        <h3>One purchase, every world</h3>
+        <p>Unlock once and every world that ever comes is included — the ocean
+          arrived free for everyone who already owned it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="worlds" style="background:var(--paper);border-top:2px solid var(--line);border-bottom:2px solid var(--line)">
+  <div class="wrap">
+    <span class="kicker">Three worlds</span>
+    <h2>Each world teaches something the others don't.</h2>
+    <p class="muted" style="max-width:62ch;margin-bottom:34px">Twelve games in
+      all. No two ask the child to do the same thing.</p>
+
+    <div class="world">
+      <div class="copy">
+        <img class="title" src="img/title-farm.svg" alt="My Farm">
+        <p class="muted">Where a child starts: familiar animals, one clear action
+          per game, and a friendly voice for every creature.</p>
+        <ul class="learn">
+          <li>Matching food to the animal that eats it</li>
+          <li>Recognising shapes through shadows</li>
+          <li>Caring for something — washing a muddy pig</li>
+          <li>Object permanence, by finding who is hiding</li>
+        </ul>
+      </div>
+      <img class="shot" src="img/shot-hub.png" alt="The farm">
+    </div>
+
+    <div class="world flip">
+      <div class="copy">
+        <img class="title" src="img/title-jungle.svg" alt="My Jungle">
+        <p class="muted">A step up: the same gentle rules, but now the child has
+          to remember and to listen.</p>
+        <ul class="learn">
+          <li>Memory, by finding pairs</li>
+          <li>Recognising animals by their real recorded call</li>
+          <li>Feeding creatures whose food is less obvious</li>
+          <li>Cause and effect, showering a very happy elephant</li>
+        </ul>
+      </div>
+      <img class="shot" src="img/shot-jungle.png" alt="The jungle">
+    </div>
+
+    <div class="world">
+      <div class="copy">
+        <img class="title" src="img/title-ocean.svg" alt="My Ocean">
+        <p class="muted">The newest world, and the liveliest — everything in it
+          moves, and everything reacts to being touched.</p>
+        <ul class="learn">
+          <li>Tracking a moving target and choosing the right one</li>
+          <li>Fine motor control, guiding a fish through the reef</li>
+          <li>Colour, by sorting fish into matching coral</li>
+          <li>Free play with sound — a whole underwater orchestra</li>
+        </ul>
+      </div>
+      <img class="shot" src="img/shot-ocean.png" alt="The ocean">
+    </div>
+  </div>
+</section>
+
+<section style="padding-bottom:28px">
+  <div class="wrap"><span class="kicker">A look inside</span>
+    <h2>Twelve small worlds to sit in.</h2></div>
+  <div class="strip">
+    <img src="img/shot-worlds.png" alt="Choosing a world">
+    <img src="img/shot-bubbles.png" alt="Popping bubbles">
+    <img src="img/shot-leadfish.png" alt="Leading a fish through the reef">
+    <img src="img/shot-orchestra.png" alt="The underwater orchestra">
+    <img src="img/shot-colors.png" alt="Sorting fish by colour">
+    <img src="img/shot-feed.png" alt="Feeding the farm animals">
+    <img src="img/shot-memory.png" alt="Finding pairs">
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <img src="img/icon.png" alt="" style="width:38px;height:38px;border-radius:10px">
+    <div><b>Oggie Games</b></div>
+    <span class="spacer"></span>
+    <a href="privacy.html">Privacy</a>
+    <a href="support.html">Support</a>
+    <a href="https://play.google.com/store/apps/details?id=com.oggie.myfirstfarm">Google Play</a>
+  </div>
+</footer>
+
+</body>
+</html>

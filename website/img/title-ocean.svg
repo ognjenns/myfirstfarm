@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="788" height="148" viewBox="-22 -22 788 148">
+  <path d="M12,90 L12,14 L50,62 L88,14 L88,90" transform="translate(0.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M12,14 L50,52 L88,14 M50,52 L50,90" transform="translate(108.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M50,14 A36,38 0 1 0 50.1,14 Z" transform="translate(250.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M84,30 A37,40 0 1 0 84,74" transform="translate(350.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M84,14 L20,14 L20,90 L84,90 M20,50 L70,50" transform="translate(448.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M12,90 L50,14 L88,90 M28,62 L72,62" transform="translate(544.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M14,90 L14,14 L86,90 L86,14" transform="translate(644.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M12,90 L12,14 L50,62 L88,14 L88,90" transform="translate(0.0 0)" fill="none" stroke="#3E8FB0" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M12,14 L50,52 L88,14 M50,52 L50,90" transform="translate(108.0 0)" fill="none" stroke="#3E8FB0" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M50,14 A36,38 0 1 0 50.1,14 Z" transform="translate(250.0 0)" fill="none" stroke="#3E8FB0" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M84,30 A37,40 0 1 0 84,74" transform="translate(350.0 0)" fill="none" stroke="#3E8FB0" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M84,14 L20,14 L20,90 L84,90 M20,50 L70,50" transform="translate(448.0 0)" fill="none" stroke="#3E8FB0" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M12,90 L50,14 L88,90 M28,62 L72,62" transform="translate(544.0 0)" fill="none" stroke="#3E8FB0" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M14,90 L14,14 L86,90 L86,14" transform="translate(644.0 0)" fill="none" stroke="#3E8FB0" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

@@ -24,6 +24,18 @@ const JUNGLE := [
 	{"id": "hippo",    "food": "watermelon"},
 ]
 
+## OKEAN — treći svet. Šest bića sa jasno različitim siluetama, da ih dete
+## razlikuje i kad su mala na ekranu. "food" stoji radi jednoobraznosti sa
+## ostalim svetovima; okean za sada nema igru hranjenja.
+const OCEAN := [
+	{"id": "fish",     "food": "flakes"},
+	{"id": "octopus",  "food": "shrimp"},
+	{"id": "turtle",   "food": "kelp"},
+	{"id": "crab",     "food": "algae"},
+	{"id": "dolphin",  "food": "sardine"},
+	{"id": "seahorse", "food": "plankton"},
+]
+
 static func by_id(id: String) -> Dictionary:
 	for a in LIST:
 		if a.id == id:
@@ -32,6 +44,12 @@ static func by_id(id: String) -> Dictionary:
 
 static func by_id_jungle(id: String) -> Dictionary:
 	for a in JUNGLE:
+		if a.id == id:
+			return a
+	return {}
+
+static func by_id_ocean(id: String) -> Dictionary:
+	for a in OCEAN:
 		if a.id == id:
 			return a
 	return {}

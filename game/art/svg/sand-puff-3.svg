@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <ellipse cx="98.2" cy="187.8" rx="31.4" ry="11.0" fill="#E4D3B4" fill-opacity="0.463"></ellipse>
+  <ellipse cx="157.8" cy="187.8" rx="31.4" ry="11.0" fill="#EFE2C8" fill-opacity="0.505"></ellipse>
+  <ellipse cx="108.7" cy="186.1" rx="41.4" ry="9.3" fill="#EFE2C8" fill-opacity="0.486"></ellipse>
+  <ellipse cx="147.3" cy="186.1" rx="41.4" ry="9.3" fill="#CBB894" fill-opacity="0.322"></ellipse>
+  <ellipse cx="90.1" cy="180.8" rx="33.2" ry="12.1" fill="#E4D3B4" fill-opacity="0.361"></ellipse>
+  <ellipse cx="165.9" cy="180.8" rx="33.2" ry="12.1" fill="#E4D3B4" fill-opacity="0.388"></ellipse>
+  <ellipse cx="69.2" cy="179.7" rx="34.2" ry="9.5" fill="#EFE2C8" fill-opacity="0.481"></ellipse>
+  <ellipse cx="186.8" cy="179.7" rx="34.2" ry="9.5" fill="#CBB894" fill-opacity="0.248"></ellipse>
+  <ellipse cx="93.9" cy="188.1" rx="28.0" ry="12.5" fill="#E4D3B4" fill-opacity="0.351"></ellipse>
+  <ellipse cx="162.1" cy="188.1" rx="28.0" ry="12.5" fill="#EFE2C8" fill-opacity="0.529"></ellipse>
+  <ellipse cx="128.0" cy="191.4" rx="42.8" ry="12.5" fill="#E4D3B4" fill-opacity="0.427"></ellipse>
+  <circle cx="94.4" cy="173.3" r="6.7" fill="#CBB894" fill-opacity="0.397"></circle>
+  <circle cx="161.6" cy="173.3" r="6.7" fill="#E4D3B4" fill-opacity="0.534"></circle>
+  <circle cx="64.5" cy="187.4" r="6.3" fill="#CBB894" fill-opacity="0.370"></circle>
+  <circle cx="191.5" cy="187.4" r="6.3" fill="#EFE2C8" fill-opacity="0.566"></circle>
+  <circle cx="85.6" cy="169.0" r="5.7" fill="#E4D3B4" fill-opacity="0.430"></circle>
+  <circle cx="170.4" cy="169.0" r="5.7" fill="#E4D3B4" fill-opacity="0.473"></circle>
+  <circle cx="81.2" cy="166.5" r="3.7" fill="#E4D3B4" fill-opacity="0.428"></circle>
+  <circle cx="174.8" cy="166.5" r="3.7" fill="#CBB894" fill-opacity="0.292"></circle>
+  <circle cx="99.9" cy="164.8" r="2.7" fill="#E4D3B4" fill-opacity="0.409"></circle>
+  <circle cx="156.1" cy="164.8" r="2.7" fill="#E4D3B4" fill-opacity="0.470"></circle>
+  <circle cx="45.8" cy="178.6" r="3.2" fill="#CBB894" fill-opacity="0.290"></circle>
+  <circle cx="210.2" cy="178.6" r="3.2" fill="#E4D3B4" fill-opacity="0.448"></circle>
+  <circle cx="67.6" cy="177.6" r="5.7" fill="#CBB894" fill-opacity="0.344"></circle>
+  <circle cx="188.4" cy="177.6" r="5.7" fill="#E4D3B4" fill-opacity="0.456"></circle>
+  <circle cx="54.4" cy="182.7" r="4.2" fill="#CBB894" fill-opacity="0.299"></circle>
+  <circle cx="201.6" cy="182.7" r="4.2" fill="#E4D3B4" fill-opacity="0.508"></circle>
+  <circle cx="116.9" cy="171.0" r="3.7" fill="#E4D3B4" fill-opacity="0.541"></circle>
+  <circle cx="139.1" cy="171.0" r="3.7" fill="#CBB894" fill-opacity="0.390"></circle>
+  <circle cx="48.7" cy="167.7" r="5.0" fill="#EFE2C8" fill-opacity="0.557"></circle>
+  <circle cx="207.3" cy="167.7" r="5.0" fill="#CBB894" fill-opacity="0.288"></circle>
+  <circle cx="87.2" cy="170.2" r="3.3" fill="#EFE2C8" fill-opacity="0.574"></circle>
+  <circle cx="168.8" cy="170.2" r="3.3" fill="#E4D3B4" fill-opacity="0.438"></circle>
+  <circle cx="110.5" cy="167.8" r="6.5" fill="#E4D3B4" fill-opacity="0.478"></circle>
+  <circle cx="145.5" cy="167.8" r="6.5" fill="#E4D3B4" fill-opacity="0.427"></circle>
+  <circle cx="49.2" cy="183.9" r="4.0" fill="#E4D3B4" fill-opacity="0.450"></circle>
+  <circle cx="206.8" cy="183.9" r="4.0" fill="#E4D3B4" fill-opacity="0.497"></circle>
+  <circle cx="69.8" cy="166.6" r="6.5" fill="#E4D3B4" fill-opacity="0.460"></circle>
+  <circle cx="186.2" cy="166.6" r="6.5" fill="#CBB894" fill-opacity="0.309"></circle>
+</svg>

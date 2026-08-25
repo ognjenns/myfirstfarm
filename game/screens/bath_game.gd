@@ -255,14 +255,14 @@ func _rub(pos: Vector2) -> void:
 
 func _start_foam() -> void:
 	phase = Phase.FOAM
-	Audio.play("success", -6.0)
+	Audio.play("splash", -8.0, 1.15)   # prelazak na penu: voda, ne zvonce
 	UI.haptic(30)
 	UI.bounce(bather, bather.base_scale)
 
 func _start_shower() -> void:
 	phase = Phase.SHOWER
 	rain.emitting = true
-	Audio.play("splash")
+	Audio.play("splash", -3.0)
 	# pena se spira
 	var tw := create_tween()
 	for f in foam_blobs:

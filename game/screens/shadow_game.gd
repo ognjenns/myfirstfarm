@@ -107,7 +107,6 @@ func _on_dropped(d: DragAnimal) -> void:
 		tw.parallel().tween_property(d, "scale", Vector2(1.4, 1.4), 0.2)
 		tw.tween_callback(func() -> void:
 			sh.visible = false
-			Audio.play("success", -4.0)
 			Audio.animal_voice(d.animal.id)
 			UI.haptic(35)
 			_sparkle(d.global_position)

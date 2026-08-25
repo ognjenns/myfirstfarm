@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="870" height="148" viewBox="-22 -22 870 148">
+  <path d="M12,90 L12,14 L50,62 L88,14 L88,90" transform="translate(0.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M12,14 L50,52 L88,14 M50,52 L50,90" transform="translate(108.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M74,14 L74,62 A26,26 0 0 1 22,62" transform="translate(250.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M14,14 L14,58 A36,34 0 0 0 86,58 L86,14" transform="translate(338.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M14,90 L14,14 L86,90 L86,14" transform="translate(438.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M84,32 A38,40 0 1 0 84,72 L84,56 L58,56" transform="translate(538.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M20,14 L20,90 L84,90" transform="translate(638.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M84,14 L20,14 L20,90 L84,90 M20,50 L70,50" transform="translate(730.0 0)" fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M12,90 L12,14 L50,62 L88,14 L88,90" transform="translate(0.0 0)" fill="none" stroke="#4E8C48" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M12,14 L50,52 L88,14 M50,52 L50,90" transform="translate(108.0 0)" fill="none" stroke="#4E8C48" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M74,14 L74,62 A26,26 0 0 1 22,62" transform="translate(250.0 0)" fill="none" stroke="#4E8C48" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M14,14 L14,58 A36,34 0 0 0 86,58 L86,14" transform="translate(338.0 0)" fill="none" stroke="#4E8C48" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M14,90 L14,14 L86,90 L86,14" transform="translate(438.0 0)" fill="none" stroke="#4E8C48" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M84,32 A38,40 0 1 0 84,72 L84,56 L58,56" transform="translate(538.0 0)" fill="none" stroke="#4E8C48" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M20,14 L20,90 L84,90" transform="translate(638.0 0)" fill="none" stroke="#4E8C48" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M84,14 L20,14 L20,90 L84,90 M20,50 L70,50" transform="translate(730.0 0)" fill="none" stroke="#4E8C48" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

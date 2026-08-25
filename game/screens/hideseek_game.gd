@@ -120,7 +120,6 @@ func _on_spot_tapped(idx: int) -> void:
 		tw.tween_callback(func() -> void:
 			animal_node.react(true)
 			UI.confetti(self, above, 45)
-			Audio.play("success")
 		)
 		tw.tween_interval(1.4)
 		tw.tween_callback(_next_round)

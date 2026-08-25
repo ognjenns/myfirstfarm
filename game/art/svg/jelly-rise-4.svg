@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="460" viewBox="0 0 320 460">
+  <path d="M86.0,207.8 C104.2,265.9 113.6,327.6 106.2,389.4" fill="none" stroke="#C9799F" stroke-width="13" stroke-linecap="round"></path>
+  <path d="M120.4,207.8 C125.6,276.2 139.3,348.9 128.5,421.5" fill="none" stroke="#DE8CBE" stroke-width="13" stroke-linecap="round"></path>
+  <path d="M160.0,207.8 C169.7,282.8 151.2,362.5 165.8,442.2" fill="none" stroke="#DE8CBE" stroke-width="13" stroke-linecap="round"></path>
+  <path d="M199.6,207.8 C194.4,276.2 180.7,348.9 191.5,421.5" fill="none" stroke="#DE8CBE" stroke-width="13" stroke-linecap="round"></path>
+  <path d="M234.0,207.8 C215.8,265.9 206.4,327.6 213.8,389.4" fill="none" stroke="#C9799F" stroke-width="13" stroke-linecap="round"></path>
+  <path d="M122.1,205.3 C113.3,255.2 127.5,287.1 119.3,305.1 L133.3,305.1 C153.5,287.1 139.3,255.2 148.1,205.3 Z" fill="#E39BC7" stroke="#4A3F3A" stroke-width="8" stroke-linejoin="round"></path>
+  <path d="M171.9,205.3 C180.7,255.2 166.5,287.1 186.7,305.1 L200.7,305.1 C192.5,287.1 206.7,255.2 197.9,205.3 Z" fill="#E39BC7" stroke="#4A3F3A" stroke-width="8" stroke-linejoin="round"></path>
+  <path d="M64.4,199.6 C58.7,12.1 261.3,12.1 255.6,199.6 C246.0,212.2 217.4,212.2 207.8,199.6 C198.2,212.2 169.6,212.2 160.0,199.6 C150.4,212.2 121.8,212.2 112.2,199.6 C102.6,212.2 74.0,212.2 64.4,199.6 Z" fill="#EBA6D0" stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round"></path>
+  <ellipse cx="160.0" cy="118.2" rx="42.1" ry="24.7" fill="#F6CBE5" fill-opacity="0.8"></ellipse>
+  <ellipse cx="125.6" cy="162.6" rx="10" ry="12" fill="#4A3F3A"></ellipse>
+  <circle cx="122.6" cy="158.6" r="3.5" fill="#FFFFFF" fill-opacity="0.9"></circle>
+  <ellipse cx="194.4" cy="162.6" rx="10" ry="12" fill="#4A3F3A"></ellipse>
+  <circle cx="191.4" cy="158.6" r="3.5" fill="#FFFFFF" fill-opacity="0.9"></circle>
+  <ellipse cx="98.8" cy="177.6" rx="15" ry="9" fill="#F3B3C4" fill-opacity="0.6"></ellipse>
+  <ellipse cx="221.2" cy="177.6" rx="15" ry="9" fill="#F3B3C4" fill-opacity="0.6"></ellipse>
+  <path d="M147.0,181.6 Q160,194.6 173.0,181.6" fill="none" stroke="#4A3F3A" stroke-width="7" stroke-linecap="round"></path>
+</svg>
