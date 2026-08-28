@@ -36,23 +36,60 @@ func _ready() -> void:
 	home_target = "ocean"
 	_s = UI.vs(self)
 	Scenery.background(self, "background-bubbles")
+	_build_scenery()
 	_build_home()
 	add_home_button()
 	set_process(true)
 
 
+## Statican ukras. Ekran je bio skoro prazna voda: mehurici se radjaju samo u
+## koloni x 0,18–0,72, levo je izuzeto zbog dugmeta za kucu a desno zbog koralne
+## kucice, pa je citava leva ivica stajala prazna.
+## SVE je namerno NEPOMICNO i ukorenjeno u dno. Sve sto lebdi u sredini vode
+## dvogodisnjak pokusa da tapne, a kad se nista ne desi to je frustracija —
+## igra je gradjena na pravilu da svaki dodir nesto uradi.
+func _build_scenery() -> void:
+	# Potonuli brod preko cele sirine, uz samo dno.
+	var w := Sprite2D.new()
+	w.texture = load("res://art/svg/wreck-background.svg")
+	var wt := w.texture.get_size()
+	var wsc: float = _s.x / wt.x
+	w.scale = Vector2.ONE * wsc
+	w.offset = Vector2(0, -wt.y / 2.0)
+	w.position = Vector2(_s.x / 2.0, _s.y)
+	w.z_index = -20
+	add_child(w)
+
+	# Alge uz levu ivicu, u dva plana. Desno ih nema — tamo je koralna kucica.
+	for spec in [["kelp-column-2", 0.118, 0.062, -18], ["kelp-column-1", 0.030, 0.075, -16]]:
+		var k := Sprite2D.new()
+		k.texture = load("res://art/svg/%s.svg" % spec[0])
+		var kt := k.texture.get_size()
+		var ksc: float = (_s.x * float(spec[2])) / kt.x
+		k.scale = Vector2.ONE * ksc
+		k.offset = Vector2(0, -kt.y / 2.0)
+		k.position = Vector2(_s.x * float(spec[1]), _s.y * 0.985)
+		k.z_index = int(spec[3])
+		add_child(k)
+
+
 func _build_home() -> void:
-	# Koralna kućica desno; otvor joj je u fajlu na (0.500w, 0.786h) — tamo
-	# ribice ulaze i tu se parkiraju da dete vidi koliko ih je skupilo.
-	_home_scale = (_s.x * 0.22) / 520.0
+	# Stari ronilacki slem na dnu, desno. Zamenio je koralnu kucicu: okno mu je
+	# OTVORENO i ispunjeno bojom dubine, pa ribice uplivavaju kroz njega i tu se
+	# parkiraju da dete vidi koliko ih je skupilo.
+	# Crtez je 420x400; okno je na (213, 205), a pescana mrlja mu je dno na
+	# 0,985h — zato se sidri po dnu i uvecava dok okno ne primi tri ribice u redu.
+	_home_scale = (_s.x * 0.24) / 420.0
 	var sp := Sprite2D.new()
-	sp.texture = load("res://art/svg/coral-home.svg")
+	sp.texture = load("res://art/svg/diver-helmet.svg")
 	sp.scale = Vector2.ONE * _home_scale
-	sp.offset = Vector2(0, -560.0 / 2.0)
+	sp.offset = Vector2(0, -400.0 / 2.0)
 	sp.position = Vector2(_s.x * 0.865, _s.y * 0.975)
 	sp.z_index = 5
 	add_child(sp)
-	_home_open = sp.position + Vector2(0.0, (0.786 - 1.0) * 560.0 * _home_scale)
+	_home_open = sp.position + Vector2(
+		(213.0 / 420.0 - 0.5) * 420.0 * _home_scale,
+		(205.0 / 400.0 - 1.0) * 400.0 * _home_scale)
 
 
 # ------------------------------------------------------------------ mehurići

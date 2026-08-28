@@ -10,6 +10,9 @@ extends BaseScreen
 ## Pogrešna posuda ne kažnjava — samo odbije ribicu i ona otpliva nazad.
 
 const COLORS := ["red", "yellow", "blue", "green"]
+## Referentni telefon na kome je igra podesena (19,5:9 → viewport 2340x1080).
+const REF := Vector2(2340.0, 1080.0)
+
 const NEED := 6              # koliko ribica čini rundu
 const SWIM_FRAMES := 4
 const BOWL_W := 0.155
@@ -159,7 +162,10 @@ func _scenery() -> void:
 		var sp := Sprite2D.new()
 		sp.texture = load("res://art/svg/seaweed-clump-medium.svg")
 		var tex := sp.texture.get_size()
-		sp.scale = Vector2.ONE * ((_s.y * spec[1]) / tex.y)
+		# Pozicije skoljki su udeo SIRINE, pa i velicina mora u sirinskoj meri.
+		# Vezana za _s.y, na iPadu skoljka naraste a razmak ostane isti.
+		# Na referentnom telefonu daje tacno staru vrednost (_s.x = REF.x).
+		sp.scale = Vector2.ONE * ((REF.y * (_s.x / REF.x) * spec[1]) / tex.y)
 		if spec[0] > 0.5:
 			sp.scale.x *= -1.0
 		sp.offset = Vector2(0, -tex.y / 2.0)

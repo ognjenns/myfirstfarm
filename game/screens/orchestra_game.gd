@@ -27,6 +27,9 @@ const PITCH := [1.0, 1.125, 1.25, 1.5, 1.6875, 2.0]
 ## — on je i vizuelna lestvica, pa se ne sme menjati.
 const PERCH_X := [0.160, 0.297, 0.434, 0.571, 0.708, 0.845]
 const SIT_Y := [0.783, 0.709, 0.635, 0.561, 0.487, 0.413]
+## Referentni telefon na kome je igra podesena (19,5:9 → viewport 2340x1080).
+const REF := Vector2(2340.0, 1080.0)
+
 const SING_FPS := 14.0
 const SING_FRAMES := 8
 
@@ -68,6 +71,16 @@ func _ready() -> void:
 	set_process(true)
 
 
+## Pesak je deo pozadine koja se RASTEZE po visini, pa uvek stoji na 0,917h.
+## Stubovi se skaliraju po SIRINI, pa im visina u pikselima prati _s.x. Zato se
+## rastojanja OD PESKA moraju meriti istom, sirinskom merom — vezana za _s.y,
+## sediste i muzicar se na iPadu razidju za oko trecinu stuba.
+## Na referentnom telefonu (_s.x = REF.x) vraca 1080 * (0,917 - d), sto je
+## identicno starom racunu — telefon se ne menja nimalo.
+func _above_ground(d: float) -> float:
+	return _s.y * 0.917 - d * REF.y * (_s.x / REF.x)
+
+
 func _build_band() -> void:
 	for i in BAND.size():
 		var kind: String = BAND[i][0]
@@ -87,11 +100,10 @@ func _build_band() -> void:
 
 		# Muzičar: dno crteža ulazi 0,061h ispod ivice kapice, da SEDI a ne lebdi.
 		var size := _s.x * 0.089
-		var cap: float = _s.y * SIT_Y[i]
 		var sp := Sprite2D.new()
 		sp.texture = load("res://art/svg/bubble-fish-%s-sing-1.svg" % kind)
 		sp.scale = Vector2.ONE * (size / 256.0)
-		sp.position = Vector2(cx, cap + _s.y * 0.061 - size * 0.5)
+		sp.position = Vector2(cx, _above_ground(0.917 - SIT_Y[i] - 0.061) - size * 0.5)
 		sp.z_index = 3
 		add_child(sp)
 
@@ -118,7 +130,7 @@ func _build_band() -> void:
 func _build_chest(x: float, first_wait: float) -> void:
 	var sc := (_s.x * 0.098) / 520.0
 	var node := Node2D.new()
-	node.position = Vector2(_s.x * x, _s.y * 0.965 - 400.0 * sc * 0.5)
+	node.position = Vector2(_s.x * x, _above_ground(0.917 - 0.965) - 400.0 * sc * 0.5)
 	node.scale = Vector2.ONE * sc
 	node.z_index = 2
 	add_child(node)
@@ -136,7 +148,7 @@ func _build_chest(x: float, first_wait: float) -> void:
 	node.add_child(body)
 
 	var c := {"node": node, "lid": lid, "open": 0.0, "left": 0, "gap": 0.0,
-		"wait": first_wait, "emit": Vector2(_s.x * x, _s.y * 0.875)}
+		"wait": first_wait, "emit": Vector2(_s.x * x, _above_ground(0.917 - 0.875))}
 	_chests.append(c)
 
 	var area := Area2D.new()

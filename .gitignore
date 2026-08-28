@@ -18,3 +18,7 @@ assets/sfx_AB_*.wav
 game/export_credentials.cfg
 shots_backup/
 assets/sfx_backup_levels/
+
+# renderovani setovi za prodavnice (generisu se sa --shots)
+shots_ipad/
+shots_iphone/

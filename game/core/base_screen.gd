@@ -15,6 +15,10 @@ func add_home_button() -> void:
 	UI.poly(btn, UI.rect_points(56, 36), Color("#f5b971"), Vector2(0, 18))  # zid
 	UI.poly(btn, UI.rect_points(16, 20), Color("#8d5524"), Vector2(0, 26))  # vrata
 	btn.tapped.connect(func() -> void: go(home_target))
+	# Izlaz mora biti IZNAD svega i uvek dodirljiv — visok z_index takodje
+	# znaci da dugme prvo hvata dodir. U vodi-ribicu ga je na tabletu
+	# pokrivala tavanica pecine, koja stoji na z 5.
+	btn.z_index = 100
 	add_child(btn)
 
 ## Ambijent za mini-igre: oblaci + letač (leptir na farmi, komarac u džungli).
