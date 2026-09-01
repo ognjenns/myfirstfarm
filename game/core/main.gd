@@ -25,6 +25,10 @@ const SCREENS := {
 
 var current: Node = null
 var last_world := "hub"  # poslednji hub (farma/džungla) — za povratak iz roditeljskih ekrana
+## Da li je dete već ušlo u neku mini-igru. Hubovi po ovome biraju šta
+## pokazivač pokazuje: dok nije bilo — kapije (put dalje, to je važnije), a
+## kad se vrati iz igre — životinje, da vidi da i one reaguju na dodir.
+var played_game := false
 
 func _ready() -> void:
 	add_to_group("main")
@@ -34,6 +38,8 @@ func _ready() -> void:
 		_screenshot_run()
 	elif "--autotest" in OS.get_cmdline_user_args():
 		Autotest.new(self).run()
+	elif "--demo" in OS.get_cmdline_user_args():
+		Demo.new(self).run()
 	elif "--make-icon" in OS.get_cmdline_user_args():
 		_make_icon()
 	elif "--make-product-icon" in OS.get_cmdline_user_args():
@@ -265,9 +271,14 @@ func _smoke_test() -> void:
 ## roditeljskih ekrana odvede na pogrešan svet (okean je tako vodio na farmu).
 const WORLD_HUBS := ["hub", "jungle", "ocean"]
 
+## Ekrani koji nisu mini-igra (hubovi, izbor sveta, roditeljski deo).
+const NOT_GAMES := ["splash", "worlds", "hub", "jungle", "ocean", "gate", "parents"]
+
 func goto(screen_name: String) -> void:
 	if screen_name in WORLD_HUBS:
 		last_world = screen_name
+	elif not screen_name in NOT_GAMES:
+		played_game = true
 	if current:
 		current.queue_free()
 	current = SCREENS[screen_name].new()

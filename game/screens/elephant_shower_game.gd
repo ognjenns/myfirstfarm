@@ -19,6 +19,7 @@ func _ready() -> void:
 	Scenery.background(self, "background-shower", true)  # organska — puno razvlačenje
 	add_ambient(0, "mosquito")
 	add_home_button()
+	add_hint(6.0)
 
 	# rekviziti: biljka levo, peškir desno
 	Scenery.svg(self, "shower-plant", Vector2(s.x * 0.055, s.y * 0.80), (s.x * 0.10) / 300.0, -20)
@@ -117,6 +118,13 @@ func _spawn_mud() -> void:
 		mud_blobs.append(blob)
 
 ## Tap na slona: mlaz + splash u pojilu + spiranje dela blata.
+## Slon je jedino dugme na ekranu — prst pokaže da se TAPNE i da polije druge.
+func hint_spot() -> Dictionary:
+	if _busy or elephant_pos == Vector2.ZERO:
+		return {}
+	return {"at": elephant_pos}
+
+
 func _spray() -> void:
 	if _busy:
 		return

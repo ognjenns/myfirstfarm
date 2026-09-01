@@ -19,6 +19,7 @@ func _ready() -> void:
 	# list-tepih na kom leže karte
 	Scenery.svg(self, "leaf-mat", Vector2(s.x * 0.5, s.y * 0.55), (s.x * 0.60) / 1700.0, -20)
 	add_home_button()
+	add_hint(6.0)
 	_start_round()
 
 func _pairs_count() -> int:
@@ -100,6 +101,16 @@ func _make_card(animal: Dictionary, pos: Vector2, card_scale: float) -> Area2D:
 			_on_card_tapped(card)
 	)
 	return card
+
+## Prst tapne jednu zatvorenu kartu — pokazuje da se karte OKREĆU.
+func hint_spot() -> Dictionary:
+	if busy:
+		return {}
+	for c in cards:
+		if is_instance_valid(c) and not c.get_meta("matched") and not c.get_meta("revealed"):
+			return {"at": c.position}
+	return {}
+
 
 func _on_card_tapped(card: Area2D) -> void:
 	if busy or card.get_meta("revealed") or card.get_meta("matched"):

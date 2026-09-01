@@ -12,6 +12,8 @@ const ANIMAL_FRACS := {
 }
 
 var animal_nodes: Array[AnimalSprite] = []
+var _open_gates: Array[TapButton] = []
+var _hint_turn := 0
 
 func _ready() -> void:
 	var s := UI.vs(self)
@@ -30,6 +32,7 @@ func _ready() -> void:
 	_build_parent_button(s)
 	_build_worlds_button()
 	_start_life_timers()
+	add_hint(6.0)
 
 ## Malo dugme gore levo — nazad na izbor sveta.
 func _build_worlds_button() -> void:
@@ -96,6 +99,24 @@ func _build_gates(s: Vector2) -> void:
 			btn.tapped.connect(func() -> void: go(target))
 		add_child(btn)
 		btn.start_pulse()
+		if not locked:
+			_open_gates.append(btn)
+
+
+## PRVI pokazivač na hubu je uvek KAPIJA — dete pre svega treba da nađe put
+## do igre, i to važi pri svakom dolasku na hub, ne samo prvi put.
+## Tek od drugog pokazivača, i tek kad se vrati iz neke igre, pokazuje se i
+## na životinje — tada već zna gde su igre, pa je red da otkrije da i krava
+## reaguje na dodir.
+## U listi meta su SAMO otključane kapije — na katanac se ne pokazuje nikad.
+func hint_spot() -> Dictionary:
+	_hint_turn += 1
+	var main: Node = get_tree().get_first_node_in_group("main")
+	if main.played_game and _hint_turn % 2 == 0 and not animal_nodes.is_empty():
+		return {"at": animal_nodes[randi() % animal_nodes.size()].position, "size": 1.9}
+	if _open_gates.is_empty():
+		return {}
+	return {"at": _open_gates[randi() % _open_gates.size()].position, "size": 2.0}
 
 func _draw_gate_icon(parent: Node, icon: String) -> void:
 	Scenery.svg(parent, "icon-%s" % icon, Vector2.ZERO, 0.66, 0)

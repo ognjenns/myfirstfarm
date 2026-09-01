@@ -63,6 +63,7 @@ class DragAnimal extends Area2D:
 func _ready() -> void:
 	Scenery.background(self, "background-shadows")
 	add_home_button()
+	add_hint(6.0)
 	_start_scene()
 
 func _start_scene() -> void:
@@ -96,6 +97,17 @@ func _start_scene() -> void:
 		d.dropped.connect(_on_dropped)
 		add_child(d)
 		scene_nodes.append(d)
+
+## Prst pokaže jednu životinju i njenu senku — inače dete vidi dva reda sličica
+## i ne zna da se donji red PREVLAČI na gornji.
+func hint_spot() -> Dictionary:
+	for d in scene_nodes:
+		if d is DragAnimal and not d.solved and not d.dragging and shadows.has(d.animal.id):
+			var sh: Node2D = shadows[d.animal.id]
+			if sh.visible:
+				return {"from": d.position, "to": sh.position}
+	return {}
+
 
 func _on_dropped(d: DragAnimal) -> void:
 	var sh: Node2D = shadows.get(d.animal.id)

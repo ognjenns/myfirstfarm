@@ -39,6 +39,7 @@ func _ready() -> void:
 	_build_scenery()
 	_build_home()
 	add_home_button()
+	add_hint(6.0)
 	set_process(true)
 
 
@@ -147,6 +148,20 @@ func _spawn_bubble() -> void:
 			get_viewport().set_input_as_handled()   # da dodir ne procuri ispod
 			_on_bubble_tapped(entry)
 	)
+
+
+## Mehurići se dižu i sami pucaju na vrhu, pa dete može da gleda ceo minut a
+## da ne shvati da se TAPKAJU. Prst tapne onaj koji je najbliži vrhu.
+func hint_spot() -> Dictionary:
+	var best: Dictionary = {}
+	for b in _bubbles:
+		if b.popped or not is_instance_valid(b.node):
+			continue
+		if best.is_empty() or b.node.position.y < best.node.position.y:
+			best = b
+	if best.is_empty():
+		return {}
+	return {"at": best.node.position}
 
 
 func _rise_speed() -> float:

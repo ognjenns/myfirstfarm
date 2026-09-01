@@ -83,6 +83,8 @@ var _chest_gap := 0.0      # razmak između mehurića unutar rafala
 var _diver_emitter := Vector2.ZERO
 var _next_diver_bubble := 0.0
 var _s := Vector2.ZERO
+var _open_gates: Array[TapButton] = []
+var _hint_turn := 0
 
 
 func _ready() -> void:
@@ -101,6 +103,7 @@ func _ready() -> void:
 	_build_gates(s)
 	_build_worlds_button()
 	_build_parent_button(s)
+	add_hint(6.0)
 	set_process(true)
 
 
@@ -867,6 +870,33 @@ func _build_gates(s: Vector2) -> void:
 		btn.z_index = 10
 		add_child(btn)
 		btn.start_pulse()
+		if not locked and target in IMPLEMENTED:
+			_open_gates.append(btn)
+
+
+## PRVI pokazivač na hubu je uvek KAPIJA — dete pre svega treba da nađe put
+## do igre, i to važi pri svakom dolasku na hub, ne samo prvi put.
+## Tek od drugog pokazivača, i tek kad se vrati iz neke igre, pokazuje se i
+## na bića — tada već zna gde su igre, pa je red da otkrije da i meduza
+## reaguje na dodir.
+## U listi meta su SAMO otključane kapije — na katanac se ne pokazuje nikad.
+func hint_spot() -> Dictionary:
+	_hint_turn += 1
+	var main: Node = get_tree().get_first_node_in_group("main")
+	if main.played_game and _hint_turn % 2 == 0:
+		# Meduza, ronilac i sanduk odgovaraju na dodir, a ništa to ne najavljuje.
+		var live: Array[Node2D] = []
+		for n in [_jelly, _diver, _crab]:
+			if is_instance_valid(n):
+				live.append(n)
+		if is_instance_valid(_chest_lid) and _chest_lid.get_parent() is Node2D:
+			live.append(_chest_lid.get_parent())
+		if not live.is_empty():
+			return {"at": live[randi() % live.size()].position, "size": 1.9}
+	if _open_gates.is_empty():
+		return {}
+	return {"at": _open_gates[randi() % _open_gates.size()].position, "size": 2.0}
+
 
 
 func _build_worlds_button() -> void:

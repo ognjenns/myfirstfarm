@@ -68,6 +68,7 @@ func _ready() -> void:
 	_build_chest(0.956, 11.0)
 	_build_band()
 	add_home_button()
+	add_hint(6.0)
 	set_process(true)
 
 
@@ -125,6 +126,16 @@ func _build_band() -> void:
 				get_viewport().set_input_as_handled()
 				_sing(entry)
 		)
+
+
+## Igra nema zadatak, pa dete i ne zna da bića sviraju — prst tapne jedno.
+func hint_spot() -> Dictionary:
+	if _players.is_empty():
+		return {}
+	var p: Dictionary = _players[randi() % _players.size()]
+	if not is_instance_valid(p.node):
+		return {}
+	return {"at": p.node.position}
 
 
 func _build_chest(x: float, first_wait: float) -> void:

@@ -47,6 +47,80 @@ func _spawn_ambient_flyer() -> void:
 	else:
 		add_child(Butterfly.new(from, to, Butterfly.COLORS[randi() % Butterfly.COLORS.size()]))
 
+## Pokazivač: ako ekran miruje `delay` sekundi, prst pokaže šta se radi, i
+## ponavlja to dok dete ne dodirne ekran. Ekran samo kaže GDE (`hint_spot`).
+var _hint_node: Hint = null
+var _hint_timer: Timer = null
+var _hint_delay := 6.0
+
+
+## Posle koliko pokretanja aplikacije dete više "zna igru".
+const LEARNED_AFTER := 2
+## Tada se pokazivač ne gasi nego se povuče: javlja se tek posle dugog
+## mirovanja. Potpuno gašenje bi vratilo problem zbog kog je i uveden — dete
+## koje zaboravi (ili mlađi brat koji prvi put uzme tablet) ostaje bez ičega.
+const LEARNED_FIRST := 12.0
+const LEARNED_DELAY := 20.0
+
+
+func add_hint(delay := 6.0, first := 2.0) -> void:
+	if Save.launches > LEARNED_AFTER:
+		delay = LEARNED_DELAY
+		first = LEARNED_FIRST
+	_hint_delay = delay
+	_hint_timer = Timer.new()
+	# Prvi put pokazivač dolazi posle dve sekunde — dete koje tek uđe u igru ne
+	# zna šta se traži, a čekanje od šest sekundi je za taj uzrast večnost.
+	# Posle toga se javlja ređe, da ne smeta onome ko je već shvatio.
+	_hint_timer.wait_time = first
+	_hint_timer.timeout.connect(_fire_hint)
+	add_child(_hint_timer)
+	_hint_timer.start()
+	var watcher := HintWatcher.new()
+	watcher.touched.connect(_on_hint_touch)
+	add_child(watcher)
+
+
+## Gde pokazivač da pokaže: {"at": Vector2} za tap, {"from": ..., "to": ...}
+## za prevlačenje, uz opciono {"size": 1.8} kad meta traži krupniji prsten.
+## Prazan rečnik = trenutno nema šta da se pokaže (runda se slavi, dete već
+## drži prst na ekranu...). Svaki ekran ga piše za sebe.
+func hint_spot() -> Dictionary:
+	return {}
+
+
+func _fire_hint() -> void:
+	_hint_timer.wait_time = _hint_delay
+	if is_instance_valid(_hint_node):
+		return
+	var spot := hint_spot()
+	if spot.is_empty():
+		return
+	var size: float = spot.get("size", 1.0)
+	if spot.has("from"):
+		_hint_node = Hint.drag(self, spot["from"], spot["to"], size)
+	else:
+		_hint_node = Hint.tap(self, spot["at"], size)
+
+
+func _on_hint_touch() -> void:
+	if is_instance_valid(_hint_node):
+		_hint_node.vanish()
+		_hint_node = null
+	if _hint_timer:
+		_hint_timer.start()  # odbrojavanje kreće ispočetka posle svakog dodira
+
+
+## Dodir se prati zasebnim čvorom: ekran koji ima svoj `_input` bi inače
+## prekrio nasleđeni (GDScript ne zove roditeljski automatski).
+class HintWatcher extends Node:
+	signal touched
+
+	func _input(event: InputEvent) -> void:
+		if event is InputEventMouseButton and event.pressed:
+			touched.emit()
+
+
 func celebrate(pos: Vector2) -> void:
 	# Slavlje je SAMO pravi dečji glas. Pobednički đingl je zvučao kao arkadna
 	# igra, a aplauz malog skupa na tihom nivou pucketa kao vatromet — oba su

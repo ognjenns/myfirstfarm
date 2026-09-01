@@ -33,11 +33,13 @@ func _ready() -> void:
 	_build_gates(s)
 	_build_worlds_button()
 	_build_parent_button(s)
+	add_hint(6.0)
 
 func _spawn_animal(id: String, pos: Vector2, sc: float) -> void:
 	var a := AnimalSprite.new(Animals.by_id_jungle(id), sc)
 	a.position = pos
 	add_child(a)
+	_animals.append(a)
 
 func _build_worlds_button() -> void:
 	var btn := TapButton.new(Vector2(100, 100), 62, Color(1, 1, 1, 0.85))
@@ -54,6 +56,10 @@ func _build_parent_button(s: Vector2) -> void:
 
 ## Igre koje se otključavaju kupovinom ("Unlock all games").
 const LOCKED_GAMES := ["memory", "quiz"]
+
+var _open_gates: Array[TapButton] = []
+var _animals: Array[AnimalSprite] = []
+var _hint_turn := 0
 
 func _build_gates(s: Vector2) -> void:
 	var gates := [
@@ -77,3 +83,22 @@ func _build_gates(s: Vector2) -> void:
 			btn.tapped.connect(func() -> void: go(target))
 		add_child(btn)
 		btn.start_pulse()
+		if not locked:
+			_open_gates.append(btn)
+
+
+## PRVI pokazivač na hubu je uvek KAPIJA — dete pre svega treba da nađe put
+## do igre, i to važi pri svakom dolasku na hub, ne samo prvi put.
+## Tek od drugog pokazivača, i tek kad se vrati iz neke igre, pokazuje se i
+## na životinje — tada već zna gde su igre, pa je red da otkrije da i majmun
+## reaguje na dodir.
+## U listi meta su SAMO otključane kapije — na katanac se ne pokazuje nikad.
+func hint_spot() -> Dictionary:
+	_hint_turn += 1
+	var main: Node = get_tree().get_first_node_in_group("main")
+	if main.played_game and _hint_turn % 2 == 0 and not _animals.is_empty():
+		return {"at": _animals[randi() % _animals.size()].position, "size": 1.9}
+	if _open_gates.is_empty():
+		return {}
+	return {"at": _open_gates[randi() % _open_gates.size()].position, "size": 2.0}
+

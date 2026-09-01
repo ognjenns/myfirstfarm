@@ -22,3 +22,6 @@ assets/sfx_backup_levels/
 # renderovani setovi za prodavnice (generisu se sa --shots)
 shots_ipad/
 shots_iphone/
+
+# provere rasporeda na tabletima (3:2, 4:3) — regenerišu se sa --shots
+shots_tab*/

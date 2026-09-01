@@ -22,6 +22,7 @@ func _ready() -> void:
 	var s := UI.vs(self)
 	Scenery.background(self, "background-hideseek")
 	add_home_button()
+	add_hint(6.0)
 	add_ambient(1)
 
 	_animal_scale = (s.x * 0.110) / 230.0
@@ -105,6 +106,14 @@ func _stop_peek() -> void:
 	if _peek_tw:
 		_peek_tw.kill()
 		_peek_tw = null
+
+## Posle duže pauze prst pokaže PRAVO skrovište: igra nema promašaj koji
+## kažnjava, a dete koje ne shvati da se skrovišta tapkaju samo gleda u ekran.
+func hint_spot() -> Dictionary:
+	if not accepting_taps or hiding_idx < 0 or hiding_idx >= spots.size():
+		return {}
+	return {"at": spots[hiding_idx].pos}
+
 
 func _on_spot_tapped(idx: int) -> void:
 	if not accepting_taps:

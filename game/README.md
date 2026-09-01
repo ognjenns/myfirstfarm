@@ -16,7 +16,12 @@ godot --headless --path game/ -- --smoke      # instancira svih 7 ekrana
 godot --headless --path game/ -- --autotest   # odigra sve 4 mini-igre (41 provera)
 godot --path game/ -- --shots                 # screenshotovi svih ekrana u shots/
 godot --path game/ --resolution 512x512 -- --make-icon   # regeneriši icon.png
+godot --path game/ -- --demo                  # demo prolaz sa vidljivim prstom
 ```
+
+`--demo` sam odigra: splash → izbor sveta → okean → orkestar, pravim
+dodirima i sa prstom na ekranu. Služi za promo video — snima se preko
+`marketing/record_short.sh` (Godot Movie Maker).
 
 Napomena: posle dodavanja novog fajla sa `class_name` prvo pokreni
 `godot --headless --import --path game/` da se klasa registruje.

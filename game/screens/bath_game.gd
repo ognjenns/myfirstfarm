@@ -30,6 +30,7 @@ func _ready() -> void:
 	var s := UI.vs(self)
 	Scenery.background(self, "background-bath")
 	add_home_button()
+	add_hint(6.0)
 
 	# kada — širina 0.462w, gornja ivica (rim) na 0.548h
 	var tub_scale := (s.x * 0.462) / 1000.0
@@ -191,6 +192,14 @@ func _input(event: InputEvent) -> void:
 			_sponge_hint()  # čisti se SAMO sunđerom — podseti dete gde je
 
 ## Prstom se ne čisti — sunđer se javi i poskoči.
+## Blato se skida SAMO sunđerom, a sunđer stoji sa strane i ne pomera se sam —
+## prst ga prevuče do životinje. U fazi tuširanja i slavlja nema šta da se radi.
+func hint_spot() -> Dictionary:
+	if sponge_drag or sponge == null or not (phase == Phase.MUD or phase == Phase.FOAM):
+		return {}
+	return {"from": sponge.position, "to": pig_pos}
+
+
 func _sponge_hint() -> void:
 	if _hint_cooldown > 0.0:
 		return

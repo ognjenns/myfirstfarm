@@ -19,6 +19,7 @@ func _ready() -> void:
 	var s := UI.vs(self)
 	Scenery.background(self, "background-quiz")
 	add_home_button()
+	add_hint(6.0)
 	for a in Animals.JUNGLE:
 		if a.id in Animals.SILENT:   # žvakanje se ne može pogoditi kao glas
 			continue
@@ -100,6 +101,7 @@ func _start_round() -> void:
 		var face := AnimalFaces.build(a.id)
 		face.scale = Vector2.ONE * (r / 130.0)
 		btn.add_child(face)
+		btn.set_meta("animal_id", a.id)  # za pokazivač: koja je tačna
 		btn.tapped.connect(_on_pick.bind(btn, a))
 		add_child(btn)
 		options.append(btn)
@@ -108,6 +110,17 @@ func _start_round() -> void:
 		if is_instance_valid(self) and not answer.is_empty():
 			_play_voice()
 	)
+
+## Zvuk je već pušten, ali dete ne mora da poveže glas sa licem — posle pauze
+## prst pokaže tačno lice. Bolje pokazati nego pustiti ga da odustane.
+func hint_spot() -> Dictionary:
+	if busy or answer.is_empty():
+		return {}
+	for o in options:
+		if is_instance_valid(o) and o.get_meta("animal_id", "") == answer.id:
+			return {"at": o.position}
+	return {}
+
 
 func _on_pick(btn: TapButton, a: Dictionary) -> void:
 	if busy:

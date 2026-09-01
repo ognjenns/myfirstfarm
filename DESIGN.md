@@ -48,6 +48,7 @@ Prase blatnjavo → dete prstom trlja blato (briše se sloj) → sunđer pravi p
 - **Nema tajmera, nema score-a.** Deca ovog uzrasta ih ne razumeju, samo frustriraju.
 - **Krupne tap zone:** minimum 15% širine ekrana po interaktivnom objektu.
 - **Sve reaguje.** Tap bilo gde daje makar mali zvuk/efekat — mrtvih zona nema.
+- **Pokazivač umesto uputstva.** Ako ekran miruje (prvi put posle ~2,5 s, kasnije na svakih ~6 s), pojavi se beli prst i pokaže potez: tapne metu ili prevuče od predmeta do cilja. Nestaje na prvi dodir. Dete od dve godine ne čita, ne sluša uputstvo i ne zna da je bela kapija ulaz u igru — jedini jezik koji razume je pokazivanje. Ekran kaže samo GDE (`hint_spot()`), tempo i crtanje su zajednički (`core/hint.gd`).
 - **Drag mora biti "lepljiv":** objekat se ne ispušta lako, snap zone velikodušne.
 
 ---

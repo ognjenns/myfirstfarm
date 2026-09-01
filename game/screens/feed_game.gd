@@ -9,10 +9,25 @@ var plates := {}  # animal_id -> Sprite2D (činija)
 var foods_left := 0
 var _round_nodes: Array[Node] = []
 
+## Prevlačenje se iz slike ne vidi: prst pokaže JEDNU hranu i činiju u koju
+## ide. Igra nema greške, pa nagoveštaj sme da otkrije tačan par.
+func hint_spot() -> Dictionary:
+	if foods_left <= 0:
+		return {}
+	for f in get_children():
+		if not (f is FoodItem) or f.dragging or f.locked:
+			continue
+		for a in animals_on_screen:
+			if a.animal.food == f.kind and plates.has(a.animal.id):
+				return {"from": f.position, "to": plates[a.animal.id].position}
+	return {}
+
+
 func _ready() -> void:
 	var s := UI.vs(self)
 	_setup_scene(s)
 	add_home_button()
+	add_hint(6.0)
 
 	# korito preko donjeg dela
 	var trough := Scenery.svg(self, _trough_asset(), Vector2(s.x * 0.5, s.y * 0.79), (s.x * _trough_span()) / 600.0, 10)

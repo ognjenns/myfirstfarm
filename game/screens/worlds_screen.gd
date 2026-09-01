@@ -9,10 +9,22 @@ func _ready() -> void:
 	_world_card(Vector2(s.x * 0.20, s.y * 0.50), "card-farm", "title-farm", "hub", s, "cow")
 	_world_card(Vector2(s.x * 0.50, s.y * 0.50), "card-jungle", "title-jungle", "jungle", s, "monkey")
 	_world_card(Vector2(s.x * 0.80, s.y * 0.50), "card-ocean", "title-ocean", "ocean", s, "fish")
+	add_hint(6.0)
+
+var _card_spots: Array[Vector2] = []
+
+
+## Tri kartice ništa ne rade same od sebe — prst pokaže da se u svet ULAZI.
+func hint_spot() -> Dictionary:
+	if _card_spots.is_empty():
+		return {}
+	return {"at": _card_spots[randi() % _card_spots.size()], "size": 2.2}
+
 
 func _world_card(pos: Vector2, art: String, title: String, target: String, s: Vector2, animal_id := "") -> void:
 	var card := Area2D.new()
 	card.position = pos
+	_card_spots.append(pos)
 	# ograniči i po širini da se kartice ne preklope na tabletu (4:3)
 	var card_scale := minf((s.y * 0.62) / 600.0, (s.x * 0.270) / 700.0)
 	var spr := Sprite2D.new()
