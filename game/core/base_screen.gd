@@ -21,7 +21,7 @@ func add_home_button() -> void:
 	btn.z_index = 100
 	add_child(btn)
 
-## Ambijent za mini-igre: oblaci + letač (leptir na farmi, komarac u džungli).
+## Ambijent za mini-igre: oblaci + leptir (džungla nema letača).
 var ambient_flyer := "butterfly"
 
 func add_ambient(cloud_count := 2, flyer := "butterfly") -> void:
@@ -42,10 +42,7 @@ func _spawn_ambient_flyer() -> void:
 	var from_left := randf() < 0.5
 	var from := Vector2(-60 if from_left else s.x + 60, y)
 	var to := Vector2(s.x + 60 if from_left else -60, y + randf_range(-80, 80))
-	if ambient_flyer == "mosquito":
-		add_child(Mosquito.new(from, to))
-	else:
-		add_child(Butterfly.new(from, to, Butterfly.COLORS[randi() % Butterfly.COLORS.size()]))
+	add_child(FarmButterfly.new(from, to, FarmButterfly.COLORS[randi() % FarmButterfly.COLORS.size()]))
 
 ## Pokazivač: ako ekran miruje `delay` sekundi, prst pokaže šta se radi, i
 ## ponavlja to dok dete ne dodirne ekran. Ekran samo kaže GDE (`hint_spot`).
@@ -64,9 +61,17 @@ const LEARNED_DELAY := 20.0
 
 
 func add_hint(delay := 6.0, first := 2.0) -> void:
+	if "--nohint" in OS.get_cmdline_user_args():
+		return   # screenshotovi za prodavnice: bez prsta
 	if Save.launches > LEARNED_AFTER:
 		delay = LEARNED_DELAY
 		first = LEARNED_FIRST
+	# Prst pokaže ODMAH na svakom ulasku (03.09.2026): deca i pri drugom ulasku
+	# krenu da tapkaju bilo gde pre nego što se prst javi. Kasnije ponavljanje
+	# ostaje ređe kad je igra naučena.
+	var script_path: String = get_script().resource_path
+	Save.first_visit(script_path.get_file().get_basename())
+	first = 0.4
 	_hint_delay = delay
 	_hint_timer = Timer.new()
 	# Prvi put pokazivač dolazi posle dve sekunde — dete koje tek uđe u igru ne
@@ -119,6 +124,24 @@ class HintWatcher extends Node:
 	func _input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and event.pressed:
 			touched.emit()
+
+
+## Mali narandžasti bljesak (kupljeni "charge" efekat, 10 sličica) — zamena
+## za konfete tamo gde one odvlače pažnju.
+func glow(pos: Vector2, height: float) -> void:
+	var sp := Sprite2D.new()
+	sp.texture = load("res://art/fx/charge-1.png")
+	sp.scale = Vector2.ONE * (height / sp.texture.get_size().y)
+	sp.position = pos
+	sp.z_index = 25
+	sp.modulate = Color(1.0, 0.62, 0.2, 0.55)
+	add_child(sp)
+	var tw := create_tween()
+	for i in 10:
+		var idx := i + 1
+		tw.tween_callback(func() -> void: sp.texture = load("res://art/fx/charge-%d.png" % idx))
+		tw.tween_interval(0.05)
+	tw.tween_callback(sp.queue_free)
 
 
 func celebrate(pos: Vector2) -> void:

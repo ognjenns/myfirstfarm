@@ -43,3 +43,14 @@ Obrada: `assets/process_mixkit_v4.sh` (mono 22050, odsecanje tišine, fade, RMS 
 i 13 `*_happy` đinglova koji su sada MRTVI (sve životinje imaju pravo glasanje) —
 mogu se obrisati pri sledećem čišćenju. `buzz.wav` je nezakačen jer su komarci
 NAMERNO uklonjeni iz igre — nije propust.
+
+## Dino svet (04.09.2026) — obrada u `assets/process_dino_sounds.sh`
+- `rock_hit.wav` — Freesound 431019 "Stone hit" (CamoMano), CC0
+- `rock_break.wav` — Freesound 524312 "Rock destroy" (Bertsz), CC0; prva sekunda
+- `egg_crack.wav` — Freesound 244723 "egg crack1" (Reitanna), CC0
+- `lava_bubble.wav` — Mixkit "Volcano lava bubble" (2445), Mixkit Free License; prvih 1.1 s
+- `egg_hatch.wav` — Mixkit "Gen egg hatch" (1740), Mixkit Free License
+- Rezerve u `~/Downloads`: Mixkit 403/400 (kamenčići), 2448 (veliki mehur), 1740 ("Gen egg hatch")
+
+## Okean, orkestar (03.09.2026)
+- `note.wav` — Freesound 659909 "Kalimba.wav" (PanPiper5), CC0; prvih 1,6 s, prigušen iznad 3 kHz; igra ga transponuje u durskoj lestvici (glockenspiel 348923 je bio previše oštar)

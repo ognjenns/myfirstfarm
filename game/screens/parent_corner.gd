@@ -2,7 +2,7 @@ extends BaseScreen
 ## Roditeljski ugao u duhu igre: drvene daske-dugmad sa ikonicama,
 ## farm prekidači za muziku/zvuk, footer sa Oggie ćurkicom.
 
-const VERSION := "1.1.2"  # držati u skladu sa version/name u export_presets.cfg
+const VERSION := "2.0.0"  # držati u skladu sa version/name u export_presets.cfg
 const PRIVACY_URL := "https://ognjenns.github.io/myfirstfarm/privacy.html"
 
 var music_toggle: Sprite2D
@@ -40,7 +40,9 @@ func _ready() -> void:
 	unlock_label = UI.label(self, "", Vector2(lx + s.x * 0.36 * 0.007, rows[1] - 6.0 * up_scale), 40)
 	unlock_price = UI.label(self, "", Vector2(lx + s.x * 0.36 * 0.34, rows[1] - 6.0 * up_scale), 34)
 	# ispod daske: šta se sve dobija (obećanje važi i za buduće svetove)
-	UI.label(self, "All worlds + future updates", Vector2(lx, rows[1] + 92.0 * up_scale), 26, Color(0.55, 0.50, 0.45))
+	# Bez obećanja budućih svetova (Ognjen, 04.09.2026): kupovina otključava
+	# igre koje postoje sada.
+	UI.label(self, "All games in all four worlds", Vector2(lx, rows[1] + 92.0 * up_scale), 26, Color(0.55, 0.50, 0.45))
 	_refresh_toggles()
 	_refresh_unlock()
 

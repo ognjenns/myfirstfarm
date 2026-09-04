@@ -14,8 +14,10 @@ const COLORS := ["red", "yellow", "blue", "green"]
 const REF := Vector2(2340.0, 1080.0)
 
 const NEED := 6              # koliko ribica čini rundu
-const SWIM_FRAMES := 4
-const BOWL_W := 0.155
+const SWIM_FRAMES := 8       # kupljena riba (fish 5) ima 8 sličica plivanja
+## Korpe su korali iz paketa u boji: crveni, žuti, zeleni koral i plava anemona.
+const BOWL_ART := {"red": "coral-8", "yellow": "coral-11", "blue": "coral-6", "green": "coral-3"}
+const BOWL_W := 0.20
 const FISH_W := 0.085
 const IN_WATER := 3          # koliko ribica pliva istovremeno
 ## Otvor posude u njenom sopstvenom fajlu (360×300).
@@ -43,7 +45,7 @@ var _deco: Array = []
 func _ready() -> void:
 	home_target = "ocean"
 	_s = UI.vs(self)
-	Scenery.background(self, "background-colors")
+	_build_background()
 	_scenery()
 	_build_deco()
 	_build_bowls()
@@ -53,6 +55,7 @@ func _ready() -> void:
 		_spawn_fish(0.20 + 0.13 * float(i))
 	add_home_button()
 	_show_hint()
+	add_hint(5.0)
 	set_process(true)
 	set_process_input(true)
 
@@ -62,16 +65,58 @@ func _ready() -> void:
 ## zadatak sa još jednom bojom.
 ## Podmornica polako prolazi u dubini iza svega — daje pokret i priču bez ijedne
 ## nove boje koja bi ušla u zadatak. Sanduci i zvezde popunjavaju pesak.
+## Pozadina iz kupljenog paketa: voda, zraci, daleke stene i pesak. Bez
+## šarenih korala u pozadini — boje su zadatak, pozadina ostaje plava.
+func _build_background() -> void:
+	var bg := Sprite2D.new()
+	bg.texture = load("res://art/ocean/bg-colour.png")
+	var bt := bg.texture.get_size()
+	bg.position = _s / 2.0
+	bg.scale = Vector2(_s.x / bt.x, _s.y / bt.y)
+	bg.z_index = -60
+	add_child(bg)
+	var sun := Sprite2D.new()
+	sun.texture = load("res://art/ocean/sunlight.png")
+	var st := sun.texture.get_size()
+	sun.scale = Vector2.ONE * ((_s.x * 0.8) / st.x)
+	sun.position = Vector2(_s.x * 0.5, st.y * sun.scale.y * 0.5 - _s.y * 0.02)
+	sun.modulate.a = 0.6
+	sun.z_index = -59
+	add_child(sun)
+	_pack("distant-rocks-1", 0.40, 0.14, 0.82, -57)
+	_pack("distant-rocks-4", 0.42, 0.88, 0.82, -57)
+	_pack("ruin-6", 0.12, 0.52, 0.80, -56).modulate = Color(0.85, 0.92, 1.0, 0.8)
+	var sand := Sprite2D.new()
+	sand.texture = load("res://art/ocean/seabed.png")
+	var sd := sand.texture.get_size()
+	sand.scale = Vector2((_s.x * 1.02) / sd.x, (_s.y * 0.24) / sd.y)
+	sand.position = Vector2(_s.x * 0.5, _s.y * 0.88)
+	sand.z_index = -50
+	add_child(sand)
+
+
+func _pack(art: String, frac_w: float, cx: float, base_y: float, z: int) -> Sprite2D:
+	var sp := Sprite2D.new()
+	sp.texture = load("res://art/ocean/%s.png" % art)
+	var tex := sp.texture.get_size()
+	sp.scale = Vector2.ONE * ((_s.x * frac_w) / tex.x)
+	sp.offset = Vector2(0, -tex.y / 2.0)
+	sp.position = Vector2(_s.x * cx, _s.y * base_y)
+	sp.z_index = z
+	add_child(sp)
+	return sp
+
+
 func _build_deco() -> void:
-	# Frejmova ima tačno onoliko koliko fajlova postoji — kad se tražilo 25 a
-	# postoji 24, dvadeset peti se učita kao ništa i podmornica trepne.
-	for i in 24:
-		_sub_frames.append(load("res://art/svg/submarine-%d.svg" % (i + 1)))
+	# Umesto podmornice: ronilac sa harpunom iz paketa (16 sličica), prolazi
+	# u dubini iza svega, s leva udesno.
+	for i in 16:
+		_sub_frames.append(load("res://art/ocean/divergun-%d.png" % (i + 1)))
 	_sub = Sprite2D.new()
 	_sub.texture = _sub_frames[0]
-	_sub.scale = Vector2.ONE * ((_s.x * 0.16) / 600.0)
+	_sub.scale = Vector2.ONE * ((_s.x * 0.20) / 700.0)
 	_sub.position = Vector2(-_s.x * 0.2, _s.y * 0.20)
-	_sub.modulate = Color(1, 1, 1, 0.65)
+	_sub.modulate = Color(1, 1, 1, 0.85)
 	_sub.z_index = 0
 	add_child(_sub)
 
@@ -95,15 +140,18 @@ func _sand_deco() -> void:
 	for i in _bowls.size() - 1:
 		gaps.append(((_bowls[i].node as Sprite2D).position.x
 			+ (_bowls[i + 1].node as Sprite2D).position.x) * 0.5 / _s.x)
-	var pick: Array = [0, 1] if gaps.size() < 3 else [1, 2]
-	var waits := [5.0, 15.0]
+	# Jedan sanduk, u desnom razmaku — dva su prizor činila generičkim.
+	var pick: Array = [1] if gaps.size() < 3 else [2]
+	var waits := [8.0]
 	for k in pick.size():
 		if pick[k] < gaps.size():
 			_add_chest(float(gaps[pick[k]]), waits[k])
 
-	for spec in [[0.215, "starfish-sand"], [0.795, "starfish-sand-orange"]]:
+	# Ukras u NEUTRALNIM bojama (bela anemona, ljubičasti kamen) — crvena ili
+	# žuta zvezda bi ušla u zadatak sa bojama.
+	for spec in [[0.215, "coral-16"], [0.795, "coral-12"]]:
 		var st := Sprite2D.new()
-		st.texture = load("res://art/svg/%s.svg" % spec[1])
+		st.texture = load("res://art/ocean/%s.png" % spec[1])
 		var stx := st.texture.get_size()
 		st.scale = Vector2.ONE * ((_s.x * 0.075) / stx.x)
 		st.offset = Vector2(0, -stx.y / 2.0)
@@ -114,25 +162,19 @@ func _sand_deco() -> void:
 
 
 func _add_chest(x: float, first_wait: float) -> void:
-	var sc := (_s.x * 0.098) / 520.0
+	# Kupljeni sanduk: dva crteža (zatvoren/otvoren), dno na pesku.
+	var sc := (_s.x * 0.098) / 512.0
 	var node := Node2D.new()
-	node.position = Vector2(_s.x * x, _s.y * 0.985 - 400.0 * sc * 0.5)
+	node.position = Vector2(_s.x * x, _s.y * 0.99)
 	node.scale = Vector2.ONE * sc
 	node.z_index = 2
 	add_child(node)
 
 	var lid := Sprite2D.new()
-	lid.texture = load("res://art/svg/chest-lid.svg")
-	var t := lid.texture.get_size()
-	lid.offset = -Vector2((0.047 - 0.5) * t.x, (0.904 - 0.5) * t.y)
-	lid.position = Vector2((0.169 - 0.5) * 520.0, (0.480 - 0.5) * 400.0)
-	lid.z_index = -1
+	lid.texture = load("res://art/ocean/chest-closed.png")
+	lid.offset = Vector2(0, -lid.texture.get_size().y / 2.0)
 	node.add_child(lid)
-
-	var body := Sprite2D.new()
-	body.texture = load("res://art/svg/chest-body.svg")
-	node.add_child(body)
-	var c := {"node": node, "lid": lid, "open": 0.0, "left": 0, "gap": 0.0,
+	var c := {"node": node, "lid": lid, "open": 0.0, "left": 0, "gap": 0.0, "is_open": false,
 		"wait": first_wait, "emit": Vector2(_s.x * x, _s.y * 0.90)}
 	_chests.append(c)
 
@@ -140,9 +182,9 @@ func _add_chest(x: float, first_wait: float) -> void:
 	var area := Area2D.new()
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
-	rect.size = Vector2(440.0, 340.0)
+	rect.size = Vector2(500.0, 430.0)
 	shape.shape = rect
-	shape.position = Vector2(0.0, 30.0)
+	shape.position = Vector2(0.0, -215.0)
 	area.add_child(shape)
 	node.add_child(area)
 	area.input_event.connect(func(_vp: Node, ev: InputEvent, _i: int) -> void:
@@ -156,23 +198,24 @@ func _add_chest(x: float, first_wait: float) -> void:
 
 
 func _scenery() -> void:
-	# Trava mora biti IZVAN najkrajnjih posuda, inače posuda stane preko nje.
-	# Krajnja posuda kod tri komada seže do ~0,09 širine, pa trava ide ispod toga.
-	for spec in [[0.020, 0.30], [0.062, 0.22], [0.980, 0.30], [0.938, 0.22]]:
-		var sp := Sprite2D.new()
-		sp.texture = load("res://art/svg/seaweed-clump-medium.svg")
-		var tex := sp.texture.get_size()
-		# Pozicije skoljki su udeo SIRINE, pa i velicina mora u sirinskoj meri.
-		# Vezana za _s.y, na iPadu skoljka naraste a razmak ostane isti.
-		# Na referentnom telefonu daje tacno staru vrednost (_s.x = REF.x).
-		sp.scale = Vector2.ONE * ((REF.y * (_s.x / REF.x) * spec[1]) / tex.y)
-		if spec[0] > 0.5:
-			sp.scale.x *= -1.0
-		sp.offset = Vector2(0, -tex.y / 2.0)
-		sp.position = Vector2(_s.x * spec[0], _s.y * 1.01)
-		sp.modulate = Color(0.72, 0.78, 0.74, 0.55)
-		sp.z_index = 1
-		add_child(sp)
+	# Prizor kao na hubu, ali IZA korpi i u neutralnim/plavim tonovima da ne
+	# ulazi u zadatak sa bojama: visoka stena desno (ista kao u lavirintu),
+	# veliki grebeni uz dno, trava i kelp uz ivice.
+	# Visoka stena desno, skoro do vrha i deblja: ribe plivaju ISPRED nje
+	# (z 6), ronilac prolazi IZA nje (z 0).
+	var rock := _pack("wall-rock-2", 0.20, 0.935, 1.07, 1)
+	var rt := rock.texture.get_size()
+	var ry: float = (_s.y * 1.0) / rt.y
+	rock.scale = Vector2(ry * 1.45, ry)
+	rock.modulate = Color(0.9, 0.95, 1.0)
+	_pack("fg-piece-2", 0.34, 0.20, 1.04, -8)
+	_pack("fg-piece-3", 0.30, 0.55, 1.03, -8)
+	_pack("fg-piece-4", 0.32, 0.84, 1.04, -8)
+	for g in [["grass-7", 0.050, 0.035, 1.08], ["grass-9", 0.045, 0.975, 1.08],
+			["grass-2", 0.10, 0.06, 1.02], ["grass-11", 0.08, 0.94, 1.02],
+			["grass-13", 0.09, 0.40, 1.03], ["grass-2", 0.08, 0.70, 1.03]]:
+		var sp := _pack(String(g[0]), float(g[1]), float(g[2]), float(g[3]), -7)
+		sp.modulate = Color(0.85, 0.9, 0.9)
 
 
 func _palette() -> Array:
@@ -193,7 +236,7 @@ func _build_bowls() -> void:
 		var col: String = pal[i]
 		var x: float = (float(i) + 0.5) / float(pal.size())
 		var sp := Sprite2D.new()
-		sp.texture = load("res://art/svg/coral-bowl-%s.svg" % col)
+		sp.texture = load("res://art/ocean/%s.png" % BOWL_ART[col])
 		var tex := sp.texture.get_size()
 		var sc := (_s.x * BOWL_W) / tex.x
 		sp.scale = Vector2.ONE * sc
@@ -211,8 +254,8 @@ func _spawn_fish(at_y := 0.19) -> void:
 	var pal := _palette()
 	var sp := Sprite2D.new()
 	var col: String = pal[randi() % pal.size()]
-	sp.texture = load("res://art/svg/sortfish-%s-1.svg" % col)
-	sp.scale = Vector2.ONE * ((_s.x * FISH_W) / 256.0)
+	sp.texture = load("res://art/ocean/f5-%s-1.png" % col)
+	sp.scale = Vector2.ONE * ((_s.x * FISH_W) / 520.0)
 	sp.position = Vector2(_s.x * randf_range(0.15, 0.85), _s.y * at_y)
 	sp.z_index = 6
 	add_child(sp)
@@ -225,6 +268,17 @@ func _spawn_fish(at_y := 0.19) -> void:
 ## Na početku runde se pokaže šta se traži: prsten oko jedne ribice i tačkice
 ## do posude njene boje. Bez teksta i bez glasa, jer igra nema ni jedno ni
 ## drugo — pokazivanje je jedini jezik koji ovaj uzrast razume odmah.
+## Pokazivač (prst): prevuci neku ribicu do korpe njene boje.
+func hint_spot() -> Dictionary:
+	for f in _fishes:
+		if not is_instance_valid(f.node) or f.busy or f.drag:
+			continue
+		for b in _bowls:
+			if b.color == f.color:
+				return {"from": f.node.position, "to": b.mouth, "size": 1.3}
+	return {}
+
+
 func _show_hint() -> void:
 	if _fishes.is_empty():
 		return
@@ -252,9 +306,9 @@ func _dot(p: Vector2) -> void:
 	var sp := Sprite2D.new()
 	# Bledi mehurić se na svetlom pesku ne vidi, pa je tačkica krupniji mehurić
 	# sa tamnijim tonom — putanja mora da bude očigledna iz prvog pogleda.
-	sp.texture = load("res://art/svg/bubble.svg")
+	sp.texture = load("res://art/ocean/bubble.png")
 	sp.position = p
-	sp.scale = Vector2.ONE * (_s.x * 0.030 / 200.0)
+	sp.scale = Vector2.ONE * (_s.x * 0.030 / 256.0)
 	sp.modulate = Color(0.42, 0.56, 0.66, 0.0)
 	sp.z_index = 4
 	add_child(sp)
@@ -340,8 +394,8 @@ func _accept(f: Dictionary, b: Dictionary) -> void:
 ## brojač koji nešto znači.
 func _keep(f: Dictionary, b: Dictionary) -> void:
 	var sp := Sprite2D.new()
-	sp.texture = load("res://art/svg/sortfish-%s-1.svg" % f.color)
-	sp.scale = Vector2.ONE * ((_s.x * 0.030) / 256.0)
+	sp.texture = load("res://art/ocean/f5-%s-1.png" % f.color)
+	sp.scale = Vector2.ONE * ((_s.x * 0.034) / 520.0)
 	var i: int = b.kept.size()
 	sp.position = b.mouth + Vector2((float(i % 3) - 1.0) * _s.x * 0.032,
 		-_s.y * 0.012 - float(i / 3) * _s.y * 0.028)
@@ -402,7 +456,7 @@ func _celebrate() -> void:
 		var ang := randf() * TAU
 		var start: Vector2 = center + Vector2(cos(ang), sin(ang)) * _s.x * randf_range(0.01, 0.14)
 		var sp := Sprite2D.new()
-		sp.texture = load("res://art/svg/bubble.svg")
+		sp.texture = load("res://art/ocean/bubble.png")
 		sp.position = start
 		sp.z_index = 9
 		var s0: float = _s.x * randf_range(0.008, 0.022) / 200.0
@@ -427,9 +481,9 @@ func _process(delta: float) -> void:
 	if _bub_in <= 0.0:
 		_bub_in = randf_range(0.5, 1.1)
 		var sp := Sprite2D.new()
-		sp.texture = load("res://art/svg/bubble-trail-mid-1.svg")
+		sp.texture = load("res://art/ocean/bubble.png")
 		sp.position = Vector2(_s.x * randf_range(0.03, 0.97), _s.y * 1.03)
-		sp.scale = Vector2.ONE * (_s.x * randf_range(0.010, 0.022) / 96.0)
+		sp.scale = Vector2.ONE * (_s.x * randf_range(0.010, 0.022) / 256.0)
 		sp.z_index = 1
 		sp.modulate.a = 0.7
 		add_child(sp)
@@ -463,7 +517,7 @@ func _process(delta: float) -> void:
 			f.node.position.y += _s.y * (0.040 if y < _s.y * 0.62 else -0.055) * delta
 			f.node.position.x += sin(_t * 1.2 + f.ph) * _s.x * 0.0007
 		var fr := 1 + int(_t * 9.0 + f.ph) % SWIM_FRAMES
-		f.node.texture = load("res://art/svg/sortfish-%s-%d.svg" % [f.color, fr])
+		f.node.texture = load("res://art/ocean/f5-%s-%d.png" % [f.color, fr])
 		f.node.rotation = sin(_t * 2.0 + f.ph) * 0.06
 
 	# Podmornica i sanduci
@@ -479,10 +533,10 @@ func _process(delta: float) -> void:
 		_sub_bub = randf_range(0.14, 0.26)
 		for k in 3:
 			var sb := Sprite2D.new()
-			sb.texture = load("res://art/svg/bubble-trail-mid-1.svg")
+			sb.texture = load("res://art/ocean/bubble.png")
 			sb.position = _sub.position + Vector2(-_s.x * 0.082,
 				_s.y * randf_range(-0.010, 0.022)) + Vector2(randf_range(-0.012, 0.006) * _s.x, 0)
-			sb.scale = Vector2.ONE * (_s.x * randf_range(0.013, 0.026) / 96.0)
+			sb.scale = Vector2.ONE * (_s.x * randf_range(0.013, 0.026) / 256.0)
 			sb.z_index = 0
 			sb.modulate.a = 0.85
 			add_child(sb)
@@ -491,16 +545,20 @@ func _process(delta: float) -> void:
 	for c in _chests:
 		var want: float = 1.0 if c.left > 0 else 0.0
 		c.open = move_toward(c.open, want, delta * (2.6 if want > 0.0 else 0.7))
-		c.lid.rotation = deg_to_rad(-22.0) * ease(c.open, 0.6)
+		var open_now: bool = c.open > 0.35
+		if open_now != c.is_open:
+			c.is_open = open_now
+			c.lid.texture = load("res://art/ocean/chest-%s.png" % ("open" if open_now else "closed"))
+			c.lid.offset = Vector2(0, -c.lid.texture.get_size().y / 2.0)
 		if c.left > 0:
 			c.gap -= delta
 			if c.gap <= 0.0:
 				c.gap = randf_range(0.06, 0.13)
 				c.left -= 1
 				var bs := Sprite2D.new()
-				bs.texture = load("res://art/svg/bubble-trail-mid-1.svg")
+				bs.texture = load("res://art/ocean/bubble.png")
 				bs.position = c.emit + Vector2(randf_range(-0.02, 0.02) * _s.x, 0)
-				bs.scale = Vector2.ONE * (_s.x * randf_range(0.010, 0.020) / 96.0)
+				bs.scale = Vector2.ONE * (_s.x * randf_range(0.010, 0.020) / 256.0)
 				bs.z_index = 2
 				add_child(bs)
 				_bubbles.append({"node": bs, "x0": bs.position.x,

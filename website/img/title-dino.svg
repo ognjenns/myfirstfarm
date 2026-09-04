@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="633" height="148" viewBox="-22 -22 633 148">
+  <!-- Ista slova kao ostali naslovi: prvo tamni obris (30), pa boja (18).
+       Crvenkasta #D0553C je iz dino palete (između horizon-red i crack-mid). -->
+  <g fill="none" stroke="#4A3F3A" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12,90 L12,14 L50,62 L88,14 L88,90" transform="translate(0 0)"></path>
+    <path d="M12,14 L50,52 L88,14 M50,52 L50,90" transform="translate(108 0)"></path>
+    <path d="M22,14 L22,90 M22,14 L48,14 A38,38 0 0 1 48,90 L22,90" transform="translate(242 0)"></path>
+    <path d="M50,14 L50,90" transform="translate(312 0)"></path>
+    <path d="M14,90 L14,14 L86,90 L86,14" transform="translate(382 0)"></path>
+    <path d="M50,14 A36,38 0 1 0 50.1,14 Z" transform="translate(488 0)"></path>
+  </g>
+  <g fill="none" stroke="#D0553C" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12,90 L12,14 L50,62 L88,14 L88,90" transform="translate(0 0)"></path>
+    <path d="M12,14 L50,52 L88,14 M50,52 L50,90" transform="translate(108 0)"></path>
+    <path d="M22,14 L22,90 M22,14 L48,14 A38,38 0 0 1 48,90 L22,90" transform="translate(242 0)"></path>
+    <path d="M50,14 L50,90" transform="translate(312 0)"></path>
+    <path d="M14,90 L14,14 L86,90 L86,14" transform="translate(382 0)"></path>
+    <path d="M50,14 A36,38 0 1 0 50.1,14 Z" transform="translate(488 0)"></path>
+  </g>
+</svg>

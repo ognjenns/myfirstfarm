@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="680" viewBox="0 -240 800 680">
+<path d="M20,410 C110,300 250,166 336,124 C372,106 428,106 464,124 C550,166 690,300 780,410 C560,420 240,420 20,410 Z" fill="#2A2030"></path>
+<path d="M336,124 C372,106 428,106 464,124 C550,166 690,300 780,410 C660,416 560,418 470,418 C470,320 430,204 336,124 Z" fill="#372A3D" opacity="0.7"></path>
+<path d="M330,130 C368,110 432,110 470,130 C452,150 348,150 330,130 Z" fill="#5A3A3A"></path>
+<path d="M344,126 C374,114 426,114 456,126 C438,138 362,138 344,126 Z" fill="#F0913C"></path>
+<path d="M398,132 C384,190 372,240 356,292" fill="none" stroke="#F0913C" stroke-width="10" stroke-linecap="round" opacity="0.30"></path>
+<path d="M436,134 C450,186 470,232 494,278" fill="none" stroke="#F0913C" stroke-width="8" stroke-linecap="round" opacity="0.22"></path>
+<ellipse cx="400" cy="120" rx="66.6" ry="22.8" fill="#F0913C" opacity="0.241"></ellipse>
+<g fill="#6A4550" fill-opacity="0.623"><circle cx="474.5" cy="35.6" r="21.2"></circle><circle cx="441.8" cy="46.6" r="11.0"></circle><circle cx="424.2" cy="60.5" r="10.8"></circle><circle cx="384.2" cy="60.0" r="9.8"></circle><circle cx="355.5" cy="49.7" r="18.5"></circle><circle cx="353.8" cy="35.6" r="21.2"></circle><circle cx="344.1" cy="18.3" r="11.0"></circle><circle cx="386.9" cy="14.6" r="10.8"></circle><circle cx="421.5" cy="14.1" r="9.8"></circle><circle cx="453.1" cy="21.3" r="18.5"></circle></g>
+<g fill="#6A4550" fill-opacity="0.354"><circle cx="464.1" cy="-36.1" r="5.8"></circle><circle cx="477.3" cy="-10.2" r="9.9"></circle><circle cx="418.1" cy="0.7" r="12.1"></circle><circle cx="361.2" cy="-2.9" r="17.1"></circle><circle cx="315.3" cy="-14.9" r="14.7"></circle><circle cx="273.9" cy="-36.1" r="5.8"></circle><circle cx="323.4" cy="-54.9" r="9.9"></circle><circle cx="359.3" cy="-71.6" r="12.1"></circle><circle cx="420.0" cy="-75.3" r="17.1"></circle><circle cx="469.1" cy="-59.6" r="14.7"></circle></g>
+<g fill="#6A4550" fill-opacity="0.78"><circle cx="388.7" cy="110.1" r="13.6"></circle><circle cx="410.2" cy="107.6" r="12.3"></circle><circle cx="400" cy="102.6" r="15.4"></circle></g>
+</svg>

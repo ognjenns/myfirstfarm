@@ -1,7 +1,8 @@
 extends BaseScreen
 ## Mini-igra: MEMORIJA (džungla). Karte sa licima životinja, poleđina sa listom.
-## Progresija bez teksta: 2 para → 2 para → 3 para → ... Bez kazne, bez tajmera.
-## PRIVREMENO koristi farm lica dok ne stigne džungla-art (ista mehanika).
+## Progresija bez teksta: 2, 2, 3, 3, 4, 4, pa 5 pari nadalje (Ognjen,
+## 04.09.2026). Bez kazne, bez tajmera.
+## Na kartama su životinje iz kupljenih paketa (lav još naša glava).
 
 const CARD_W := 300.0
 const CARD_H := 380.0
@@ -15,15 +16,49 @@ var pairs_left := 0
 func _ready() -> void:
 	home_target = "jungle"
 	var s := UI.vs(self)
-	Scenery.background(self, "background-memory")
-	# list-tepih na kom leže karte
-	Scenery.svg(self, "leaf-mat", Vector2(s.x * 0.5, s.y * 0.55), (s.x * 0.60) / 1700.0, -20)
+	_build_scene(s)
 	add_home_button()
 	add_hint(6.0)
 	_start_round()
 
+## "Stari hram" — svaka igra ima svoj kutak džungle, da ne liči na hub:
+## gušća senka šume, uvijene lijane sa vrha, dva kamena totema koji vire
+## iza karata, palme, kamenje i lišće dole. Bez smeđe trake tla.
+func _build_scene(s: Vector2) -> void:
+	var bg := Sprite2D.new()
+	bg.texture = load("res://art/jungle/bg-deep.png")
+	var bt := bg.texture.get_size()
+	var sc: float = maxf(s.y / bt.y, s.x / bt.x)
+	bg.scale = Vector2(sc, sc)
+	bg.position = s / 2.0
+	bg.z_index = -60
+	add_child(bg)
+	# lijane sa vrha uz ivice
+	JungleScene.place(self, "vines-top", Vector2(0.05, -0.02), 0.70, true, -40, Vector2(0.5, 0.0))
+	JungleScene.place(self, "vines-top", Vector2(0.95, -0.02), 0.60, true, -40, Vector2(0.5, 0.0), true)
+	JungleScene.place(self, "vine-hang", Vector2(0.30, -0.01), 0.24, true, -41, Vector2(0.5, 0.0))
+	JungleScene.place(self, "vine-hang-long", Vector2(0.72, -0.01), 0.30, true, -41, Vector2(0.5, 0.0), true)
+	# palme iza totema
+	JungleScene.place(self, "palm-trunk", Vector2(0.15, 0.92), 0.55, true, -38)
+	JungleScene.place(self, "palm-leaves", Vector2(0.155, 0.40), 0.15, false, -37, Vector2(0.5, 0.55))
+	JungleScene.place(self, "palm-trunk", Vector2(0.86, 0.94), 0.50, true, -38, Vector2(0.5, 1.0), true)
+	JungleScene.place(self, "palm-leaves", Vector2(0.855, 0.47), 0.14, false, -37, Vector2(0.5, 0.55), true)
+	# totemi: mirni levo, namršteni desno — vire iza karata
+	JungleScene.place(self, "rock-head", Vector2(0.09, 0.98), 0.52, true, -30)
+	JungleScene.place(self, "rock-head-2", Vector2(0.92, 0.98), 0.46, true, -30)
+	# kamenje, lišće i busenje uz donju ivicu, ispred karata
+	JungleScene.place(self, "rock-3", Vector2(0.24, 1.02), 0.13, false, 12)
+	JungleScene.place(self, "rock-1", Vector2(0.77, 1.02), 0.06, false, 12)
+	JungleScene.place(self, "grass-drape", Vector2(0.25, 0.92), 0.05, false, 13, Vector2(0.5, 0.0))
+	JungleScene.place(self, "ground-leaves", Vector2(0.50, 1.02), 0.12, false, 12)
+	JungleScene.place(self, "tuft-3", Vector2(0.37, 1.01), 0.07, false, 12)
+	JungleScene.place(self, "tuft-3", Vector2(0.63, 1.01), 0.07, false, 12, Vector2(0.5, 1.0), true)
+	JungleScene.place(self, "grass-top", Vector2(0.10, 1.0), 0.08, false, 12)
+	JungleScene.place(self, "grass-top", Vector2(0.90, 1.0), 0.08, false, 12, Vector2(0.5, 1.0), true)
+	JungleScene.place(self, "stump", Vector2(0.70, 1.0), 0.05, false, 12)
+
 func _pairs_count() -> int:
-	return clampi(2 + round_num / 2, 2, 3)
+	return clampi(2 + round_num / 2, 2, 5)
 
 func _start_round() -> void:
 	for c in cards:
@@ -42,9 +77,11 @@ func _start_round() -> void:
 		deck.append(a)
 	deck.shuffle()
 
-	# raspored: 4 karte → 2×2, 6 karata → 3×2
-	var cols := 2 if deck.size() == 4 else 3
-	var card_scale := (s.y * 0.30) / CARD_H
+	# raspored: uvek dva reda — 4 karte → 2×2, 6 → 3×2, 8 → 4×2, 10 → 5×2.
+	# Karta je po visini; kad pet kolona ne staje po širini (tablet 4:3),
+	# smanji se toliko da stane.
+	var cols := deck.size() / 2
+	var card_scale := minf((s.y * 0.30) / CARD_H, (s.x * 0.94) / (cols * CARD_W * 1.30))
 	var gap_x := CARD_W * card_scale * 1.30
 	var gap_y := CARD_H * card_scale * 1.18
 	for i in deck.size():
@@ -67,25 +104,24 @@ func _make_card(animal: Dictionary, pos: Vector2, card_scale: float) -> Area2D:
 	card.set_meta("matched", false)
 	card.set_meta("base_scale", card_scale)  # prava širina — flip se UVEK vraća na ovo
 
-	# poleđina: dizajnerska karta sa listom (card-back.svg, 360×440)
+	# Karte u stilu paketa (debela tamna kontura, kao crteži životinja):
+	# poleđina drvena sa pravim listom iz paketa, lice svetlo sa životinjom.
 	var back := Node2D.new()
 	back.name = "Back"
-	var back_spr := Sprite2D.new()
-	back_spr.texture = load("res://art/svg/card-back.svg")
-	back_spr.scale = Vector2(CARD_W / 360.0, CARD_H / 440.0)
-	back.add_child(back_spr)
+	_card_board(back, Color("#B97A34"), Color("#D3964C"))
+	var leaf := Sprite2D.new()
+	leaf.texture = load("res://art/jungle/leaf-1.png")
+	leaf.scale = Vector2.ONE * ((CARD_H * 0.58) / leaf.texture.get_size().y)
+	leaf.rotation = -0.35
+	leaf.position = Vector2(0, 8)
+	back.add_child(leaf)
 	card.add_child(back)
 
-	# lice: dizajnerska karta (card-front.svg) sa životinjom
 	var front := Node2D.new()
 	front.name = "Front"
 	front.visible = false
-	var front_spr := Sprite2D.new()
-	front_spr.texture = load("res://art/svg/card-front.svg")
-	front_spr.scale = Vector2(CARD_W / 360.0, CARD_H / 440.0)
-	front.add_child(front_spr)
-	var face := AnimalFaces.build(animal.id)
-	face.scale = Vector2.ONE * 0.60
+	_card_board(front, Color("#F6E9CC"), Color("#FFF7E4"))
+	var face := FarmBody.portrait(animal.id, CARD_H * 0.60)
 	face.position = Vector2(0, 12)
 	card.add_child(front)
 	front.add_child(face)
@@ -102,6 +138,15 @@ func _make_card(animal: Dictionary, pos: Vector2, card_scale: float) -> Area2D:
 	)
 	return card
 
+## Daska karte: senka ispod, debela tamna kontura, ispuna i svetliji unutrašnji
+## okvir — isti "jezik" kao kupljeni crteži (kontura ~10 px na 300 px karte).
+func _card_board(parent: Node2D, fill: Color, inner: Color) -> void:
+	UI.poly(parent, UI.rounded_rect_points(CARD_W + 22, CARD_H + 22, 44), Color(0, 0, 0, 0.22), Vector2(0, 14))
+	UI.poly(parent, UI.rounded_rect_points(CARD_W + 22, CARD_H + 22, 44), Color("#2B1A0E"))
+	UI.poly(parent, UI.rounded_rect_points(CARD_W, CARD_H, 36), fill)
+	UI.poly(parent, UI.rounded_rect_points(CARD_W - 40, CARD_H - 40, 26), inner)
+	UI.poly(parent, UI.rounded_rect_points(CARD_W - 52, CARD_H - 52, 22), fill)
+
 ## Prst tapne jednu zatvorenu kartu — pokazuje da se karte OKREĆU.
 func hint_spot() -> Dictionary:
 	if busy:
@@ -113,7 +158,15 @@ func hint_spot() -> Dictionary:
 
 
 func _on_card_tapped(card: Area2D) -> void:
-	if busy or card.get_meta("revealed") or card.get_meta("matched"):
+	if busy or card.get_meta("matched"):
+		return
+	# Prva otvorena karta se na ponovni tap ZATVARA (toggle) — dete sme da se
+	# predomisli, i ne ostaje "zaglavljena" otvorena dok ne tapne drugu.
+	if card.get_meta("revealed"):
+		if card == first_pick:
+			Audio.play("pluck", -4.0)
+			_flip(card, false)
+			first_pick = null
 		return
 	Audio.play("pluck")
 	_flip(card, true)
@@ -142,7 +195,11 @@ func _match_found(c1: Area2D, c2: Area2D) -> void:
 		_star_pop(c.global_position)
 	if pairs_left == 0:
 		round_num += 1
-		celebrate(UI.vs(self) / 2)
+		# bez konfeta: dečji glas + bljesak na svakoj karti (Ognjen, 04.09.2026)
+		Audio.play(["yay", "giggle", "kid"][randi() % 3], -2.0)
+		for c in cards:
+			if is_instance_valid(c):
+				glow(c.position, CARD_H * float(c.get_meta("base_scale")) * 1.3)
 		get_tree().create_timer(1.8).timeout.connect(_start_round)
 
 ## Zvezdica iskoči i zavrti se na pogođenom paru.

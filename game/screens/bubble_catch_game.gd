@@ -8,11 +8,20 @@ extends BaseScreen
 ## zaglavila. Tap MORA nešto da uradi, samo ne ono što dete želi — tako uči
 ## razliku, bez kazne.
 
-const FISH := ["clown", "jelly", "puffer", "seahorse", "tang", "turtle",
-	"octopus", "starfish"]
+## Kupljene ribe (art/ocean): prefiks sličica i koliko ih ima. Sve gledaju
+## ULEVO, pa se pri plivanju ka kućici okreću suprotno od starih SVG riba.
+const KINDS := {
+	"blue": {"p": "f4-blue", "n": 8}, "green": {"p": "f4-green", "n": 8},
+	"orange": {"p": "f4-orange", "n": 8}, "purple": {"p": "f4-purple", "n": 8},
+	"yellow": {"p": "f4-yellow", "n": 8}, "round": {"p": "f6-blue", "n": 12},
+	"pink": {"p": "f2-pink", "n": 12}, "striped": {"p": "f3-yellow", "n": 12},
+	"gold": {"p": "fc-orange", "n": 16}, "jelly": {"p": "jelly", "n": 10},
+	"horse": {"p": "horse-green", "n": 16},
+}
+const FISH := ["blue", "green", "orange", "purple", "yellow", "round", "pink",
+	"striped", "gold", "jelly", "horse"]
 const NEED := 5          # koliko ribica čini rundu
 const POP_FRAMES := 12
-const SWIM_FRAMES := 8
 
 var _s := Vector2.ZERO
 var _t := 0.0
@@ -35,7 +44,7 @@ var _parked: Array = []
 func _ready() -> void:
 	home_target = "ocean"
 	_s = UI.vs(self)
-	Scenery.background(self, "background-bubbles")
+	_build_background()
 	_build_scenery()
 	_build_home()
 	add_home_button()
@@ -49,29 +58,66 @@ func _ready() -> void:
 ## SVE je namerno NEPOMICNO i ukorenjeno u dno. Sve sto lebdi u sredini vode
 ## dvogodisnjak pokusa da tapne, a kad se nista ne desi to je frustracija —
 ## igra je gradjena na pravilu da svaki dodir nesto uradi.
-func _build_scenery() -> void:
-	# Potonuli brod preko cele sirine, uz samo dno.
-	var w := Sprite2D.new()
-	w.texture = load("res://art/svg/wreck-background.svg")
-	var wt := w.texture.get_size()
-	var wsc: float = _s.x / wt.x
-	w.scale = Vector2.ONE * wsc
-	w.offset = Vector2(0, -wt.y / 2.0)
-	w.position = Vector2(_s.x / 2.0, _s.y)
-	w.z_index = -20
-	add_child(w)
+## Pozadina iz kupljenog paketa: boja vode, sunčevi zraci, daleke stene sa
+## strana i pesak. Bez ruševina — mehurići moraju da ostanu čitljivi.
+func _build_background() -> void:
+	var bg := Sprite2D.new()
+	bg.texture = load("res://art/ocean/bg-colour.png")
+	var bt := bg.texture.get_size()
+	bg.position = _s / 2.0
+	bg.scale = Vector2(_s.x / bt.x, _s.y / bt.y)
+	bg.z_index = -60
+	add_child(bg)
+	var sun := Sprite2D.new()
+	sun.texture = load("res://art/ocean/sunlight.png")
+	var st := sun.texture.get_size()
+	sun.scale = Vector2.ONE * ((_s.x * 0.8) / st.x)
+	sun.position = Vector2(_s.x * 0.5, st.y * sun.scale.y * 0.5 - _s.y * 0.02)
+	sun.modulate.a = 0.7
+	sun.z_index = -59
+	add_child(sun)
+	_deco("distant-rocks-1", 0.40, 0.14, 0.80, -57)
+	_deco("distant-rocks-4", 0.42, 0.88, 0.80, -57)
+	_deco("distant-rocks-3", 0.12, 0.52, 0.79, -57)
+	var sand := Sprite2D.new()
+	sand.texture = load("res://art/ocean/seabed.png")
+	var sd := sand.texture.get_size()
+	sand.scale = Vector2((_s.x * 1.02) / sd.x, (_s.y * 0.26) / sd.y)
+	sand.position = Vector2(_s.x * 0.5, _s.y * 0.87)
+	sand.z_index = -50
+	add_child(sand)
 
-	# Alge uz levu ivicu, u dva plana. Desno ih nema — tamo je koralna kucica.
-	for spec in [["kelp-column-2", 0.118, 0.062, -18], ["kelp-column-1", 0.030, 0.075, -16]]:
-		var k := Sprite2D.new()
-		k.texture = load("res://art/svg/%s.svg" % spec[0])
-		var kt := k.texture.get_size()
-		var ksc: float = (_s.x * float(spec[2])) / kt.x
-		k.scale = Vector2.ONE * ksc
-		k.offset = Vector2(0, -kt.y / 2.0)
-		k.position = Vector2(_s.x * float(spec[1]), _s.y * 0.985)
-		k.z_index = int(spec[3])
-		add_child(k)
+
+func _deco(art: String, frac_w: float, cx: float, base_y: float, z: int) -> Sprite2D:
+	var sp := Sprite2D.new()
+	sp.texture = load("res://art/ocean/%s.png" % art)
+	var tex := sp.texture.get_size()
+	sp.scale = Vector2.ONE * ((_s.x * frac_w) / tex.x)
+	sp.offset = Vector2(0, -tex.y / 2.0)
+	sp.position = Vector2(_s.x * cx, _s.y * base_y)
+	sp.z_index = z
+	add_child(sp)
+	return sp
+
+
+func _build_scenery() -> void:
+	# Potonuli brod iz kupljenog paketa, na pesku iza svega; malo tamniji od
+	# daleke izmaglice paketa da se vidi kao deo prizora, ne kao pozadina.
+	var w := _deco("ship-wreck", 0.58, 0.50, 0.92, -20)
+	w.modulate = Color(0.78, 0.86, 0.95)
+
+	# Trave i korali iz paketa uz levu ivicu i po dnu; desno samo malo, tamo
+	# je kaciga.
+	_deco("grass-7", 0.055, 0.035, 1.08, -18)
+	_deco("grass-2", 0.110, 0.095, 1.02, -17)
+	_deco("grass-11", 0.080, 0.030, 1.00, -16)
+	_deco("coral-3", 0.070, 0.150, 1.06, -16)
+	_deco("coral-17", 0.075, 0.075, 1.07, -15)
+	_deco("grass-13", 0.090, 0.42, 1.03, -17)
+	_deco("coral-8", 0.085, 0.60, 1.07, -16)
+	_deco("grass-2", 0.085, 0.72, 1.04, -17)
+	_deco("coral-18", 0.075, 0.96, 1.06, -16)
+	_deco("grass-11", 0.070, 0.99, 1.02, -17)
 
 
 func _build_home() -> void:
@@ -122,13 +168,13 @@ func _spawn_bubble() -> void:
 	if has_fish:
 		fish = FISH[randi() % FISH.size()]
 		var f := Sprite2D.new()
-		f.texture = load("res://art/svg/bubble-fish-%s-1.svg" % fish)
-		f.scale = Vector2.ONE * (r * 1.35 / 256.0)
+		f.texture = _fish_tex(fish, 1)
+		f.scale = Vector2.ONE * (r * 1.45 / _fish_dim(fish))
 		node.add_child(f)
 
 	var b := Sprite2D.new()
-	b.texture = load("res://art/svg/bubble.svg")
-	b.scale = Vector2.ONE * (r * 2.0 / 200.0)
+	b.texture = load("res://art/ocean/bubble.png")
+	b.scale = Vector2.ONE * (r * 2.0 / 256.0)
 	b.z_index = 1                            # opna se vidi PREKO ribice
 	node.add_child(b)
 
@@ -152,6 +198,18 @@ func _spawn_bubble() -> void:
 
 ## Mehurići se dižu i sami pucaju na vrhu, pa dete može da gleda ceo minut a
 ## da ne shvati da se TAPKAJU. Prst tapne onaj koji je najbliži vrhu.
+func _fish_tex(kind: String, frame: int) -> Texture2D:
+	var k: Dictionary = KINDS[kind]
+	return load("res://art/ocean/%s-%d.png" % [k.p, 1 + (frame - 1) % int(k.n)])
+
+
+## Veća strana crteža — ribe su široke, meduza i konjić visoki, pa se svi
+## uklapaju u istu kružnicu po većoj dimenziji.
+func _fish_dim(kind: String) -> float:
+	var tex := _fish_tex(kind, 1).get_size()
+	return maxf(tex.x, tex.y)
+
+
 func hint_spot() -> Dictionary:
 	var best: Dictionary = {}
 	for b in _bubbles:
@@ -196,15 +254,26 @@ func _wobble(b: Dictionary) -> void:
 	tw.tween_property(n, "scale", Vector2.ONE, 0.12)
 
 
+## Pucanje mehurića — kupljena animacija (gamedeveloperstudio.com, 8 frejmova).
+## Kapljice u poslednjim frejmovima izlaze VAN kruga mehurića, pa se crtež
+## skalira po prečniku mehurića u PRVOM frejmu (386 od 512 px), a ne po celom
+## platnu — inače bi pucanje bilo osetno manje od samog mehurića.
+## Dve varijante pucanja se biraju nasumično — isti mehurić koji puca uvek
+## isto posle par minuta počne da izgleda mašinski.
+const POP_ART := 7
+const POP_SETS := ["pop", "popb"]
+const POP_BUBBLE_FRAC := 372.0 / 512.0
+
 func _play_pop(pos: Vector2, r: float) -> void:
 	var sp := Sprite2D.new()
 	sp.position = pos
-	sp.scale = Vector2.ONE * (r * 2.4 / 256.0)
+	sp.scale = Vector2.ONE * ((r * 2.0) / (256.0 * POP_BUBBLE_FRAC))
 	sp.z_index = 6
 	add_child(sp)
-	for i in POP_FRAMES:
-		sp.texture = load("res://art/svg/bubble-pop-%d.svg" % (i + 1))
-		await get_tree().create_timer(0.028).timeout
+	var set_name: String = POP_SETS[randi() % POP_SETS.size()]
+	for i in POP_ART:
+		sp.texture = load("res://art/fx/%s-%d.png" % [set_name, i + 1])
+		await get_tree().create_timer(0.045).timeout
 		if not is_instance_valid(sp):
 			return
 	sp.queue_free()
@@ -215,9 +284,9 @@ func _play_pop(pos: Vector2, r: float) -> void:
 func _release_fish(kind: String, from: Vector2) -> void:
 	Audio.play("fish_go", -2.0, randf_range(0.95, 1.08))
 	var sp := Sprite2D.new()
-	sp.texture = load("res://art/svg/bubble-fish-%s-1.svg" % kind)
+	sp.texture = _fish_tex(kind, 1)
 	sp.position = from
-	sp.scale = Vector2.ONE * (_s.x * 0.075 / 256.0)
+	sp.scale = Vector2.ONE * (_s.x * 0.085 / _fish_dim(kind))
 	sp.z_index = 4
 	add_child(sp)
 	# Blagi luk umesto prave linije — riba ne pliva kao strela.
@@ -230,10 +299,10 @@ func _park_fish(kind: String) -> void:
 	# Skupljene ribice ostaju vidljive u otvoru — za ovaj uzrast je to jedini
 	# "brojač" koji nešto znači.
 	var sp := Sprite2D.new()
-	sp.texture = load("res://art/svg/bubble-fish-%s.svg" % kind)
+	sp.texture = _fish_tex(kind, 1)
 	# Ribice stoje zbijeno, delimično jedna preko druge — tako izgleda kao
 	# društvo koje se sklonilo u kućicu, a ne kao poređane figurice.
-	sp.scale = Vector2.ONE * (_s.x * 0.042 / 256.0)
+	sp.scale = Vector2.ONE * (_s.x * 0.048 / _fish_dim(kind))
 	var i := _parked.size()
 	sp.position = _home_open + Vector2(
 		(-1.0 + 0.5 * float(i % 3)) * _s.x * 0.028,
@@ -340,10 +409,11 @@ func _process(delta: float) -> void:
 		var dir: Vector2 = p - w.node.position
 		w.node.position = p
 		if dir.length() > 0.5:
-			w.node.rotation = lerp_angle(w.node.rotation, dir.angle(), 0.25)
-			w.node.scale.y = absf(w.node.scale.y) * (-1.0 if dir.x < 0.0 else 1.0)
-		var fr := 1 + int(_t * 14.0) % SWIM_FRAMES
-		w.node.texture = load("res://art/svg/bubble-fish-%s-%d.svg" % [w.kind, fr])
+			# Crtež gleda ulevo: nos ide u smeru kretanja, pa je rotacija
+			# obrnuta, a ogledanje po y kad ide udesno.
+			w.node.rotation = lerp_angle(w.node.rotation, dir.angle() + PI, 0.25)
+			w.node.scale.y = absf(w.node.scale.y) * (-1.0 if dir.x > 0.0 else 1.0)
+		w.node.texture = _fish_tex(w.kind, 1 + int(_t * 14.0))
 		# trag ide IZA ribice — suprotno od smera kretanja
 		w.trail -= delta
 		if w.trail <= 0.0 and w.t < 0.92:
@@ -369,10 +439,10 @@ func _celebrate_bubbles() -> void:
 		var ang := randf() * TAU
 		var start: Vector2 = center + Vector2(cos(ang), sin(ang)) * _s.x * randf_range(0.01, 0.20)
 		var sp := Sprite2D.new()
-		sp.texture = load("res://art/svg/bubble.svg")
+		sp.texture = load("res://art/ocean/bubble.png")
 		sp.position = start
 		sp.z_index = 9
-		var s0: float = _s.x * randf_range(0.008, 0.024) / 200.0
+		var s0: float = _s.x * randf_range(0.008, 0.024) / 256.0
 		sp.scale = Vector2.ONE * s0
 		add_child(sp)
 

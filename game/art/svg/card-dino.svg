@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="600" viewBox="0 0 700 600">
+<!-- Kartica sveta DINO. Gradjena po istom kalupu kao card-ocean: kremasti
+     okvir sa zaobljenim uglovima, a SVAKI crtez staje unutar njega — nebo je
+     put sa zaobljenim gornjim uglovima, tlo sa zaobljenim donjim. -->
+<rect x="10" y="10" width="680" height="580" rx="66" fill="#FBF6EA" stroke="#4A3F3A" stroke-width="10"></rect>
+
+<!-- nebo: sumrak u pojasevima, tacno iz dino palete -->
+<path d="M76,10 L624,10 A66,66 0 0 1 690,76 L690,352 L10,352 L10,76 A66,66 0 0 1 76,10 Z" fill="#3C2645"></path>
+<rect x="10" y="140" width="680" height="52" fill="#6B3448"></rect>
+<rect x="10" y="192" width="680" height="42" fill="#8A3F45"></rect>
+<rect x="10" y="234" width="680" height="38" fill="#A94A40"></rect>
+<rect x="10" y="272" width="680" height="34" fill="#C25A3C"></rect>
+<rect x="10" y="306" width="680" height="28" fill="#DC7743"></rect>
+<rect x="10" y="334" width="680" height="18" fill="#E8944C"></rect>
+<ellipse cx="330" cy="352" rx="250" ry="54" fill="#F0A45C" fill-opacity="0.55"></ellipse>
+<ellipse cx="330" cy="352" rx="150" ry="32" fill="#FFC489" fill-opacity="0.55"></ellipse>
+
+<!-- vulkan: silueta sa zarecim kraterom i lenjim dimom -->
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round">
+  <path d="M188,352 L296,182 L404,352 Z" fill="#2A2030"></path>
+</g>
+<ellipse cx="296" cy="186" rx="30" ry="11" fill="#F0913C"></ellipse>
+<g fill="#7A4740">
+  <ellipse cx="298" cy="152" rx="20" ry="13" fill-opacity="0.55"></ellipse>
+  <ellipse cx="308" cy="126" rx="15" ry="10" fill-opacity="0.38"></ellipse>
+  <ellipse cx="298" cy="104" rx="11" ry="8" fill-opacity="0.22"></ellipse>
+</g>
+
+<!-- arukarija: stablo i tri sloja krosnje -->
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round">
+  <rect x="576" y="196" width="26" height="158" rx="8" fill="#4A3140"></rect>
+  <ellipse cx="589" cy="204" rx="82" ry="34" fill="#183328"></ellipse>
+  <ellipse cx="589" cy="166" rx="64" ry="29" fill="#1B3E31"></ellipse>
+  <ellipse cx="589" cy="132" rx="44" ry="23" fill="#12291F"></ellipse>
+</g>
+
+<!-- tlo: dve terase, donji uglovi zaobljeni kao i okvir -->
+<path d="M10,352 C150,336 320,362 470,356 C560,352 640,346 690,342 L690,524 A66,66 0 0 1 624,590 L76,590 A66,66 0 0 1 10,524 Z" fill="#A27654"></path>
+<path d="M10,428 C160,412 330,436 500,428 C580,424 650,418 690,414 L690,524 A66,66 0 0 1 624,590 L76,590 A66,66 0 0 1 10,524 Z" fill="#B98A63"></path>
+
+<!-- jezerce ohladjene lave: izvor svetla u prednjem planu -->
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round">
+  <ellipse cx="196" cy="474" rx="116" ry="48" fill="#2A1E22"></ellipse>
+</g>
+<ellipse cx="196" cy="474" rx="84" ry="30" fill="#3A2528"></ellipse>
+<g fill="none" stroke-linecap="round">
+  <path d="M136,472 q30,-16 60,0 q30,16 60,-2" stroke="#F0B23C" stroke-width="11"></path>
+  <path d="M152,496 q28,-12 56,2" stroke="#E8703C" stroke-width="9"></path>
+  <path d="M158,452 q26,-10 50,2" stroke="#B33A2E" stroke-width="8"></path>
+</g>
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round" fill="#241B20">
+  <ellipse cx="92" cy="466" rx="34" ry="24"></ellipse>
+  <ellipse cx="300" cy="480" rx="28" ry="20"></ellipse>
+</g>
+
+<!-- paprat levo -->
+<g stroke="#4A3F3A" stroke-width="9" stroke-linejoin="round">
+  <path d="M74,404 C56,362 76,340 66,308 C92,326 96,362 92,404 Z" fill="#1E4436"></path>
+  <path d="M110,404 C126,368 112,344 124,314 C136,344 130,376 126,404 Z" fill="#16342A"></path>
+</g>
+
+<!-- mali dinosaurus: veliko celo, MALE tamne oci NISKO, obrascici uz oci -->
+<g stroke="#4A3F3A" stroke-width="10" stroke-linejoin="round">
+  <path d="M470,368 C454,326 474,304 498,322 C480,336 474,348 472,370 Z" fill="#63495A"></path>
+  <path d="M540,368 C556,326 536,304 512,322 C530,336 536,348 538,370 Z" fill="#63495A"></path>
+  <ellipse cx="505" cy="412" rx="88" ry="78" fill="#7A5C6B"></ellipse>
+  <ellipse cx="505" cy="452" rx="40" ry="27" fill="#C9908A"></ellipse>
+</g>
+<g fill="#26202C">
+  <circle cx="479" cy="432" r="10"></circle>
+  <circle cx="531" cy="432" r="10"></circle>
+</g>
+<g fill="#E08A8A" fill-opacity="0.9">
+  <ellipse cx="448" cy="440" rx="17" ry="12"></ellipse>
+  <ellipse cx="562" cy="440" rx="17" ry="12"></ellipse>
+</g>
+<path d="M489,460 q16,12 32,0" fill="none" stroke="#26202C" stroke-width="7" stroke-linecap="round"></path>
+
+<!-- iskre, isto mesto u kompoziciji gde ostale kartice imaju cvetice -->
+<g fill="#FFB866"><circle cx="120" cy="546" r="12"></circle><circle cx="360" cy="524" r="10"></circle></g>
+<g fill="#FFE0B8"><circle cx="404" cy="556" r="9"></circle><circle cx="252" cy="540" r="8"></circle></g>
+</svg>

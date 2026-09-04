@@ -18,9 +18,18 @@ func _init(food_kind: String, pos: Vector2, visible_width := 150.0) -> void:
 	z_index = 20
 
 	var sprite := Sprite2D.new()
-	sprite.texture = load("res://art/svg/food-%s.svg" % kind)
-	# item zauzima ~75% od 256px kanvasa
-	sprite.scale = Vector2.ONE * (visible_width / 192.0)
+	# Kupljeni crteži hrane (art/food/<kind>.png) imaju prednost nad starim
+	# SVG-ovima; ako za neku hranu ne postoje, ostaje stari crtež. Tako se
+	# nova hrana dodaje samo ubacivanjem fajla, bez ijedne izmene koda.
+	var bought := "res://art/food/%s.png" % kind
+	if ResourceLoader.exists(bought):
+		sprite.texture = load(bought)
+		# Kupljeni su u kvadratu 320 px, a crtež zauzima gotovo ceo kvadrat.
+		sprite.scale = Vector2.ONE * (visible_width / 260.0)
+	else:
+		sprite.texture = load("res://art/svg/food-%s.svg" % kind)
+		# item zauzima ~75% od 256px kanvasa
+		sprite.scale = Vector2.ONE * (visible_width / 192.0)
 	add_child(sprite)
 
 	var shape := CollisionShape2D.new()

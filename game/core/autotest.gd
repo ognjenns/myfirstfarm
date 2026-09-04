@@ -51,19 +51,41 @@ func _test_memory() -> void:
 	check(g.round_num == 1, "memory: prešlo na sledeću rundu")
 	await _sleep(2.0)
 
-func _test_shower() -> void:
-	main.goto("shower")
+func _test_vines() -> void:
+	main.goto("vines")
 	await _frames(5)
 	var g: Node = main.current
-	check(not g.mud_blobs.is_empty(), "shower: životinja je blatnjava na startu")
-	var first_id: String = g.bather.animal.id
-	check(first_id != "elephant", "shower: slon ne kupa sam sebe")
-	for i in 5:
-		g._spray()
-		await _sleep(0.6)
-	check(g.mud_blobs.is_empty() or g._busy, "shower: blato oprano posle prskanja")
-	await _sleep(2.6)
-	check(not g.mud_blobs.is_empty(), "shower: sledeća životinja stigla blatnjava")
+	check(g._vines.size() == 3, "vines: prva runda ima 3 lijane")
+	check(g._at == 0, "vines: majmun kreće sa prve lijane")
+	for i in 2:
+		g._jump()
+		await _sleep(0.9)
+	check(g._at == 2, "vines: posle dva skoka je na trećoj lijani")
+	check(g._busy, "vines: stigao do banane — slavlje")
+	await _sleep(3.0)
+	check(g.round_num == 1 and g._at == 0 and not g._busy, "vines: nova runda, majmun opet na prvoj")
+
+func _test_sizes() -> void:
+	main.goto("sizes")
+	await _frames(5)
+	var g: Node = main.current
+	check(g.animals_on_screen.size() == 3 and g.bushes.size() == 3, "sizes: prva runda 3 životinje i 3 žbuna")
+	var s: Vector2 = UI.vs(g)
+	# pogrešan žbun ne uništava ništa
+	var d0: Node = g.animals_on_screen[0]
+	for b in g.bushes:
+		if b.size != d0.size:
+			d0.global_position = Vector2(b.x, s.y * 0.90)
+			g._on_dropped(d0)
+	check(not d0.locked and g.left == 3, "sizes: promašaj vraća životinju")
+	for d in g.animals_on_screen:
+		for b in g.bushes:
+			if b.size == d.size:
+				d.global_position = Vector2(b.x, s.y * 0.90)
+				g._on_dropped(d)
+	check(g.left == 0 and g.round_num == 1, "sizes: obe u svom žbunu, runda prošla")
+	await _sleep(3.0)
+	check(g.animals_on_screen.size() == 3, "sizes: nova runda krenula")
 
 func run() -> void:
 	# failsafe: ako bilo šta zaglavi, ugasi se posle 90s sa greškom
@@ -76,7 +98,8 @@ func run() -> void:
 	await _test_bath()
 	await _test_hideseek()
 	await _test_memory()
-	await _test_shower()
+	await _test_vines()
+	await _test_sizes()
 	if failed:
 		printerr("AUTOTEST: NEUSPEH")
 		main.get_tree().quit(1)
@@ -148,22 +171,26 @@ func _test_bath() -> void:
 		if g.phase != g.Phase.MUD:
 			break  # blato već očišćeno usput (blobovi se preklapaju)
 		for i in 10:
-			g._rub(blob.position)
+			g._rub(blob.global_position)
 	check(g.mud_blobs.is_empty(), "bath: blato očišćeno")
 	check(g.phase == g.Phase.FOAM, "bath: prešlo na penu")
-	for i in 80:
-		g._rub(g.pig_pos + Vector2(randf_range(-100, 100), randf_range(-100, 100)))
+	# pena je, kao i blato, zalepljena za telo (lokalne koordinate) — trljaj po njoj
+	for blob in g.foam_blobs.duplicate():
+		if g.phase != g.Phase.FOAM:
+			break
+		for i in 10:
+			g._rub(blob.global_position)
 	check(g.phase == g.Phase.SHOWER, "bath: prešlo na tuširanje")
-	await _sleep(2.2)
+	await _sleep(3.2)   # tuširanje traje 2,8 s
 	check(g.phase == g.Phase.HAPPY, "bath: prase srećno")
-	await _sleep(2.5)
+	await _sleep(3.2)
 	check(g.phase == g.Phase.MUD and not g.mud_blobs.is_empty(), "bath: novi krug (blato se vratilo)")
 
 func _test_hideseek() -> void:
 	main.goto("hideseek")
 	await _frames(5)
 	var g: Node = main.current
-	await _sleep(2.2)  # intro + trčanje iza objekta
+	await _sleep(8.5)  # intro + šetnja iza objekta (celim telom, sporo: do ~7,7 s)
 	check(g.accepting_taps, "hideseek: prima tapove posle sakrivanja")
 	var first_animal: String = g.animal_node.animal.id
 	# promašaj
@@ -174,5 +201,5 @@ func _test_hideseek() -> void:
 	g._on_spot_tapped(g.hiding_idx)
 	check(not g.accepting_taps, "hideseek: pogodak registrovan")
 	await _sleep(2.6)  # iskakanje + konfete + nova runda
-	await _sleep(2.2)  # intro nove runde
+	await _sleep(8.5)  # intro nove runde
 	check(g.accepting_taps, "hideseek: nova runda krenula (bila: %s, sad: %s)" % [first_animal, g.animal_node.animal.id])

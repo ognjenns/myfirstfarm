@@ -10,6 +10,10 @@ extends Node2D
 
 const R := 44.0
 const DRAG_TIME := 1.15
+## Vrh podignutog prsta u crtežu (165×256) — obe poze dele platno, pa se pri
+## pritisku menja samo tekstura i vrh prirodno "klone" ka meti.
+const TIP := Vector2(44.0, 6.0)
+var _hand: Sprite2D
 
 static func tap(parent: Node, pos: Vector2, size := 1.0, times := 2) -> Hint:
 	var h := Hint.new()
@@ -20,10 +24,11 @@ static func tap(parent: Node, pos: Vector2, size := 1.0, times := 2) -> Hint:
 	var tw := h.create_tween()
 	for i in times:
 		tw.tween_interval(0.12)
+		tw.tween_callback(h._press)
 		tw.tween_callback(h._ripple)
-		tw.tween_property(h, "scale", Vector2.ONE * size * 0.66, 0.14).set_trans(Tween.TRANS_QUAD)
-		tw.tween_property(h, "scale", Vector2.ONE * size, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tw.tween_interval(0.3)
+		tw.tween_interval(0.18)
+		tw.tween_callback(h._release)
+		tw.tween_interval(0.36)
 	tw.tween_callback(h._vanish)
 	return h
 
@@ -34,10 +39,11 @@ static func drag(parent: Node, from: Vector2, to: Vector2, size := 1.0) -> Hint:
 	h._set_size(size)
 	h._appear()
 	var tw := h.create_tween()
-	tw.tween_property(h, "scale", Vector2.ONE * size * 0.7, 0.18).set_trans(Tween.TRANS_QUAD)
+	tw.tween_interval(0.18)
+	tw.tween_callback(h._press)
 	tw.tween_callback(h._trail.bind(from, to))
-	tw.parallel().tween_property(h, "position", to, DRAG_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tw.tween_property(h, "scale", Vector2.ONE * size, 0.2)
+	tw.tween_property(h, "position", to, DRAG_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_callback(h._release)
 	tw.tween_interval(0.25)
 	tw.tween_callback(h._vanish)
 	return h
@@ -53,8 +59,16 @@ func _init() -> void:
 	_ring(R, 18.0, Color(Pal.OUTLINE, 0.9))
 	_ring(R, 9.0, Color(1, 1, 1, 1.0))
 	UI.circle(self, Vector2.ZERO, R - 9.0, Color(1, 1, 1, 0.22))  # blaga svetlost unutra
-	UI.circle(self, Vector2.ZERO, 15.0, Pal.OUTLINE)
-	UI.circle(self, Vector2.ZERO, 9.0, Color(1, 1, 1, 1.0))
+	# Ruka (kupljeni crtež, dve poze: podignut i pritisnut prst). Vrh prsta je
+	# tačno na meti, dlan ide dole-desno. Prsten ostaje — kroz njega se vidi
+	# ŠTA se tapka, a ruka kaže KAKO.
+	_hand = Sprite2D.new()
+	_hand.texture = load("res://art/fx/finger-up.png")
+	var ht := _hand.texture.get_size()
+	_hand.offset = Vector2(ht.x / 2.0 - TIP.x, ht.y / 2.0 - TIP.y)
+	_hand.scale = Vector2.ONE * 0.52
+	_hand.z_index = 2
+	add_child(_hand)
 
 
 ## Prsten kao Line2D — Polygon2D ume samo punu površinu, a ovde je rupa bitna:
@@ -74,6 +88,14 @@ func _ring(radius: float, width: float, color: Color) -> Line2D:
 ## izgubi među životinjama, u mini-igri je meta blizu i prsten sme da bude manji.
 func _set_size(size: float) -> void:
 	scale = Vector2.ONE * size
+
+
+func _press() -> void:
+	_hand.texture = load("res://art/fx/finger-down.png")
+
+
+func _release() -> void:
+	_hand.texture = load("res://art/fx/finger-up.png")
 
 
 func _appear() -> void:

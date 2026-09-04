@@ -11,22 +11,29 @@ extends BaseScreen
 ## lestvica VIDI, ne samo čuje.
 
 ## [vrsta, stub, boja note] — redosled je i redosled tonova
+## Muzičari su kupljene ribe (art/ocean): prefiks sličica i broj. Nemaju
+## crtež pevanja, pa "pevaju" bržim zamahom i poskokom.
+## Osam muzičara = cela lestvica do-re-mi-fa-sol-la-si-do (03.09.2026).
 const BAND := [
-	["clown",    1, Color("#D9645F")],
-	["tang",     2, Color("#E0873E")],
-	["puffer",   3, Color("#E8C34A")],
-	["turtle",   4, Color("#6FAE64")],
-	["seahorse", 5, Color("#4E9CC4")],
-	["octopus",  6, Color("#9B7BC4")],
+	["f4-orange", 1, Color("#D9645F"), 8],
+	["f2-pink",   2, Color("#E0873E"), 12],
+	["f3-yellow", 3, Color("#E8C34A"), 12],
+	["f6-green",  4, Color("#6FAE64"), 12],
+	["f5-blue",   5, Color("#4E9CC4"), 8],
+	["horse-yellow", 6, Color("#3F7FB5"), 16],
+	["jelly",     7, Color("#9B7BC4"), 10],
+	["fc-orange", 8, Color("#D9645F"), 16],
 ]
-## Pentatonika: prima, sekunda, terca, kvinta, seksta, oktava.
-const PITCH := [1.0, 1.125, 1.25, 1.5, 1.6875, 2.0]
+## Stub je ruševni stub iz paketa, obojen u boju note; visine po lestvici.
+const PERCH_H := [0.16, 0.21, 0.26, 0.31, 0.36, 0.41, 0.46, 0.51]
+## Durska lestvica (čista intonacija): do re mi fa sol la si do.
+const PITCH := [1.0, 1.125, 1.25, 1.3333, 1.5, 1.6667, 1.875, 2.0]
 ## Iz specifikacije: x centri stubova i visine njihovih sedišta.
 ## Ceo red je pomeren za 0,025 udesno u odnosu na specifikaciju, jer je prvi
 ## stub nalegao na levi sanduk. Razmak od 0,137 između stubova ostaje netaknut
 ## — on je i vizuelna lestvica, pa se ne sme menjati.
-const PERCH_X := [0.160, 0.297, 0.434, 0.571, 0.708, 0.845]
-const SIT_Y := [0.783, 0.709, 0.635, 0.561, 0.487, 0.413]
+const PERCH_X := [0.135, 0.238, 0.341, 0.444, 0.547, 0.650, 0.753, 0.856]
+const SIT_Y := [0.783, 0.709, 0.635, 0.561, 0.487, 0.413, 0.339, 0.265]
 ## Referentni telefon na kome je igra podesena (19,5:9 → viewport 2340x1080).
 const REF := Vector2(2340.0, 1080.0)
 
@@ -46,7 +53,7 @@ var _staff_frames: Array = []   # 24 frejma; keširaju se jednom, ne pri svakom 
 func _ready() -> void:
 	home_target = "ocean"
 	_s = UI.vs(self)
-	Scenery.background(self, "background-orchestra")
+	_build_background()
 	# Notni sistem stoji IZA muzičara, u gornjoj polovini kadra — voda je tu
 	# bila prazna. Najviši stub prolazi ispred njega, što daje dubinu.
 	_staff = Sprite2D.new()
@@ -78,6 +85,54 @@ func _ready() -> void:
 ## sediste i muzicar se na iPadu razidju za oko trecinu stuba.
 ## Na referentnom telefonu (_s.x = REF.x) vraca 1080 * (0,917 - d), sto je
 ## identicno starom racunu — telefon se ne menja nimalo.
+## Pozadina iz kupljenog paketa: voda, zraci, daleke stene, olupina, pesak.
+func _build_background() -> void:
+	var bg := Sprite2D.new()
+	bg.texture = load("res://art/ocean/bg-colour.png")
+	var bt := bg.texture.get_size()
+	bg.position = _s / 2.0
+	bg.scale = Vector2(_s.x / bt.x, _s.y / bt.y)
+	bg.z_index = -60
+	add_child(bg)
+	var sun := Sprite2D.new()
+	sun.texture = load("res://art/ocean/sunlight.png")
+	var st := sun.texture.get_size()
+	sun.scale = Vector2.ONE * ((_s.x * 0.8) / st.x)
+	sun.position = Vector2(_s.x * 0.5, st.y * sun.scale.y * 0.5 - _s.y * 0.02)
+	sun.modulate.a = 0.6
+	sun.z_index = -59
+	add_child(sun)
+	_pack("distant-rocks-1", 0.40, 0.14, 0.84, -57)
+	_pack("distant-rocks-4", 0.42, 0.88, 0.84, -57)
+	_pack("ship-wreck", 0.22, 0.50, 0.86, -56).modulate = Color(0.85, 0.92, 1.0, 0.8)
+	var sand := Sprite2D.new()
+	sand.texture = load("res://art/ocean/seabed.png")
+	var sd := sand.texture.get_size()
+	sand.scale = Vector2((_s.x * 1.02) / sd.x, (_s.y * 0.20) / sd.y)
+	sand.position = Vector2(_s.x * 0.5, _s.y * 0.92)
+	sand.z_index = -50
+	add_child(sand)
+	for g in [["grass-7", 0.045, 0.02, 1.08], ["grass-9", 0.045, 0.985, 1.08],
+			["fg-piece-3", 0.30, 0.30, 1.05], ["fg-piece-5", 0.30, 0.72, 1.05]]:
+		_pack(String(g[0]), float(g[1]), float(g[2]), float(g[3]), -8).modulate = Color(0.85, 0.9, 0.92)
+
+
+func _pack(art: String, frac_w: float, cx: float, base_y: float, z: int) -> Sprite2D:
+	var sp := Sprite2D.new()
+	sp.texture = load("res://art/ocean/%s.png" % art)
+	var tex := sp.texture.get_size()
+	sp.scale = Vector2.ONE * ((_s.x * frac_w) / tex.x)
+	sp.offset = Vector2(0, -tex.y / 2.0)
+	sp.position = Vector2(_s.x * cx, _s.y * base_y)
+	sp.z_index = z
+	add_child(sp)
+	return sp
+
+
+func _fish_tex(i: int, frame: int) -> Texture2D:
+	return load("res://art/ocean/%s-%d.png" % [BAND[i][0], 1 + (frame - 1) % int(BAND[i][3])])
+
+
 func _above_ground(d: float) -> float:
 	return _s.y * 0.917 - d * REF.y * (_s.x / REF.x)
 
@@ -88,35 +143,40 @@ func _build_band() -> void:
 		var perch: int = BAND[i][1]
 		var cx: float = _s.x * PERCH_X[i]
 
-		# Stub: oslonac na dnu, sedi na liniji peska.
+		# Stub iz paketa: oslonac na dnu, visina po lestvici, boja note.
 		var pv := Sprite2D.new()
-		pv.texture = load("res://art/svg/coral-perch-%d.svg" % perch)
+		pv.texture = load("res://art/ocean/pillar-white.png")
 		var ptex := pv.texture.get_size()
-		var psc := (_s.x * 0.103) / ptex.x
-		pv.scale = Vector2.ONE * psc
+		var ph: float = REF.y * (_s.x / REF.x) * PERCH_H[perch - 1]
+		# Širina prati visinu (kapitel ne sme da se spljošti), ali ne ispod 0,05w.
+		pv.scale = Vector2(maxf(_s.x * 0.05, ph * 0.42) / ptex.x, ph / ptex.y)
 		pv.offset = Vector2(0, -ptex.y / 2.0)
 		pv.position = Vector2(cx, _s.y * 0.917)
+		pv.modulate = (BAND[i][2] as Color).lerp(Color.WHITE, 0.12)
 		pv.z_index = 2
 		add_child(pv)
 
-		# Muzičar: dno crteža ulazi 0,061h ispod ivice kapice, da SEDI a ne lebdi.
-		var size := _s.x * 0.089
+		# Muzičar sedi na vrhu stuba; crteži gledaju ulevo, pa se ogledaju da
+		# gledaju ka sredini (levi ka desno, desni ka levo).
+		var size := _s.x * 0.082
 		var sp := Sprite2D.new()
-		sp.texture = load("res://art/svg/bubble-fish-%s-sing-1.svg" % kind)
-		sp.scale = Vector2.ONE * (size / 256.0)
-		sp.position = Vector2(cx, _above_ground(0.917 - SIT_Y[i] - 0.061) - size * 0.5)
+		sp.texture = _fish_tex(i, 1)
+		var ft := sp.texture.get_size()
+		var fsc: float = size / maxf(ft.x, ft.y)
+		sp.scale = Vector2(-fsc if i < 4 else fsc, fsc)
+		sp.position = Vector2(cx, _s.y * 0.917 - ph - size * 0.30)
 		sp.z_index = 3
 		add_child(sp)
 
-		var entry := {"node": sp, "kind": kind, "idx": i, "sing": -1.0,
-			"mouth": Vector2(cx + size * 0.26, sp.position.y - size * 0.42)}
+		var entry := {"node": sp, "kind": kind, "idx": i, "sing": -1.0, "base": sp.scale, "f": randf() * 8.0,
+			"mouth": Vector2(cx + (size * 0.3 if i < 4 else -size * 0.3), sp.position.y - size * 0.15)}
 		_players.append(entry)
 
 		# Tap zona je NAMERNO mnogo veća od bića — dečji prst ne cilja precizno.
 		var area := Area2D.new()
 		var shape := CollisionShape2D.new()
 		var rect := RectangleShape2D.new()
-		rect.size = Vector2(_s.x * 0.12, _s.y * 0.20)
+		rect.size = Vector2(_s.x * 0.10, _s.y * 0.20)
 		shape.shape = rect
 		area.add_child(shape)
 		area.position = sp.position
@@ -139,35 +199,28 @@ func hint_spot() -> Dictionary:
 
 
 func _build_chest(x: float, first_wait: float) -> void:
-	var sc := (_s.x * 0.098) / 520.0
+	var sc := (_s.x * 0.098) / 512.0
 	var node := Node2D.new()
-	node.position = Vector2(_s.x * x, _above_ground(0.917 - 0.965) - 400.0 * sc * 0.5)
+	node.position = Vector2(_s.x * x, _above_ground(0.917 - 0.97))
 	node.scale = Vector2.ONE * sc
 	node.z_index = 2
 	add_child(node)
 
 	var lid := Sprite2D.new()
-	lid.texture = load("res://art/svg/chest-lid.svg")
-	var t := lid.texture.get_size()
-	lid.offset = -Vector2((0.047 - 0.5) * t.x, (0.904 - 0.5) * t.y)
-	lid.position = Vector2((0.169 - 0.5) * 520.0, (0.480 - 0.5) * 400.0)
-	lid.z_index = -1
+	lid.texture = load("res://art/ocean/chest-closed.png")
+	lid.offset = Vector2(0, -lid.texture.get_size().y / 2.0)
 	node.add_child(lid)
 
-	var body := Sprite2D.new()
-	body.texture = load("res://art/svg/chest-body.svg")
-	node.add_child(body)
-
-	var c := {"node": node, "lid": lid, "open": 0.0, "left": 0, "gap": 0.0,
+	var c := {"node": node, "lid": lid, "open": 0.0, "left": 0, "gap": 0.0, "is_open": false,
 		"wait": first_wait, "emit": Vector2(_s.x * x, _above_ground(0.917 - 0.875))}
 	_chests.append(c)
 
 	var area := Area2D.new()
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
-	rect.size = Vector2(440.0, 340.0)
+	rect.size = Vector2(500.0, 430.0)
 	shape.shape = rect
-	shape.position = Vector2(0.0, 30.0)
+	shape.position = Vector2(0.0, -215.0)
 	area.add_child(shape)
 	node.add_child(area)
 	area.input_event.connect(func(_vp: Node, ev: InputEvent, _i: int) -> void:
@@ -184,7 +237,11 @@ func _process_chests(delta: float) -> void:
 	for c in _chests:
 		var want: float = 1.0 if c.left > 0 else 0.0
 		c.open = move_toward(c.open, want, delta * (2.6 if want > 0.0 else 0.7))
-		c.lid.rotation = deg_to_rad(-22.0) * ease(c.open, 0.6)
+		var open_now: bool = c.open > 0.35
+		if open_now != c.is_open:
+			c.is_open = open_now
+			c.lid.texture = load("res://art/ocean/chest-%s.png" % ("open" if open_now else "closed"))
+			c.lid.offset = Vector2(0, -c.lid.texture.get_size().y / 2.0)
 		if c.left > 0:
 			c.gap -= delta
 			if c.gap <= 0.0:
@@ -201,9 +258,9 @@ func _process_chests(delta: float) -> void:
 
 func _spawn_bubble(pos: Vector2) -> void:
 	var sp := Sprite2D.new()
-	sp.texture = load("res://art/svg/bubble.svg")
+	sp.texture = load("res://art/ocean/bubble.png")
 	sp.position = pos
-	sp.scale = Vector2.ONE * (_s.x * randf_range(0.010, 0.024) / 200.0)
+	sp.scale = Vector2.ONE * (_s.x * randf_range(0.010, 0.024) / 256.0)
 	sp.z_index = 5
 	add_child(sp)
 	_bubbles.append({"node": sp, "age": 0.0, "x0": pos.x, "ph": randf() * TAU,
@@ -265,15 +322,19 @@ func _process(delta: float) -> void:
 	_staff.texture = _staff_frames[int(_t * 12.0) % _staff_frames.size()]
 
 	for p in _players:
-		if p.sing < 0.0:
-			continue
-		p.sing += delta
-		var f := int(p.sing * SING_FPS)
-		if f >= SING_FRAMES:
-			p.sing = -1.0
-			p.node.texture = load("res://art/svg/bubble-fish-%s-sing-1.svg" % p.kind)
-			continue
-		p.node.texture = load("res://art/svg/bubble-fish-%s-sing-%d.svg" % [p.kind, f + 1])
+		# Stalno lagano diše sličicama; dok "peva" (0,6 s) zamah je brz i
+		# poskoči sa malim naduvavanjem — kupljene ribe nemaju usta koja pevaju.
+		var singing: bool = p.sing >= 0.0
+		p.f += delta * (22.0 if singing else 7.0)
+		p.node.texture = _fish_tex(p.idx, 1 + int(p.f))
+		if singing:
+			p.sing += delta
+			var k: float = p.sing / 0.6
+			if k >= 1.0:
+				p.sing = -1.0
+				p.node.scale = p.base
+			else:
+				p.node.scale = p.base * (1.0 + 0.18 * sin(k * PI))
 
 	for i in range(_notes.size() - 1, -1, -1):
 		var n: Dictionary = _notes[i]

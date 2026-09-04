@@ -15,6 +15,8 @@ Na ovom Macu: `godot` = `/Applications/Godot.app/Contents/MacOS/Godot`
 godot --headless --path game/ -- --smoke      # instancira svih 7 ekrana
 godot --headless --path game/ -- --autotest   # odigra sve 4 mini-igre (41 provera)
 godot --path game/ -- --shots                 # screenshotovi svih ekrana u shots/
+godot --path game/ -- --shots --only=jungle,jfeed   # samo navedeni ekrani
+godot --path game/ --resolution 1440x1080 -- --shots   # tablet 4:3
 godot --path game/ --resolution 512x512 -- --make-icon   # regeneriši icon.png
 godot --path game/ -- --demo                  # demo prolaz sa vidljivim prstom
 ```
@@ -45,6 +47,7 @@ Za Play Store kasnije: release keystore + AAB (`gradle_build/export_format=1`).
 - `core/` — main (screen manager), audio autoload, Animals (sadržaj), UI helperi, AnimalSprite, TapButton, FoodItem, BaseScreen
 - `screens/` — hub + 4 mini-igre + parental gate + roditeljski ugao
 - `art/animals/` — Kenney Animal Pack Redux (CC0)
+- `art/farm/`, `art/ocean/`, `art/dino/`, `art/jungle/` — kupljeni paketi (gamedeveloperstudio.com, Robert Brooks; komercijalna upotreba i izmene dozvoljene, bez atribucije). Džungla se seče iz `~/Downloads/<Paket>--<id>/` skriptom `assets/cut_jungle.py` (životinje: `<id>-<anim>-N.png`, isti isečak za sve animacije jedne životinje). Lav je kupljen namršten, pa se njegove sličice sklapaju iz Spriter fajla (`assets/spriter_render.py`, mali renderer za `.scml`) bez obrva i sa vilicom bez očnjaka — sve u `cut_jungle.py`. `FarmBody` sam pada na staru glavu za životinje koje nemaju red u `ANIMS`.
 - `sfx/` — **placeholder** sintetizovani zvuci (`assets/gen_sounds.py`) — zameniti pravim pre objave
 
 ## Reskin nove igre

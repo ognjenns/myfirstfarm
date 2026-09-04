@@ -7,14 +7,19 @@ const SCREENS := {
 	"hub": preload("res://screens/hub.gd"),
 	"jungle": preload("res://screens/jungle_hub.gd"),
 	"ocean": preload("res://screens/ocean_hub.gd"),
+	"dino": preload("res://screens/dino_hub.gd"),
+	"eggs": preload("res://screens/eggs_game.gd"),
+	"lava": preload("res://screens/lava_game.gd"),
+	"dig": preload("res://screens/dig_game.gd"),
+	"tower": preload("res://screens/tower_game.gd"),
 	"bubbles": preload("res://screens/bubble_catch_game.gd"),
 	"leadfish": preload("res://screens/lead_fish_game.gd"),
 	"orchestra": preload("res://screens/orchestra_game.gd"),
 	"colors": preload("res://screens/color_sort_game.gd"),
 	"memory": preload("res://screens/memory_game.gd"),
 	"quiz": preload("res://screens/sound_quiz_game.gd"),
-	"jfeed": preload("res://screens/jungle_feed_game.gd"),
-	"shower": preload("res://screens/elephant_shower_game.gd"),
+	"sizes": preload("res://screens/size_game.gd"),
+	"vines": preload("res://screens/vine_game.gd"),
 	"feed": preload("res://screens/feed_game.gd"),
 	"shadows": preload("res://screens/shadow_game.gd"),
 	"bath": preload("res://screens/bath_game.gd"),
@@ -54,12 +59,28 @@ func _ready() -> void:
 ## Snimi screenshot svakog ekrana u ../shots/ (vizuelna provera bez klika).
 func _screenshot_run() -> void:
 	var dir := ProjectSettings.globalize_path("res://").path_join("../shots")
+	# `--out=/putanja` snima u drugi folder (za screenshotove za prodavnice);
+	# `--nohint` bez pokazivača-prsta; u ovom režimu su sve igre otključane.
+	for arg in OS.get_cmdline_user_args():
+		if String(arg).begins_with("--out="):
+			dir = String(arg).trim_prefix("--out=")
+	Save.unlocked = true
 	DirAccess.make_dir_recursive_absolute(dir)
+	# `--only=jungle,jfeed` snima samo navedene ekrane (brža provera).
+	var only: Array = []
+	var wait := 5.0   # `--wait=9` čeka duže (npr. da se životinja sakrije)
+	for arg in OS.get_cmdline_user_args():
+		if String(arg).begins_with("--only="):
+			only = String(arg).trim_prefix("--only=").split(",")
+		elif String(arg).begins_with("--wait="):
+			wait = float(String(arg).trim_prefix("--wait="))
 	for screen_name in SCREENS:
+		if not only.is_empty() and not screen_name in only:
+			continue
 		goto(screen_name)
 		# Igre popunjavaju ekran tokom vremena — mehurići se dižu, ribice
 		# doplivaju, nagoveštaj se iscrta. Na 0,9 s su ekrani bili prazni.
-		await get_tree().create_timer(5.0).timeout
+		await get_tree().create_timer(wait).timeout
 		# Bez čekanja na završen crtež slika zaostaje za ekranom — snimci su
 		# ispadali dva ekrana unazad, pa je "bubbles.png" prikazivao džunglu.
 		await RenderingServer.frame_post_draw
@@ -124,9 +145,8 @@ func _make_feature() -> void:
 	# red faca: farma + džungla
 	var ids := ["cow", "monkey", "pig", "lion", "duck", "elephant"]
 	for i in ids.size():
-		var f := AnimalFaces.build(ids[i])
+		var f := FarmBody.portrait(ids[i], 230.0 * 1.35)
 		f.position = Vector2(s.x * (0.115 + 0.154 * i), s.y * 0.76 + (18.0 if i % 2 == 1 else -8.0))
-		f.scale = Vector2.ONE * 1.35
 		root.add_child(f)
 	await get_tree().create_timer(0.5).timeout
 	var img := get_viewport().get_texture().get_image()
@@ -269,10 +289,10 @@ func _smoke_test() -> void:
 
 ## Hubovi svetova — dopuniti pri dodavanju novog sveta, inače povratak iz
 ## roditeljskih ekrana odvede na pogrešan svet (okean je tako vodio na farmu).
-const WORLD_HUBS := ["hub", "jungle", "ocean"]
+const WORLD_HUBS := ["hub", "jungle", "ocean", "dino"]
 
 ## Ekrani koji nisu mini-igra (hubovi, izbor sveta, roditeljski deo).
-const NOT_GAMES := ["splash", "worlds", "hub", "jungle", "ocean", "gate", "parents"]
+const NOT_GAMES := ["splash", "worlds", "hub", "jungle", "ocean", "dino", "gate", "parents"]
 
 func goto(screen_name: String) -> void:
 	if screen_name in WORLD_HUBS:

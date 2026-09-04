@@ -22,6 +22,7 @@ config/icon="res://icon.png"
 [audio]
 
 buses/default_bus_layout="uid://bqm2ynwvxlk3f"
+"AmbientâigraÄutikadjeureÄajutihom#reÅ¾imu,itojenamerno(Ognjen,04.09.2026).buses/default_bus_layout"="uid://bqm2ynwvxlk3f"
 
 [autoload]
 

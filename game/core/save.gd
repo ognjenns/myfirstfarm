@@ -9,6 +9,8 @@ var sfx_on := true
 ## Koliko je puta aplikacija pokrenuta. Po ovome pokazivač zna da li dete tek
 ## upoznaje igru ili je već zna (vidi BaseScreen.add_hint).
 var launches := 0
+## Ekrani koje je dete već otvorilo — na prvom ulasku pokazivač ne čeka.
+var seen: Array = []
 
 func _ready() -> void:
 	var cfg := ConfigFile.new()
@@ -17,6 +19,7 @@ func _ready() -> void:
 		music_on = cfg.get_value("audio", "music_on", true)
 		sfx_on = cfg.get_value("audio", "sfx_on", true)
 		launches = cfg.get_value("play", "launches", 0)
+		seen = cfg.get_value("play", "seen", [])
 	if OS.get_cmdline_user_args().is_empty():
 		launches += 1
 		_persist()
@@ -32,7 +35,17 @@ func _persist() -> void:
 	cfg.set_value("audio", "music_on", music_on)
 	cfg.set_value("audio", "sfx_on", sfx_on)
 	cfg.set_value("play", "launches", launches)
+	cfg.set_value("play", "seen", seen)
 	cfg.save(PATH)
+
+## Da li je ovo prvi ulazak na ekran; odmah ga upiše kao viđen.
+func first_visit(screen: String) -> bool:
+	if screen in seen:
+		return false
+	seen.append(screen)
+	if OS.get_cmdline_user_args().is_empty():
+		_persist()
+	return true
 
 func set_unlocked(value: bool) -> void:
 	unlocked = value

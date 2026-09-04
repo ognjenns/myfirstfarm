@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="820" viewBox="0 0 300 820">
+<path d="M76,818 C70,610 84,392 104,224 C112,156 120,100 124,52 L212,52 C210,102 208,158 204,226 C196,394 210,612 224,818 Z" fill="#2B2130"></path>
+<path d="M124,52 L212,52 C210,102 208,158 204,226 C196,394 210,612 224,818 L176,818 C168,610 166,394 172,226 C176,158 172,102 164,52 Z" fill="#4A3140" opacity="0.9"></path>
+  <path d="M96,110 C123,94 177,94 204,110" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M93,176 C121.5,160 178.5,160 207,176" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M90,242 C120,226 180,226 210,242" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M87,308 C118.5,292 181.5,292 213,308" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M84,374 C117,358 183,358 216,374" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M81,440 C115.5,424 184.5,424 219,440" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M78,506 C114,490 186,490 222,506" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M75,572 C112.5,556 187.5,556 225,572" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M72,638 C111,622 189,622 228,638" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M69,704 C109.5,688 190.5,688 231,704" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+  <path d="M66,770 C108,754 192,754 234,770" fill="none" stroke="#5E3E44" stroke-width="7" stroke-linecap="round" opacity="0.5"></path>
+<path d="M60,818 C66,768 100,744 152,744 C204,744 238,768 244,818 Z" fill="#2B2130"></path>
+<path d="M104,760 C68,742 44,714 40,682 C68,700 92,724 108,752 Z" fill="#2B2130"></path>
+<path d="M198,742 C232,724 254,698 258,668 C232,684 210,708 194,736 Z" fill="#2B2130"></path>
+</svg>

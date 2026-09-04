@@ -42,9 +42,14 @@ static func bg_x(fx: float) -> float:
 static func sun(parent: Node, pos: Vector2, z := -35) -> void:
 	svg(parent, "sun", pos, 0.8, z)
 
+## Oblaci: kupljeni set (5 oblika, art/fx/cloud1..5.png), svaki put nasumičan
+## — svi su svedeni na širinu starog cloud.svg (448 px), pa postojeće mere na
+## svim ekranima ostaju iste. Ako seta nema, ostaje stari crtež.
+const CLOUD_COUNT := 5
 static func cloud(parent: Node, pos: Vector2, s := 1.0, z := -35) -> void:
 	var c := DriftCloud.new()
-	c.texture = load("res://art/svg/cloud.svg")
+	var pick := "res://art/fx/cloud%d.png" % (randi() % CLOUD_COUNT + 1)
+	c.texture = load(pick) if ResourceLoader.exists(pick) else load("res://art/svg/cloud.svg")
 	c.position = pos
 	c.scale = Vector2.ONE * (s * 0.75)
 	c.z_index = z
@@ -117,9 +122,9 @@ static func hill(parent: Node, w: float, bottom: float, top_y: float, amp: float
 	UI.poly(parent, pts, color, Vector2.ZERO, z)
 
 ## Meka senka pod objektom/životinjom.
-static func ground_shadow(parent: Node, pos: Vector2, rx := 80.0, z := -1) -> void:
+static func ground_shadow(parent: Node, pos: Vector2, rx := 80.0, z := -1, color := Pal.SHADOW) -> void:
 	var pts := PackedVector2Array()
 	for i in 24:
 		var a := TAU * i / 24
 		pts.append(Vector2(cos(a) * rx, sin(a) * rx * 0.28))
-	UI.poly(parent, pts, Pal.SHADOW, pos, z)
+	UI.poly(parent, pts, color, pos, z)

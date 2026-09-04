@@ -9,15 +9,18 @@ var answer: Dictionary = {}
 var last_answer_id := ""
 var bubble: Area2D
 var bubble_scale := 1.0
-var options: Array[TapButton] = []
+var options: Array[Node2D] = []   # FarmBody tela na kamenju
 var pedestals: Array[Node] = []
 var busy := false
 var streak := 0
+## Sredine tri kamena i visina njihovog vrha (stopala životinja).
+const XS := [0.253, 0.500, 0.747]
+const ROCK_TOP := 0.76
 
 func _ready() -> void:
 	home_target = "jungle"
 	var s := UI.vs(self)
-	Scenery.background(self, "background-quiz")
+	_build_scene(s)
 	add_home_button()
 	add_hint(6.0)
 	for a in Animals.JUNGLE:
@@ -35,15 +38,38 @@ func _ready() -> void:
 	note_timer.start()
 	get_tree().create_timer(1.0).timeout.connect(_spawn_note)
 
+## Svoj kutak džungle, da ne liči na hub: bez krošnje i smeđe trake; tri
+## odvojena kamena na kojima stoje životinje, palme sa strane, grana sa
+## lišćem ulazi iz gornjeg desnog ugla, malo trave uz donju ivicu.
+func _build_scene(s: Vector2) -> void:
+	JungleScene.background(self)   # sa smeđom trakom: kamenje stoji na zemlji
+	# lijane sa vrha (grana bez debla je lebdela)
+	JungleScene.place(self, "vine-hang", Vector2(0.08, -0.01), 0.26, true, -42, Vector2(0.5, 0.0))
+	JungleScene.place(self, "vine-hang-long", Vector2(0.90, -0.01), 0.34, true, -42, Vector2(0.5, 0.0), true)
+	# palme: podnožje ispod ivice ekrana i lišće oko njega, da ne lebde
+	JungleScene.place(self, "palm-trunk", Vector2(0.07, 1.06), 0.56, true, -40)
+	JungleScene.place(self, "palm-leaves", Vector2(0.075, 0.535), 0.14, false, -39, Vector2(0.5, 0.55))
+	JungleScene.place(self, "palm-trunk", Vector2(0.93, 1.06), 0.50, true, -40, Vector2(0.5, 1.0), true)
+	JungleScene.place(self, "palm-leaves", Vector2(0.925, 0.59), 0.13, false, -39, Vector2(0.5, 0.55), true)
+	JungleScene.place(self, "tuft-3", Vector2(0.06, 1.01), 0.08, false, -17)
+	JungleScene.place(self, "tuft-3", Vector2(0.94, 1.01), 0.08, false, -17, Vector2(0.5, 1.0), true)
+	# tri ODVOJENA kamena-postolja (Ognjen: red kamenja dole je bio previše);
+	# uz donju ivicu samo malo trave i lišća
+	for i in 3:
+		JungleScene.place(self, "rock-2", Vector2(XS[i], 0.91), 0.21, false, -5)
+		JungleScene.place(self, "grass-top", Vector2(XS[i] - 0.02, 0.775), 0.11, false, -4)
+	for x in [0.12, 0.38, 0.62, 0.88]:
+		JungleScene.place(self, "grass-top", Vector2(x, 1.01), 0.08, false, -18)
+	JungleScene.place(self, "ground-leaves", Vector2(0.25, 1.02), 0.10, false, -18)
+	JungleScene.place(self, "ground-leaves", Vector2(0.75, 1.02), 0.10, false, -18, Vector2(0.5, 1.0), true)
+
 ## Oblačić sa notom: pulsira, auto-pusti glas na startu runde, tap = ponovi.
 func _build_bubble(s: Vector2) -> void:
 	bubble = Area2D.new()
-	bubble.position = Vector2(s.x * 0.5, s.y * 0.295)  # centar "glow" zone u pozadini
-	bubble_scale = (s.y * 0.40) / 280.0
+	bubble.position = Vector2(s.x * 0.5, s.y * 0.22)
+	bubble_scale = (s.y * 0.33) / 280.0
 	bubble.scale = Vector2.ONE * bubble_scale
-	var spr := Sprite2D.new()
-	spr.texture = load("res://art/svg/sound-bubble.svg")
-	bubble.add_child(spr)
+	_draw_bubble(bubble)
 	var shape := CollisionShape2D.new()
 	var circle := CircleShape2D.new()
 	circle.radius = 175.0
@@ -57,6 +83,33 @@ func _build_bubble(s: Vector2) -> void:
 	var tw := bubble.create_tween().set_loops()
 	tw.tween_property(bubble, "scale", Vector2.ONE * bubble_scale * 1.06, 0.55).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tw.tween_property(bubble, "scale", Vector2.ONE * bubble_scale, 0.55).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+## Oblačić u stilu paketa (kao karte memorije): senka, tamna kontura, svetla
+## ispuna sa svetlijim unutrašnjim okvirom, rep dole-levo; unutra naše note
+## (note-float, iste kao u orkestru). Lokalne mere 280×280 kao stari crtež.
+const INK := Color("#2B1A0E")
+
+func _draw_bubble(parent: Node2D) -> void:
+	var w := 262.0
+	var h := 186.0
+	UI.poly(parent, UI.rounded_rect_points(w + 12, h + 12, 40), Color(0, 0, 0, 0.20), Vector2(0, 10))
+	UI.poly(parent, UI.rounded_rect_points(w + 12, h + 12, 40), INK)
+	UI.poly(parent, PackedVector2Array([Vector2(-104, 78), Vector2(-46, 78), Vector2(-96, 140)]), INK)
+	UI.poly(parent, UI.rounded_rect_points(w, h, 34), Color("#F6E9CC"))
+	UI.poly(parent, PackedVector2Array([Vector2(-96, 80), Vector2(-56, 80), Vector2(-90, 126)]), Color("#F6E9CC"))
+	UI.poly(parent, UI.rounded_rect_points(w - 34, h - 34, 24), Color("#FFF7E4"))
+	UI.poly(parent, UI.rounded_rect_points(w - 44, h - 44, 20), Color("#F6E9CC"))
+	_note(parent, Vector2(-44, 4), 0.78, 1)
+	_note(parent, Vector2(44, 4), 0.78, 2)
+
+## Nota iz našeg SVG-a (note-float-1/2, 140×180).
+func _note(parent: Node2D, pos: Vector2, sc: float, kind: int) -> Sprite2D:
+	var sp := Sprite2D.new()
+	sp.texture = load("res://art/svg/note-float-%d.svg" % kind)
+	sp.position = pos
+	sp.scale = Vector2.ONE * sc
+	parent.add_child(sp)
+	return sp
 
 func _play_voice() -> void:
 	if answer.is_empty():
@@ -87,24 +140,35 @@ func _start_round() -> void:
 	var opts: Array = [answer, pool[0], pool[1]]
 	opts.shuffle()
 
-	# raspored po dizajnu: centri x 0.253/0.500/0.747, lica y=0.705, postolja ispod
+	# tri životinje celim telom, svaka na svom kamenu (stopala na vrhu kamena)
 	var s := UI.vs(self)
-	var r := s.x * 0.0755
-	const XS := [0.253, 0.500, 0.747]
-	var ped_scale := (r * 2.0) / 420.0
 	for i in opts.size():
 		var a: Dictionary = opts[i]
 		var cx: float = s.x * XS[i]
-		var ped := Scenery.svg(self, "quiz-pedestal", Vector2(cx, s.y * 0.737 + 120.0 * ped_scale), ped_scale, -5)
-		pedestals.append(ped)
-		var btn := TapButton.new(Vector2(cx, s.y * 0.705), r, Pal.BUTTON_WHITE)
-		var face := AnimalFaces.build(a.id)
-		face.scale = Vector2.ONE * (r / 130.0)
-		btn.add_child(face)
-		btn.set_meta("animal_id", a.id)  # za pokazivač: koja je tačna
-		btn.tapped.connect(_on_pick.bind(btn, a))
-		add_child(btn)
-		options.append(btn)
+		# Krupno, ali da žirafa ne uđe u oblačić (dno mu je na ~0.46 visine).
+		var rel: float = {"giraffe": 1.05, "elephant": 0.85, "hippo": 0.75, "lion": 0.80, "monkey": 0.68, "parrot": 0.50}.get(a.id, 0.7)
+		var body := FarmBody.new(a, s.y * 0.40 * rel, i == 0)   # leva gleda udesno
+		# Kamen ima ravan vrh na levoj polovini (desno se spušta): telo stoji
+		# na sredini ravnog dela, ne na sredini celog kamena.
+		body.position = Vector2(cx - s.x * 0.021 - body.feet_shift(), s.y * ROCK_TOP)
+		body.interactive = false   # dodir vodi kviz (glas se ne sme sam pustiti)
+		body.z_index = 2
+		body.set_meta("animal_id", a.id)  # za pokazivač: koja je tačna
+		body.set_meta("home_x", cx)
+		add_child(body)
+		options.append(body)
+		var area := Area2D.new()
+		var shape := CollisionShape2D.new()
+		var rect := RectangleShape2D.new()
+		rect.size = body.body_size() * 1.15
+		shape.shape = rect
+		shape.position = Vector2(0, -body.body_size().y * 0.5)
+		area.add_child(shape)
+		body.add_child(area)
+		area.input_event.connect(func(_vp: Node, event: InputEvent, _i: int) -> void:
+			if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+				_on_pick(body, a)
+		)
 
 	get_tree().create_timer(0.6).timeout.connect(func() -> void:
 		if is_instance_valid(self) and not answer.is_empty():
@@ -118,11 +182,11 @@ func hint_spot() -> Dictionary:
 		return {}
 	for o in options:
 		if is_instance_valid(o) and o.get_meta("animal_id", "") == answer.id:
-			return {"at": o.position}
+			return {"at": o.position + Vector2(0, -(o as FarmBody).body_size().y * 0.5), "size": 1.6}
 	return {}
 
 
-func _on_pick(btn: TapButton, a: Dictionary) -> void:
+func _on_pick(btn: FarmBody, a: Dictionary) -> void:
 	if busy:
 		return
 	if a.id != answer.id:
@@ -132,27 +196,30 @@ func _on_pick(btn: TapButton, a: Dictionary) -> void:
 		return
 	busy = true
 	streak += 1
-	Audio.animal_voice(a.id)
 	UI.haptic(35)
-	_jump_spin(btn)
-	_sparkle(btn.global_position)
+	btn.react()          # svoj glas + svoja tačka (rika, skok, lepršanje...)
+	_jump(btn)
+	_sparkle(btn.global_position + Vector2(0, -btn.body_size().y * 0.5))
 	if streak % 4 == 0:
-		celebrate(UI.vs(self) / 2)
+		# bez konfeta: dečji glas + bljesak na sve tri životinje
+		Audio.play(["yay", "giggle", "kid"][randi() % 3], -2.0)
+		for o in options:
+			if is_instance_valid(o):
+				glow(o.position + Vector2(0, -(o as FarmBody).body_size().y * 0.5), (o as FarmBody).body_size().y * 1.3)
 		get_tree().create_timer(2.2).timeout.connect(_start_round)
 	else:
 		get_tree().create_timer(1.4).timeout.connect(_start_round)
 
-## Pogodak: životinja skoči sa postolja i napravi ceo okret, pa doskoči.
-func _jump_spin(btn: TapButton) -> void:
+## Pogodak: životinja poskoči sa kamena i doskoči (bez okreta — tela iz
+## paketa imaju svoju tačku, okret bi izgledao kao lutka).
+func _jump(btn: FarmBody) -> void:
 	var start_y := btn.position.y
 	var tw := btn.create_tween()
-	tw.tween_property(btn, "position:y", start_y - 230.0, 0.30).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tw.parallel().tween_property(btn, "rotation", TAU, 0.62).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tw.tween_property(btn, "position:y", start_y, 0.32).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
-	tw.tween_callback(func() -> void: btn.rotation = 0.0)
+	tw.tween_property(btn, "position:y", start_y - 160.0, 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(btn, "position:y", start_y, 0.30).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 
 ## Promašaj: kratko "ne-ne" drmanje levo-desno, bez drame.
-func _shake_no(btn: TapButton) -> void:
+func _shake_no(btn: Node2D) -> void:
 	if btn.has_meta("shake_tw"):
 		var old: Tween = btn.get_meta("shake_tw")
 		if old and old.is_valid():
@@ -169,9 +236,7 @@ func _spawn_note() -> void:
 	var s := UI.vs(self)
 	var left := randf() < 0.5
 	var x := s.x * (randf_range(0.07, 0.22) if left else randf_range(0.78, 0.93))
-	var note := Sprite2D.new()
-	note.texture = load("res://art/svg/note-float-%d.svg" % (1 + randi() % 2))
-	note.position = Vector2(x, s.y * 0.68)
+	var note := _note(self, Vector2(x, s.y * 0.68), 1.0, 1 + randi() % 2)
 	note.scale = Vector2.ONE * randf_range(0.45, 0.72)
 	note.rotation = randf_range(-0.15, 0.15)
 	note.z_index = -2
