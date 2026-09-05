@@ -3,7 +3,11 @@ extends Node
 
 const PATH := "user://save.cfg"
 
-var unlocked := OS.is_debug_build()  # debug: sve otključano (screenshotovi/razvoj); release: kupovina
+## Debug build otključava sve (screenshotovi, razvoj na Androidu) — ali NIKAD
+## na iOS-u: 2.0.0 je u App Store otišao sa debug šablonom (export-debug pa
+## Xcode Release arhiva) i svi kupci su dobili sve igre besplatno (05.09.2026).
+## Na iOS-u otključava samo kupovina, ma kakav bio build.
+var unlocked := OS.is_debug_build() and OS.get_name() != "iOS"
 var music_on := true
 var sfx_on := true
 ## Koliko je puta aplikacija pokrenuta. Po ovome pokazivač zna da li dete tek
@@ -15,7 +19,7 @@ var seen: Array = []
 func _ready() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(PATH) == OK:
-		unlocked = cfg.get_value("iap", "unlocked", OS.is_debug_build())
+		unlocked = cfg.get_value("iap", "unlocked", unlocked)
 		music_on = cfg.get_value("audio", "music_on", true)
 		sfx_on = cfg.get_value("audio", "sfx_on", true)
 		launches = cfg.get_value("play", "launches", 0)
