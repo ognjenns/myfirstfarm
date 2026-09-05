@@ -8,6 +8,7 @@ const SCREENS := {
 	"jungle": preload("res://screens/jungle_hub.gd"),
 	"ocean": preload("res://screens/ocean_hub.gd"),
 	"dino": preload("res://screens/dino_hub.gd"),
+	"polar": preload("res://screens/polar_hub.gd"),
 	"eggs": preload("res://screens/eggs_game.gd"),
 	"lava": preload("res://screens/lava_game.gd"),
 	"dig": preload("res://screens/dig_game.gd"),
@@ -289,10 +290,10 @@ func _smoke_test() -> void:
 
 ## Hubovi svetova — dopuniti pri dodavanju novog sveta, inače povratak iz
 ## roditeljskih ekrana odvede na pogrešan svet (okean je tako vodio na farmu).
-const WORLD_HUBS := ["hub", "jungle", "ocean", "dino"]
+const WORLD_HUBS := ["hub", "jungle", "ocean", "dino", "polar"]
 
 ## Ekrani koji nisu mini-igra (hubovi, izbor sveta, roditeljski deo).
-const NOT_GAMES := ["splash", "worlds", "hub", "jungle", "ocean", "dino", "gate", "parents"]
+const NOT_GAMES := ["splash", "worlds", "hub", "jungle", "ocean", "dino", "polar", "gate", "parents"]
 
 func goto(screen_name: String) -> void:
 	if screen_name in WORLD_HUBS:

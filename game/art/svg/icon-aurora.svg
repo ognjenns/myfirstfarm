@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+<defs>
+  <clipPath id="c"><circle cx="128" cy="128" r="98"></circle></clipPath>
+</defs>
+<circle cx="128" cy="128" r="98" fill="#2B3A6B" stroke="#4A3F3A" stroke-width="10"></circle>
+<g clip-path="url(#c)" stroke-linecap="round" fill="none" opacity="0.95">
+  <path d="M20,150 C60,90 100,170 140,110 C170,70 200,120 240,80" stroke="#7BE495" stroke-width="30"></path>
+  <path d="M10,180 C50,130 90,200 130,140 C160,100 200,150 250,110" stroke="#F49AC2" stroke-width="22"></path>
+  <path d="M30,120 C70,70 110,140 150,90 C180,55 210,100 240,60" stroke="#B9F0FF" stroke-width="12"></path>
+</g>
+<g fill="#FDFBF6">
+  <circle cx="60" cy="70" r="5"></circle>
+  <circle cx="190" cy="52" r="4"></circle>
+  <circle cx="86" cy="196" r="4"></circle>
+  <circle cx="176" cy="188" r="6"></circle>
+  <circle cx="128" cy="204" r="3"></circle>
+</g>
+<circle cx="128" cy="128" r="98" fill="none" stroke="#4A3F3A" stroke-width="10"></circle>
+</svg>

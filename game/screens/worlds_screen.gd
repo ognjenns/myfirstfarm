@@ -6,11 +6,13 @@ func _ready() -> void:
 	add_child(GradientBG.new(Pal.SKY_TOP, Pal.SKY_LOW))
 	add_ambient(2)
 
-	# Cetiri sveta: razmak 0.24 sirine umesto ranijih 0.30 za tri kartice.
-	_world_card(Vector2(s.x * 0.14, s.y * 0.50), "card-farm", "title-farm", "hub", s, "cow")
-	_world_card(Vector2(s.x * 0.38, s.y * 0.50), "card-jungle", "title-jungle", "jungle", s, "monkey")
-	_world_card(Vector2(s.x * 0.62, s.y * 0.50), "card-ocean", "title-ocean", "ocean", s, "fish")
-	_world_card(Vector2(s.x * 0.86, s.y * 0.50), "card-dino", "title-dino", "dino", s)
+	# Pet svetova u DVA REDA (Ognjen 05.09.2026: pet u nizu je bilo sitno):
+	# tri gore, dva dole, poravnati na prazna mesta gornjeg reda.
+	_world_card(Vector2(s.x * 0.22, s.y * 0.245), "card-farm", "title-farm", "hub", s, "cow")
+	_world_card(Vector2(s.x * 0.50, s.y * 0.245), "card-jungle", "title-jungle", "jungle", s, "monkey")
+	_world_card(Vector2(s.x * 0.78, s.y * 0.245), "card-ocean", "title-ocean", "ocean", s, "fish")
+	_world_card(Vector2(s.x * 0.36, s.y * 0.715), "card-dino", "title-dino", "dino", s)
+	_world_card(Vector2(s.x * 0.64, s.y * 0.715), "card-polar", "title-arctic", "polar", s)
 	add_hint(6.0)
 
 var _card_spots: Array[Vector2] = []
@@ -35,6 +37,8 @@ const PICTURES := {
 		"sprite": "res://art/ocean/diver-1.png", "sw": 300.0, "spos": Vector2(120, 10)},
 	"card-dino":   {"tex": "res://art/dino/bg-scene.png", "cx": 0.50, "cy": 0.55, "w": 0.55,
 		"sprite": "res://art/dino/bi-1.png", "sw": 360.0, "spos": Vector2(110, 40)},
+	"card-polar":  {"tex": "res://art/polar/bg-scene.png", "cx": 0.50, "cy": 0.50, "w": 0.55,
+		"sprite": "res://art/polar/penguin-idle-1.png", "sw": 300.0, "spos": Vector2(120, 30)},
 }
 
 func _world_card(pos: Vector2, art: String, title: String, target: String, s: Vector2, animal_id := "") -> void:
@@ -42,7 +46,9 @@ func _world_card(pos: Vector2, art: String, title: String, target: String, s: Ve
 	card.position = pos
 	_card_spots.append(pos)
 	# ograniči i po širini da se kartice ne preklope na tabletu (4:3)
-	var card_scale := minf((s.y * 0.62) / 600.0, (s.x * 0.215) / 700.0)
+	# dva reda: visina reda je 0.32 ekrana (kartica + naslov ispod), po širini
+	# tri kartice u redu
+	var card_scale := minf((s.y * 0.32) / 600.0, (s.x * 0.22) / 700.0)
 	var body := Node2D.new()
 	body.scale = Vector2.ONE * card_scale
 	card.add_child(body)

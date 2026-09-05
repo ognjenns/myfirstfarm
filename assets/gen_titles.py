@@ -29,10 +29,12 @@ GLYPHS = {
 	"E": "M84,14 L20,14 L20,90 L84,90 M20,50 L70,50",
 	"O": "M50,14 A36,38 0 1 0 50.1,14 Z",
 	"C": "M84,30 A37,40 0 1 0 84,74",
+	"T": "M14,14 L86,14 M50,14 L50,90",
+	"I": "M27,14 L27,90",
 }
 
 ADV = {"M": 108, "N": 100, "O": 100, "G": 100, "U": 100, "Y": 96, "A": 100,
-	"R": 96, "F": 92, "E": 96, "L": 92, "J": 88, "C": 98}
+	"R": 96, "F": 92, "E": 96, "L": 92, "J": 88, "C": 98, "T": 92, "I": 54}
 SPACE = 46
 
 
@@ -73,3 +75,4 @@ print("naslovi ->", os.path.abspath(OUT))
 word_svg("MY FARM", "#6FAE64", "title-farm.svg")      # zelena farme
 word_svg("MY JUNGLE", "#4E8C48", "title-jungle.svg")  # zelena džungle
 word_svg("MY OCEAN", "#3E8FB0", "title-ocean.svg")    # plava okeana
+word_svg("MY ARCTIC", "#79C7E3", "title-arctic.svg")  # ledeno plava polarnog sveta
