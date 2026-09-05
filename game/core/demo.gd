@@ -73,6 +73,69 @@ func run() -> void:
 	main.get_tree().quit()
 
 
+## Kratki obilazak za 12-sekundni Short (Ognjen 05.09.2026: "uđi u svaku igru
+## da se vidi hub", bez splash-a). Svetovi se menjaju direktnim rezom
+## (main.goto), prst tapka po jednu stvar u svakom hubu, pa na lavi postavi
+## tri kamena i dinosaurus pređe. Ukupno ~10 s igre.
+func run_tour() -> void:
+	main.get_tree().create_timer(60.0).timeout.connect(func() -> void:
+		printerr("DEMO TIMEOUT")
+		main.get_tree().quit(3))
+	seed(20260905)
+	_build_hand()
+
+	print("DEMO: worlds")
+	main.goto("worlds")
+	await _move_to(Vector2(_vs().x * 0.5, _vs().y * 0.82))
+	await _sleep(0.15)
+	var cards := _children_of_type(main.current, "Area2D")
+	await _tap(_at(cards, 0, Vector2(_vs().x * 0.14, _vs().y * 0.50)), 0.3)
+
+	# farma: tap na životinju (krava je prva u listi)
+	print("DEMO: farm")
+	await _sleep(0.3)
+	var farm: Node = main.current
+	var animals: Array = farm.animal_nodes if "animal_nodes" in farm else []
+	await _tap(_at(animals, 0, Vector2(_vs().x * 0.30, _vs().y * 0.70)) + Vector2(0, -20), 0.5)
+
+	print("DEMO: jungle")
+	main.goto("jungle")
+	await _sleep(0.4)
+	var jungle: Node = main.current
+	var janimals: Array = jungle.animal_nodes if "animal_nodes" in jungle else []
+	await _tap(_at(janimals, 0, Vector2(_vs().x * 0.30, _vs().y * 0.70)) + Vector2(0, -20), 0.5)
+
+	print("DEMO: ocean")
+	main.goto("ocean")
+	await _sleep(0.4)
+	var ocean: Node = main.current
+	if "_chest_lid" in ocean and is_instance_valid(ocean._chest_lid):
+		await _tap(ocean._chest_lid.get_parent().position + Vector2(0, 20), 0.5)
+	else:
+		await _sleep(1.2)
+
+	print("DEMO: dino")
+	main.goto("dino")
+	await _sleep(0.3)
+	var dino: Node = main.current
+	if "_dino_area" in dino and is_instance_valid(dino._dino_area):
+		await _tap(dino._dino_area.position, 0.4)
+	else:
+		await _sleep(1.0)
+
+	print("DEMO: lava")
+	main.goto("lava")
+	await _sleep(0.25)
+	var lava: Node = main.current
+	var slots: Array = lava._slots if "_slots" in lava else []
+	for i in slots.size():
+		await _tap(slots[i].pos, 0.05)
+	await _slide_out()
+	await _sleep(3.0)
+	print("DEMO DONE")
+	main.get_tree().quit()
+
+
 # ------------------------------------------------------------------ prst
 
 func _build_hand() -> void:

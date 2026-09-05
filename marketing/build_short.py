@@ -24,7 +24,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 W, H = 1080, 1920
 FPS = 30
-RAW = sys.argv[1] if len(sys.argv) > 1 else os.path.expanduser("~/Desktop/OggieGames_Reel/raw.avi")
+RAW = next((a for a in sys.argv[1:] if not a.startswith("--")), os.path.expanduser("~/Desktop/OggieGames_Reel/raw.avi"))
 WORK = os.path.join(os.path.dirname(os.path.abspath(__file__)), "short_cards")
 OUTDIR = os.path.expanduser("~/Desktop/OggieGames_Reel")
 OUT = f"{OUTDIR}/my-first-animals-gameplay.mp4"
@@ -49,7 +49,20 @@ CAPTIONS = [
     (18.10, 3.90, "No score, no timer,\nno way to lose", ""),
 ]
 END_TITLE = "My First Animals"
-END_SUB = "Farm · Jungle · Ocean · Ages 2 to 5\nGoogle Play  ·  App Store"
+END_SUB = "Farm · Jungle · Ocean · Dino · Ages 2 to 5\nApp Store"
+
+# `python3 build_short.py --tour` — 12-sekundna verzija (DEMO=tour snimak):
+# bez splash-a, četiri huba + lava, kraći natpisi. Ognjen: "toddler", ne
+# "two-year-old".
+if "--tour" in sys.argv:
+    TRIM, MAIN, END = 0.20, 10.30, 1.70
+    OUT = f"{OUTDIR}/my-first-animals-tour.mp4"
+    CAPTIONS = [
+        (0.20, 2.10, "Four worlds\nfor toddlers", ""),
+        (2.60, 2.60, "Tap anything,\nit reacts", ""),
+        (5.50, 2.40, "No score, no timer,\nno way to lose", ""),
+        (8.00, 2.30, "Made for toddlers", "No ads"),
+    ]
 
 VENC = ["-c:v", "libx264", "-preset", "medium", "-crf", "19",
         "-pix_fmt", "yuv420p", "-r", str(FPS)]

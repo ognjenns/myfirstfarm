@@ -45,6 +45,8 @@ func _ready() -> void:
 		Autotest.new(self).run()
 	elif "--demo" in OS.get_cmdline_user_args():
 		Demo.new(self).run()
+	elif "--tour" in OS.get_cmdline_user_args():
+		Demo.new(self).run_tour()
 	elif "--make-icon" in OS.get_cmdline_user_args():
 		_make_icon()
 	elif "--make-product-icon" in OS.get_cmdline_user_args():
